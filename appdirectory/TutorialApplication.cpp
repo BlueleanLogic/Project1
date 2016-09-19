@@ -16,6 +16,9 @@ http://www.ogre3d.org/wiki/
 */
 
 #include "TutorialApplication.h"
+//#include <random>
+#include <OgreVector3.h>
+#include <OgreNode.h>
 
 //---------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
@@ -28,23 +31,28 @@ TutorialApplication::~TutorialApplication(void)
 
 //---------------------------------------------------------------------------
 int cubeRoomDimention = 5000;
+Ogre::Entity* sphereEntity;
+Ogre::SceneNode* ogreNode2;
+Ogre::Vector3 dir;
+
+
 
 void TutorialApplication::createScene(void)
 {
-
-
+    dir = directionVector();
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.8, 0.8, 0.8));
     //create sphere
-    Ogre::Entity* sphereEntity = mSceneMgr->createEntity("sphere.mesh");
-    sphereEntity->setCastShadows(true);
-    sphereEntity->setMaterialName("Examples/SphereMappedRustySteel");
-
+    sphereEntity = mSceneMgr->createEntity("uv_sphere.mesh");
+    
     //place initial sphere
-    Ogre::SceneNode* ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
+    ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
     Ogre::Vector3(0, 200, 0));
     ogreNode2->attachObject(sphereEntity);
     //put sphere in scene
     //mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(sphereEntity);
+    sphereEntity->setCastShadows(true);
+    sphereEntity->setMaterialName("Examples/SphereMappedRustySteel");
+
 
     ////////////////FLOOR///////////////
     //a blueprint for a plane that is perpendicular to the y-axis and zero units from the origin
@@ -209,13 +217,46 @@ void TutorialApplication::createViewports()
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   bool ret = BaseApplication::frameRenderingQueued(fe);
+  Ogre::Vector3 a = ogreNode2->getPosition;
+
  
+  if (ret)
+  {
+    //ogreNode7 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
+    //Ogre::Vector3(0, 200, 0)+directionVector());
+    //ogreNode7->attachObject(sphereEntity);
+    ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  
+  }
   return ret;
 }
  
 bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe)
 {
   return true;
+}
+
+//borrowed from http://stackoverflow.com/questions/11758809/what-is-the-optimal-algorithm-for-generating-an-unbiased-random-integer-within-a?answertab=votes#tab-top
+int TutorialApplication::RandomNum (int min, int max)
+{
+    int n = max - min + 1;
+    int remainder = RAND_MAX % n;
+    int x;
+    do{
+        x = rand();
+    }while (x >= RAND_MAX - remainder);
+    return min + x % n;
+}
+
+Ogre::Vector3 TutorialApplication::directionVector()
+{
+  double randX = RandomNum(-1, 1);
+  double randY = RandomNum(-1, 1);
+  double randZ = RandomNum(-1, 1);
+  Ogre::Vector3 v = Ogre::Vector3(randX, randY, randZ);
+  v.normalise();
+
+  return v;
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

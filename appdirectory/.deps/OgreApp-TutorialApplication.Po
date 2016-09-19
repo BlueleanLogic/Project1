@@ -897,7 +897,9 @@ OgreApp-TutorialApplication.o: TutorialApplication.cpp \
  /usr/include/ois/OISInputManager.h /usr/include/ois/OISFactoryCreator.h \
  /usr/include/ois/OISException.h /usr/include/ois/OISEffect.h \
  /usr/include/ois/OISForceFeedback.h \
- /lusr/opt/ogre-1.9/include/OGRE/SdkCameraMan.h
+ /lusr/opt/ogre-1.9/include/OGRE/SdkCameraMan.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreVector3.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h
 
 /usr/include/stdc-predef.h:
 
@@ -2892,3 +2894,7 @@ BaseApplication.h:
 /usr/include/ois/OISForceFeedback.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/SdkCameraMan.h:
+
+/lusr/opt/ogre-1.9/include/OGRE/OgreVector3.h:
+
+/lusr/opt/ogre-1.9/include/OGRE/OgreNode.h:

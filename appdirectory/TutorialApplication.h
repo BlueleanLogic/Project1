@@ -19,6 +19,7 @@ http://www.ogre3d.org/wiki/
 #define __TutorialApplication_h_
 
 #include "BaseApplication.h"
+#include <OgreVector3.h>
 
 //---------------------------------------------------------------------------
 
@@ -31,8 +32,11 @@ public:
 protected:
     virtual void createScene(void);
     virtual void createCamera();
-	virtual void createViewports();
-	virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
+    virtual void createViewports();
+    virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
+    virtual Ogre::Vector3 directionVector();
+    virtual int RandomNum (int min, int max);
+    
 
 private:
 	bool processUnbufferedInput(const Ogre::FrameEvent& fe);
