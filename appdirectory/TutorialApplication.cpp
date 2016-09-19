@@ -19,6 +19,9 @@ http://www.ogre3d.org/wiki/
 //#include <random>
 #include <OgreVector3.h>
 #include <OgreNode.h>
+#include <ctime>
+#include <iostream>
+#include <cstdlib>
 
 //---------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
@@ -31,18 +34,26 @@ TutorialApplication::~TutorialApplication(void)
 
 //---------------------------------------------------------------------------
 int cubeRoomDimention = 5000;
+int sphereRadius = 95;
 Ogre::Entity* sphereEntity;
 Ogre::SceneNode* ogreNode2;
 Ogre::Vector3 dir;
+Ogre::Plane wallPlane4(Ogre::Vector3::UNIT_Z, 0); //negative z
+Ogre::Plane wallPlane3(Ogre::Vector3::NEGATIVE_UNIT_Z, 0); //positive z
+Ogre::Plane floorPlane(Ogre::Vector3::UNIT_Y, 0); // "negative" y
+Ogre::Plane ceilingPlane(Ogre::Vector3::NEGATIVE_UNIT_Y, 0);// positive y
+Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0); //positive x
+Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0); //negative x
 
 
 
 void TutorialApplication::createScene(void)
 {
+    srand(time(NULL)); //for random number
     dir = directionVector();
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.8, 0.8, 0.8));
     //create sphere
-    sphereEntity = mSceneMgr->createEntity("uv_sphere.mesh");
+    sphereEntity = mSceneMgr->createEntity("sphere.mesh");
     
     //place initial sphere
     ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
@@ -56,7 +67,7 @@ void TutorialApplication::createScene(void)
 
     ////////////////FLOOR///////////////
     //a blueprint for a plane that is perpendicular to the y-axis and zero units from the origin
-    Ogre::Plane floorPlane(Ogre::Vector3::UNIT_Y, 0);
+    //Ogre::Plane floorPlane(Ogre::Vector3::UNIT_Y, 0);
 
     //creating actual plane on blueprint
     Ogre::MeshManager::getSingleton().createPlane(
@@ -73,10 +84,10 @@ void TutorialApplication::createScene(void)
 
     groundEntity->setCastShadows(false);
 
-    groundEntity->setMaterialName("Examples/BeachStones");
+    groundEntity->setMaterialName("Examples/Rockwall");
 
     /////////////CEILING////////////////////////
-    Ogre::Plane ceilingPlane(Ogre::Vector3::NEGATIVE_UNIT_Y, 0);
+    //Ogre::Plane ceilingPlane(Ogre::Vector3::NEGATIVE_UNIT_Y, 0);
 
     Ogre::MeshManager::getSingleton().createPlane(
       "ceiling",
@@ -88,7 +99,6 @@ void TutorialApplication::createScene(void)
       Ogre::Vector3::UNIT_Z);
 
     Ogre::Entity* ceilingEntity = mSceneMgr->createEntity("ceiling");
-    //mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(ceilingEntity);
 
     Ogre::SceneNode* ogreNode3 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
     Ogre::Vector3(0, cubeRoomDimention, 0));
@@ -98,8 +108,8 @@ void TutorialApplication::createScene(void)
 
     ceilingEntity->setMaterialName("Examples/CloudySky");
 
-    ////////////WALL 1 ALONG X/////////////////////////////
-    Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0);
+    ////////////WALL 1 ALONG POS X/////////////////////////////
+    //Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0);
 
     Ogre::MeshManager::getSingleton().createPlane(
       "wall",
@@ -108,7 +118,7 @@ void TutorialApplication::createScene(void)
       cubeRoomDimention, cubeRoomDimention, 20, 20, 
       true, 
       1, 5, 5, 
-      Ogre::Vector3::UNIT_Z);
+      Ogre::Vector3::UNIT_Y);
 
     Ogre::Entity* wallEntity = mSceneMgr->createEntity("wall");
 
@@ -118,10 +128,10 @@ void TutorialApplication::createScene(void)
 
     wallEntity->setCastShadows(false);
 
-    wallEntity->setMaterialName("Examples/BeachStones");
+    wallEntity->setMaterialName("Examples/Rockwall");
 
-    ////////////WALL 2 ALONG X/////////////////////////////
-    Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0);
+    ////////////WALL 2 ALONG NEG X/////////////////////////////
+    //Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0);
 
     Ogre::MeshManager::getSingleton().createPlane(
       "wall2",
@@ -130,7 +140,7 @@ void TutorialApplication::createScene(void)
       cubeRoomDimention, cubeRoomDimention, 20, 20, 
       true, 
       1, 5, 5, 
-      Ogre::Vector3::UNIT_Z);
+      Ogre::Vector3::UNIT_Y);
 
     Ogre::Entity* wallEntity2 = mSceneMgr->createEntity("wall2");
 
@@ -140,10 +150,10 @@ void TutorialApplication::createScene(void)
 
     wallEntity2->setCastShadows(false);
 
-    wallEntity2->setMaterialName("Examples/BeachStones");
+    wallEntity2->setMaterialName("Examples/Rockwall");
 
     ////////////WALL 3 ALONG POS Z/////////////////////////////
-    Ogre::Plane wallPlane3(Ogre::Vector3::NEGATIVE_UNIT_Z, 0);
+    //Ogre::Plane wallPlane3(Ogre::Vector3::NEGATIVE_UNIT_Z, 0);
 
     Ogre::MeshManager::getSingleton().createPlane(
       "wall3",
@@ -162,10 +172,10 @@ void TutorialApplication::createScene(void)
 
     wallEntity3->setCastShadows(false);
 
-    wallEntity3->setMaterialName("Examples/BeachStones"); 
+    wallEntity3->setMaterialName("Examples/Rockwall"); 
 
     ////////////WALL 4 ALONG NEG Z/////////////////////////////
-    Ogre::Plane wallPlane4(Ogre::Vector3::UNIT_Z, 0);
+    //Ogre::Plane wallPlane4(Ogre::Vector3::UNIT_Z, 0);
 
     Ogre::MeshManager::getSingleton().createPlane(
       "wall4",
@@ -184,7 +194,7 @@ void TutorialApplication::createScene(void)
 
     wallEntity4->setCastShadows(false);
 
-    wallEntity4->setMaterialName("Examples/BeachStones"); 
+    wallEntity4->setMaterialName("Examples/Rockwall"); 
 
 }
 //---------------------------------------------------------------------------
@@ -193,7 +203,7 @@ void TutorialApplication::createCamera()
 {
     mCamera = mSceneMgr->createCamera("PlayerCam");
     //position the camera
-    mCamera->setPosition(Ogre::Vector3(0, 300, 500));
+    mCamera->setPosition(Ogre::Vector3(0, 300, 500)); //0 300 500
     //sets direction of camera
     mCamera->lookAt(Ogre::Vector3(0, 0, 0));
     //the distance at which the Camera will no longer render any mesh
@@ -217,16 +227,54 @@ void TutorialApplication::createViewports()
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   bool ret = BaseApplication::frameRenderingQueued(fe);
-  Ogre::Vector3 a = ogreNode2->getPosition;
+  Ogre::Vector3 a = ogreNode2->getPosition();
+  Ogre::Vector3 R;
+
+  bool xOutOfRangeNeg = (a.x <= (0-cubeRoomDimention/2 + sphereRadius));
+  bool xOutOfRangePos = (a.x >= (cubeRoomDimention/2 - sphereRadius));
+  bool yOutOfRangeNeg = (a.y <= (0 + sphereRadius));
+  bool yOutOfRangePos = (a.y >= (cubeRoomDimention - sphereRadius));
+  bool zOutOfRangeNeg = (a.z <= (0-cubeRoomDimention/2 + sphereRadius));
+  bool zOutOfRangePos = (a.z >= (cubeRoomDimention/2 - sphereRadius));
 
  
-  if (ret)
+  if (ret && (!xOutOfRangePos && !yOutOfRangePos && !zOutOfRangePos && !xOutOfRangeNeg && !yOutOfRangeNeg && !zOutOfRangeNeg))
   {
-    //ogreNode7 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
-    //Ogre::Vector3(0, 200, 0)+directionVector());
-    //ogreNode7->attachObject(sphereEntity);
     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
-  
+  }else{
+    //Reflected ray: R = I - 2(N·I)N
+    //R = a - 2*()
+    if(zOutOfRangeNeg){
+      R = dir - 2*(wallPlane4.normal * dir)*wallPlane4.normal;
+      R.normalise();
+      dir = R;
+      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+    } else if(zOutOfRangePos){
+      R = dir -2*(wallPlane3.normal * dir)*wallPlane3.normal;
+      R.normalise();
+      dir = R;
+      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+    } else if(yOutOfRangeNeg){
+      R = dir -2*(floorPlane.normal * dir)*floorPlane.normal;
+      R.normalise();
+      dir = R;
+      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+    } else if(yOutOfRangePos){
+      R = dir -2*(ceilingPlane.normal * dir)*ceilingPlane.normal;
+      R.normalise();
+      dir = R;
+      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+    } else if(xOutOfRangeNeg){
+      R = dir -2*(wallPlane2.normal * dir)*wallPlane2.normal;
+      R.normalise();
+      dir = R;
+      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+    } else if(xOutOfRangePos){
+      R = dir -2*(wallPlane.normal * dir)*wallPlane.normal;
+      R.normalise();
+      dir = R;
+      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+    }
   }
   return ret;
 }
@@ -245,6 +293,7 @@ int TutorialApplication::RandomNum (int min, int max)
     do{
         x = rand();
     }while (x >= RAND_MAX - remainder);
+
     return min + x % n;
 }
 
