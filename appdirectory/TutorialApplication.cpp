@@ -20,8 +20,6 @@ http://www.ogre3d.org/wiki/
 #include <OgreVector3.h>
 #include <OgreNode.h>
 #include <ctime>
-#include <iostream>
-#include <cstdlib>
 
 //---------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
@@ -44,25 +42,44 @@ Ogre::Plane floorPlane(Ogre::Vector3::UNIT_Y, 0); // "negative" y
 Ogre::Plane ceilingPlane(Ogre::Vector3::NEGATIVE_UNIT_Y, 0);// positive y
 Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0); //positive x
 Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0); //negative x
+int speed;
 
 
 
 void TutorialApplication::createScene(void)
 {
     srand(time(NULL)); //for random number
-    dir = directionVector();
-    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.8, 0.8, 0.8));
+    speed = speedOfBall();
+    dir = directionVector()*speed;
+    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.5));
+
+    //purple light
+    Ogre::Light* spotLight = mSceneMgr->createLight("SpotLight");
+    spotLight->setDiffuseColour(1.0, 0, 1.0);
+    spotLight->setSpecularColour(1.0, 0, 1.0);
+    spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
+    spotLight->setDirection(-1, -1, -1);
+    spotLight->setPosition(Ogre::Vector3(cubeRoomDimention/2-30, cubeRoomDimention-1, cubeRoomDimention/4));
+
+    //green light
+    Ogre::Light* spotLight2 = mSceneMgr->createLight("SpotLight2");
+    spotLight2->setDiffuseColour(0, 1.0, .5);
+    spotLight2->setSpecularColour(0, 1.0, .5);
+    spotLight2->setType(Ogre::Light::LT_SPOTLIGHT);
+    spotLight2->setDirection(1, -1, 1);
+    spotLight2->setPosition(Ogre::Vector3(0-cubeRoomDimention/2+30, cubeRoomDimention-1, 0 - cubeRoomDimention/4));
+
     //create sphere
     sphereEntity = mSceneMgr->createEntity("sphere.mesh");
-    
+    sphereEntity->setCastShadows(true);
+    sphereEntity->setMaterialName("Examples/EnvMappedRustySteel");
     //place initial sphere
     ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
     Ogre::Vector3(0, 200, 0));
     ogreNode2->attachObject(sphereEntity);
     //put sphere in scene
     //mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(sphereEntity);
-    sphereEntity->setCastShadows(true);
-    sphereEntity->setMaterialName("Examples/SphereMappedRustySteel");
+    
 
 
     ////////////////FLOOR///////////////
@@ -247,32 +264,32 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
     if(zOutOfRangeNeg){
       R = dir - 2*(wallPlane4.normal * dir)*wallPlane4.normal;
       R.normalise();
-      dir = R;
+      dir = R*speed;
       ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
     } else if(zOutOfRangePos){
       R = dir -2*(wallPlane3.normal * dir)*wallPlane3.normal;
       R.normalise();
-      dir = R;
+      dir = R*speed;
       ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
     } else if(yOutOfRangeNeg){
       R = dir -2*(floorPlane.normal * dir)*floorPlane.normal;
       R.normalise();
-      dir = R;
+      dir = R*speed;
       ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
     } else if(yOutOfRangePos){
       R = dir -2*(ceilingPlane.normal * dir)*ceilingPlane.normal;
       R.normalise();
-      dir = R;
+      dir = R*speed;
       ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
     } else if(xOutOfRangeNeg){
       R = dir -2*(wallPlane2.normal * dir)*wallPlane2.normal;
       R.normalise();
-      dir = R;
+      dir = R*speed;
       ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
     } else if(xOutOfRangePos){
       R = dir -2*(wallPlane.normal * dir)*wallPlane.normal;
       R.normalise();
-      dir = R;
+      dir = R*speed;
       ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
     }
   }
@@ -299,13 +316,18 @@ int TutorialApplication::RandomNum (int min, int max)
 
 Ogre::Vector3 TutorialApplication::directionVector()
 {
-  double randX = RandomNum(-1, 1);
-  double randY = RandomNum(-1, 1);
-  double randZ = RandomNum(-1, 1);
+  int randX = RandomNum(-1, 1);
+  int randY = RandomNum(-1, 1);
+  int randZ = RandomNum(-1, 1);
   Ogre::Vector3 v = Ogre::Vector3(randX, randY, randZ);
   v.normalise();
-
   return v;
+}
+
+int TutorialApplication::speedOfBall()
+{
+  int s = RandomNum(2, 8); 
+  return s;
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

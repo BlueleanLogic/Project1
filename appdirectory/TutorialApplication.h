@@ -36,6 +36,7 @@ protected:
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
     virtual Ogre::Vector3 directionVector();
     virtual int RandomNum (int min, int max);
+    virtual int speedOfBall();
     
 
 private:
