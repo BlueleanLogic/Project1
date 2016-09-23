@@ -4,19 +4,16 @@ Filename:    TutorialApplication.cpp
 -----------------------------------------------------------------------------
 
 This source file is part of the
-   ___                 __    __ _ _    _
-  /___\__ _ _ __ ___  / / /\ \ (_) | _(_)
- //  // _` | '__/ _ \ \ \/  \/ / | |/ / |
-/ \_// (_| | | |  __/  \  /\  /| |   <| |
-\___/ \__, |_|  \___|   \/  \/ |_|_|\_\_|
-      |___/
 Tutorial Framework (for Ogre 1.9)
 http://www.ogre3d.org/wiki/
+
+and edited by Brittany Madrigal for her own project 1 in Game Tech
+
+Description: Makes a ball and a room, and alows the user to watch the ball bounce around the room unbound by gravity.
 -----------------------------------------------------------------------------
 */
 
 #include "TutorialApplication.h"
-//#include <random>
 #include <OgreVector3.h>
 #include <OgreNode.h>
 #include <ctime>
@@ -43,8 +40,6 @@ Ogre::Plane ceilingPlane(Ogre::Vector3::NEGATIVE_UNIT_Y, 0);// positive y
 Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0); //positive x
 Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0); //negative x
 int speed;
-
-
 
 void TutorialApplication::createScene(void)
 {
@@ -77,16 +72,8 @@ void TutorialApplication::createScene(void)
     ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
     Ogre::Vector3(0, 200, 0));
     ogreNode2->attachObject(sphereEntity);
-    //put sphere in scene
-    //mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(sphereEntity);
-    
-
 
     ////////////////FLOOR///////////////
-    //a blueprint for a plane that is perpendicular to the y-axis and zero units from the origin
-    //Ogre::Plane floorPlane(Ogre::Vector3::UNIT_Y, 0);
-
-    //creating actual plane on blueprint
     Ogre::MeshManager::getSingleton().createPlane(
       "ground",
       Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
@@ -104,7 +91,6 @@ void TutorialApplication::createScene(void)
     groundEntity->setMaterialName("Examples/Rockwall");
 
     /////////////CEILING////////////////////////
-    //Ogre::Plane ceilingPlane(Ogre::Vector3::NEGATIVE_UNIT_Y, 0);
 
     Ogre::MeshManager::getSingleton().createPlane(
       "ceiling",
@@ -126,7 +112,6 @@ void TutorialApplication::createScene(void)
     ceilingEntity->setMaterialName("Examples/CloudySky");
 
     ////////////WALL 1 ALONG POS X/////////////////////////////
-    //Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0);
 
     Ogre::MeshManager::getSingleton().createPlane(
       "wall",
@@ -148,7 +133,6 @@ void TutorialApplication::createScene(void)
     wallEntity->setMaterialName("Examples/Rockwall");
 
     ////////////WALL 2 ALONG NEG X/////////////////////////////
-    //Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0);
 
     Ogre::MeshManager::getSingleton().createPlane(
       "wall2",
@@ -170,7 +154,6 @@ void TutorialApplication::createScene(void)
     wallEntity2->setMaterialName("Examples/Rockwall");
 
     ////////////WALL 3 ALONG POS Z/////////////////////////////
-    //Ogre::Plane wallPlane3(Ogre::Vector3::NEGATIVE_UNIT_Z, 0);
 
     Ogre::MeshManager::getSingleton().createPlane(
       "wall3",
@@ -192,7 +175,6 @@ void TutorialApplication::createScene(void)
     wallEntity3->setMaterialName("Examples/Rockwall"); 
 
     ////////////WALL 4 ALONG NEG Z/////////////////////////////
-    //Ogre::Plane wallPlane4(Ogre::Vector3::UNIT_Z, 0);
 
     Ogre::MeshManager::getSingleton().createPlane(
       "wall4",
@@ -259,8 +241,6 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   {
     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
   }else{
-    //Reflected ray: R = I - 2(N·I)N
-    //R = a - 2*()
     if(zOutOfRangeNeg){
       R = dir - 2*(wallPlane4.normal * dir)*wallPlane4.normal;
       R.normalise();
@@ -301,7 +281,8 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe)
   return true;
 }
 
-//borrowed from http://stackoverflow.com/questions/11758809/what-is-the-optimal-algorithm-for-generating-an-unbiased-random-integer-within-a?answertab=votes#tab-top
+//borrowed idea from http://stackoverflow.com/questions/11758809/what-is-the-optimal-
+//algorithm-for-generating-an-unbiased-random-integer-within-a?answertab=votes#tab-top
 int TutorialApplication::RandomNum (int min, int max)
 {
     int n = max - min + 1;
@@ -319,6 +300,12 @@ Ogre::Vector3 TutorialApplication::directionVector()
   int randX = RandomNum(-1, 1);
   int randY = RandomNum(-1, 1);
   int randZ = RandomNum(-1, 1);
+
+  if(randX && randY && randZ == 0){
+    int randY = -1;
+    int randZ = 1;
+  }
+
   Ogre::Vector3 v = Ogre::Vector3(randX, randY, randZ);
   v.normalise();
   return v;
