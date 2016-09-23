@@ -43,6 +43,8 @@ int speed;
 
 void TutorialApplication::createScene(void)
 {
+    Physics* physicsEngine = new Physics();
+
     srand(time(NULL)); //for random number
     speed = speedOfBall();
     dir = directionVector()*speed;
