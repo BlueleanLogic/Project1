@@ -20,6 +20,7 @@ Description: Makes a ball and a room, and alows the user to watch the ball bounc
 
 //---------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
+    :physicsEngine(0)
 {
 }
 //---------------------------------------------------------------------------
@@ -44,7 +45,7 @@ int speed;
 void TutorialApplication::createScene(void)
 {
     //Setting Up Physics
-    Physics* physicsEngine = new Physics();
+    physicsEngine = new Physics();
 
     btTransform groundTransform;
     groundTransform.setIdentity();
@@ -93,10 +94,44 @@ void TutorialApplication::createScene(void)
     Ogre::Vector3(0, 200, 0));
     ogreNode2->attachObject(sphereEntity);
 
+
+
     //Add physics to sphere
-    
-    
-    // physicsEngine->getDynamicsWorld()->addRigidBody(body);
+    Ogre::Vector3 physicsCubeName = Ogre::Vector3(30,30,30);
+    btVector3 initialPosition = btVector3(30,-30,30);
+
+    Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName("Cube.mesh").staticCast<Ogre::Mesh>();
+
+    Ogre::Entity *entity = mSceneMgr->createEntity(mesh);
+
+    Ogre::SceneNode *newNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(physicsCubeName);
+    newNode->attachObject(entity);
+
+    //create the new shape, and tell the physics that is a Box
+    btCollisionShape *newRigidShape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
+    //physicsEngine->getCollisionShapes().push_back(newRigidShape);
+
+      //set the initial position and transform. For this demo, we set the tranform to be none
+    btTransform startTransform;
+    startTransform.setIdentity();
+    startTransform.setRotation(btQuaternion(1.0f, 1.0f, 1.0f, 0));
+
+    //set the mass of the object. a mass of "0" means that it is an immovable object
+    btScalar mass = 0.1f;
+    btVector3 localInertia(0,0,0);
+
+    startTransform.setOrigin(initialPosition);
+    newRigidShape->calculateLocalInertia(mass, localInertia);
+
+    //actually contruvc the body and add it to the dynamics world
+    btDefaultMotionState *myMotionState = new btDefaultMotionState(startTransform);
+
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, newRigidShape, localInertia);
+    btRigidBody *body = new btRigidBody(rbInfo);
+    body->setRestitution(1);
+    body->setUserPointer(newNode);
+
+    physicsEngine->getDynamicsWorld()->addRigidBody(body);
     // physicsEngine->trackRigidBodyWithName(body, physicsCubeName);
 
     ////////////////FLOOR///////////////
@@ -251,53 +286,9 @@ void TutorialApplication::createViewports()
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   bool ret = BaseApplication::frameRenderingQueued(fe);
-  Ogre::Vector3 a = ogreNode2->getPosition();
-  Ogre::Vector3 R;
 
-  bool xOutOfRangeNeg = (a.x <= (0-cubeRoomDimention/2 + sphereRadius));
-  bool xOutOfRangePos = (a.x >= (cubeRoomDimention/2 - sphereRadius));
-  bool yOutOfRangeNeg = (a.y <= (0 + sphereRadius));
-  bool yOutOfRangePos = (a.y >= (cubeRoomDimention - sphereRadius));
-  bool zOutOfRangeNeg = (a.z <= (0-cubeRoomDimention/2 + sphereRadius));
-  bool zOutOfRangePos = (a.z >= (cubeRoomDimention/2 - sphereRadius));
+  physicsEngine->getDynamicsWorld()->stepSimulation(1.0f/60.0f);
 
- 
-  if (ret && (!xOutOfRangePos && !yOutOfRangePos && !zOutOfRangePos && !xOutOfRangeNeg && !yOutOfRangeNeg && !zOutOfRangeNeg))
-  {
-    ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
-  }else{
-    if(zOutOfRangeNeg){
-      R = dir - 2*(wallPlane4.normal * dir)*wallPlane4.normal;
-      R.normalise();
-      dir = R*speed;
-      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
-    } else if(zOutOfRangePos){
-      R = dir -2*(wallPlane3.normal * dir)*wallPlane3.normal;
-      R.normalise();
-      dir = R*speed;
-      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
-    } else if(yOutOfRangeNeg){
-      R = dir -2*(floorPlane.normal * dir)*floorPlane.normal;
-      R.normalise();
-      dir = R*speed;
-      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
-    } else if(yOutOfRangePos){
-      R = dir -2*(ceilingPlane.normal * dir)*ceilingPlane.normal;
-      R.normalise();
-      dir = R*speed;
-      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
-    } else if(xOutOfRangeNeg){
-      R = dir -2*(wallPlane2.normal * dir)*wallPlane2.normal;
-      R.normalise();
-      dir = R*speed;
-      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
-    } else if(xOutOfRangePos){
-      R = dir -2*(wallPlane.normal * dir)*wallPlane.normal;
-      R.normalise();
-      dir = R*speed;
-      ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
-    }
-  }
   return ret;
 }
  

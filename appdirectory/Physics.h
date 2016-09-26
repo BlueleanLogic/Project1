@@ -22,6 +22,8 @@ class Physics{
 		~Physics(void);
 		void initObjects(void);
 		btDiscreteDynamicsWorld* getDynamicsWorld();
+		void getCollisionShapes();
+		void trackRigidBodyWithName();
 	protected:
 
 	private:

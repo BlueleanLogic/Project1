@@ -16,8 +16,17 @@ void Physics::initObjects() {
 	overlappingPairCache = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver();
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+	// list<CollisionShape> objects;
 }
 
 btDiscreteDynamicsWorld* Physics::getDynamicsWorld() {
 	return dynamicsWorld;
+}
+
+void getCollisionShapes() { //change from void
+
+}
+
+void trackRigidBodyWithName() {
+
 }

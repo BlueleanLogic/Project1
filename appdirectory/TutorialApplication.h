@@ -29,6 +29,7 @@ class TutorialApplication : public BaseApplication
 public:
     TutorialApplication(void);
     virtual ~TutorialApplication(void);
+    Physics* physicsEngine;
 
 protected:
     virtual void createScene(void);
