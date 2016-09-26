@@ -17,3 +17,7 @@ void Physics::initObjects() {
 	solver = new btSequentialImpulseConstraintSolver();
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 }
+
+btDiscreteDynamicsWorld* Physics::getDynamicsWorld() {
+	return dynamicsWorld;
+}

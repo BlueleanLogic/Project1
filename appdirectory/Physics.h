@@ -21,6 +21,7 @@ class Physics{
 		Physics(void);
 		~Physics(void);
 		void initObjects(void);
+		btDiscreteDynamicsWorld* getDynamicsWorld();
 	protected:
 
 	private:
