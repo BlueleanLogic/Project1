@@ -2,14 +2,8 @@
 #define __Physics_h_
 
 #include <btBulletDynamicsCommon.h>
-
-// #include <btDefaultCollisionConfiguration.h>
-// #include <btCollisionDispatcher.h>
-// #include <btBroadphaseInterface.h>
-// #include <btSequentialImpulseConstraintSolver.h>
-// #include <btDiscreteDynamicsWorld.h>
-
 #include "BulletCollision/CollisionShapes/btCollisionShape.h"
+
 #include <vector>
 #include <map>
 #include <string>

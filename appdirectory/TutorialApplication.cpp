@@ -43,7 +43,6 @@ int speed;
 
 void TutorialApplication::createScene(void)
 {
-    Physics* physicsEngine = new Physics();
 
     srand(time(NULL)); //for random number
     speed = speedOfBall();
@@ -197,6 +196,25 @@ void TutorialApplication::createScene(void)
 
     wallEntity4->setMaterialName("Examples/Rockwall"); 
 
+
+    //Setting Up Physics
+    Physics* physicsEngine = new Physics();
+
+    btTransform groundTransform;
+    groundTransform.setIdentity();
+    groundTransform.setOrigin(btVector3(0, -50, 0));
+    btScalar groundMass(0.);
+    btVector3 localGroundInertia(0, 0, 0);
+
+    btCollisionShape *groundShape = new btBoxShape(btVector3(btScalar(50.), btScalar(50.), btScalar(50.)));
+    btDefaultMotionState *groundMotionState = new btDefaultMotionState(groundTransform);
+
+    groundShape->calculateLocalInertia(groundMass, localGroundInertia);
+
+    btRigidBody::btRigidBodyConstructionInfo(groundMass, groundMotionState, groundShape, localGroundInertia);
+    btRigidBody *groundBody = new btRigidBody(groundRBInfo);
+
+    physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
 }
 //---------------------------------------------------------------------------
 
