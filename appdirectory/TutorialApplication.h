@@ -21,6 +21,7 @@ http://www.ogre3d.org/wiki/
 #include "BaseApplication.h"
 #include <OgreVector3.h>
 #include "Physics.h"
+#include "MyMotionState.h"
 
 //---------------------------------------------------------------------------
 

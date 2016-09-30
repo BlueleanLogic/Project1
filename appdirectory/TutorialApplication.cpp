@@ -17,6 +17,7 @@ Description: Makes a ball and a room, and alows the user to watch the ball bounc
 #include <OgreVector3.h>
 #include <OgreNode.h>
 #include <ctime>
+#include "MyMotionState.h"
 
 //---------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
@@ -44,7 +45,7 @@ int speed;
 
 void TutorialApplication::createScene(void)
 {
-    //Setting Up Physics
+    // Setting Up Physics
     physicsEngine = new Physics();
 
     btTransform groundTransform;
@@ -63,9 +64,9 @@ void TutorialApplication::createScene(void)
 
     physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
 
-
     srand(time(NULL)); //for random number
     speed = speedOfBall();
+
     dir = directionVector()*speed;
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.5));
 
@@ -90,26 +91,26 @@ void TutorialApplication::createScene(void)
     sphereEntity->setCastShadows(true);
     sphereEntity->setMaterialName("Examples/EnvMappedRustySteel");
     //place initial sphere
-    ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
-    Ogre::Vector3(0, 200, 0));
-    ogreNode2->attachObject(sphereEntity);
+    // ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
+    // Ogre::Vector3(0, 200, 0));
+    // ogreNode2->attachObject(sphereEntity);
 
 
 
     //Add physics to sphere
     Ogre::Vector3 physicsCubeName = Ogre::Vector3(30,30,30);
-    btVector3 initialPosition = btVector3(30,-30,30);
+    btVector3 initialPosition = btVector3(30,500,30);
 
-    Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName("Cube.mesh").staticCast<Ogre::Mesh>();
+    // Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName("Cube.mesh").staticCast<Ogre::Mesh>();
 
-    Ogre::Entity *entity = mSceneMgr->createEntity(mesh);
+    // Ogre::Entity *entity = mSceneMgr->createEntity("Cube.mesh");
 
-    Ogre::SceneNode *newNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(physicsCubeName);
-    newNode->attachObject(entity);
+    Ogre::SceneNode *ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(physicsCubeName);
+    ogreNode2->attachObject(sphereEntity);
 
     //create the new shape, and tell the physics that is a Box
     btCollisionShape *newRigidShape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
-    //physicsEngine->getCollisionShapes().push_back(newRigidShape);
+    // physicsEngine->getCollisionShapes().push_back(newRigidShape);
 
       //set the initial position and transform. For this demo, we set the tranform to be none
     btTransform startTransform;
@@ -124,14 +125,18 @@ void TutorialApplication::createScene(void)
     newRigidShape->calculateLocalInertia(mass, localInertia);
 
     //actually contruvc the body and add it to the dynamics world
-    btDefaultMotionState *myMotionState = new btDefaultMotionState(startTransform);
+    MyMotionState *myMotionState = new MyMotionState(startTransform, ogreNode2);
+    myMotionState->getWorldTransform(startTransform);
 
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, newRigidShape, localInertia);
     btRigidBody *body = new btRigidBody(rbInfo);
     body->setRestitution(1);
-    body->setUserPointer(newNode);
+    body->setUserPointer(ogreNode2);
 
+    printf("1\n");
     physicsEngine->getDynamicsWorld()->addRigidBody(body);
+    printf("2\n");
+
     // physicsEngine->trackRigidBodyWithName(body, physicsCubeName);
 
     ////////////////FLOOR///////////////
@@ -255,6 +260,7 @@ void TutorialApplication::createScene(void)
     wallEntity4->setCastShadows(false);
 
     wallEntity4->setMaterialName("Examples/Rockwall"); 
+    printf("3\n");
 }
 //---------------------------------------------------------------------------
 
@@ -286,8 +292,60 @@ void TutorialApplication::createViewports()
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   bool ret = BaseApplication::frameRenderingQueued(fe);
+  // Ogre::Vector3 a = ogreNode2->getPosition();
+
+  // Ogre::Vector3 R;
+
+ 
+  // bool xOutOfRangeNeg = (a.x <= (0-cubeRoomDimention/2 + sphereRadius));
+  // physicsEngine->getDynamicsWorld()->stepSimulation(1.0f/60.0f);
+  // bool xOutOfRangePos = (a.x >= (cubeRoomDimention/2 - sphereRadius));
+  // bool yOutOfRangeNeg = (a.y <= (0 + sphereRadius));
+  // bool yOutOfRangePos = (a.y >= (cubeRoomDimention - sphereRadius));
+  // bool zOutOfRangeNeg = (a.z <= (0-cubeRoomDimention/2 + sphereRadius));
+  // bool zOutOfRangePos = (a.z >= (cubeRoomDimention/2 - sphereRadius));
+ 
+ 
+ 
+  // if (ret && (!xOutOfRangePos && !yOutOfRangePos && !zOutOfRangePos && !xOutOfRangeNeg && !yOutOfRangeNeg && !zOutOfRangeNeg))
+  // {
+  //   ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  // }else{
+  //   if(zOutOfRangeNeg){
+  //     R = dir - 2*(wallPlane4.normal * dir)*wallPlane4.normal;
+  //     R.normalise();
+  //     dir = R*speed;
+  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //   } else if(zOutOfRangePos){
+  //     R = dir -2*(wallPlane3.normal * dir)*wallPlane3.normal;
+  //     R.normalise();
+  //     dir = R*speed;
+  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //   } else if(yOutOfRangeNeg){
+  //     R = dir -2*(floorPlane.normal * dir)*floorPlane.normal;
+  //     R.normalise();
+  //     dir = R*speed;
+  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //   } else if(yOutOfRangePos){
+  //     R = dir -2*(ceilingPlane.normal * dir)*ceilingPlane.normal;
+  //     R.normalise();
+  //     dir = R*speed;
+  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //   } else if(xOutOfRangeNeg){
+  //     R = dir -2*(wallPlane2.normal * dir)*wallPlane2.normal;
+  //     R.normalise();
+  //     dir = R*speed;
+  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //   } else if(xOutOfRangePos){
+  //     R = dir -2*(wallPlane.normal * dir)*wallPlane.normal;
+  //     R.normalise();
+  //     dir = R*speed;
+  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //   }
+  // }
 
   physicsEngine->getDynamicsWorld()->stepSimulation(1.0f/60.0f);
+  printf("4\n");
 
   return ret;
 }
@@ -329,7 +387,7 @@ Ogre::Vector3 TutorialApplication::directionVector()
 
 int TutorialApplication::speedOfBall()
 {
-  int s = RandomNum(2, 8); 
+  int s = RandomNum(2, 3); 
   return s;
 }
 
