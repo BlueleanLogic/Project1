@@ -54,8 +54,24 @@ void TutorialApplication::createScene(void)
     btScalar groundMass(0.);
     btVector3 localGroundInertia(0, 0, 0);
 
-    btCollisionShape *groundShape = new btBoxShape(btVector3(btScalar(50.), btScalar(50.), btScalar(50.)));
+    btCollisionShape *groundShape = new btBoxShape(btVector3(btScalar(cubeRoomDimention), btScalar(cubeRoomDimention), btScalar(cubeRoomDimention)));
     btDefaultMotionState *groundMotionState = new btDefaultMotionState(groundTransform);
+
+    ////////////////FLOOR///////////////
+    Ogre::MeshManager::getSingleton().createPlane(
+      "ground",
+      Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+      floorPlane, 
+      cubeRoomDimention, cubeRoomDimention, 20, 20, 
+      true, 
+      1, 5, 5, 
+      Ogre::Vector3::UNIT_Z);
+
+    Ogre::Entity* groundEntity = mSceneMgr->createEntity("ground");
+    mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(groundEntity);
+    groundEntity->setCastShadows(false);
+    groundEntity->setMaterialName("Examples/Rockwall");
+    ////////////////////////////////////////////////
 
     groundShape->calculateLocalInertia(groundMass, localGroundInertia);
 
@@ -91,14 +107,12 @@ void TutorialApplication::createScene(void)
     sphereEntity->setCastShadows(true);
     sphereEntity->setMaterialName("Examples/EnvMappedRustySteel");
     //place initial sphere
-    // ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
-    // Ogre::Vector3(0, 200, 0));
     // ogreNode2->attachObject(sphereEntity);
 
 
 
     //Add physics to sphere
-    Ogre::Vector3 physicsCubeName = Ogre::Vector3(30,30,30);
+    Ogre::Vector3 physicsCubeName = Ogre::Vector3(30,500,30);
     btVector3 initialPosition = btVector3(30,500,30);
 
     // Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName("Cube.mesh").staticCast<Ogre::Mesh>();
@@ -106,6 +120,8 @@ void TutorialApplication::createScene(void)
     // Ogre::Entity *entity = mSceneMgr->createEntity("Cube.mesh");
 
     Ogre::SceneNode *ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(physicsCubeName);
+    // ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
+    // Ogre::Vector3(0, 200, 0));
     ogreNode2->attachObject(sphereEntity);
 
     //create the new shape, and tell the physics that is a Box
@@ -139,22 +155,6 @@ void TutorialApplication::createScene(void)
 
     // physicsEngine->trackRigidBodyWithName(body, physicsCubeName);
 
-    ////////////////FLOOR///////////////
-    Ogre::MeshManager::getSingleton().createPlane(
-      "ground",
-      Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-      floorPlane, 
-      cubeRoomDimention, cubeRoomDimention, 20, 20, 
-      true, 
-      1, 5, 5, 
-      Ogre::Vector3::UNIT_Z);
-
-    Ogre::Entity* groundEntity = mSceneMgr->createEntity("ground");
-    mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(groundEntity);
-
-    groundEntity->setCastShadows(false);
-
-    groundEntity->setMaterialName("Examples/Rockwall");
 
     /////////////CEILING////////////////////////
 
