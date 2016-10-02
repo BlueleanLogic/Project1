@@ -99,7 +99,9 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_assignment2_OBJECTS = assignment2-TutorialApplication.$(OBJEXT) \
 	assignment2-BaseApplication.$(OBJEXT) \
-	assignment2-Physics.$(OBJEXT)
+	assignment2-Physics.$(OBJEXT) \
+	assignment2-MyMotionState.$(OBJEXT) \
+	assignment2-BulletEntities.$(OBJEXT)
 assignment2_OBJECTS = $(am_assignment2_OBJECTS)
 am__DEPENDENCIES_1 =
 assignment2_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -192,13 +194,13 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing aclocal-1.14
+ACLOCAL = ${SHELL} /v/filer4b/v38q001/madrigal/classes/cs354R/Project1/appdirectory/missing aclocal-1.14
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing autoconf
-AUTOHEADER = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing autoheader
-AUTOMAKE = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing automake-1.14
+AUTOCONF = ${SHELL} /v/filer4b/v38q001/madrigal/classes/cs354R/Project1/appdirectory/missing autoconf
+AUTOHEADER = ${SHELL} /v/filer4b/v38q001/madrigal/classes/cs354R/Project1/appdirectory/missing autoheader
+AUTOMAKE = ${SHELL} /v/filer4b/v38q001/madrigal/classes/cs354R/Project1/appdirectory/missing automake-1.14
 AWK = gawk
 BULLET_CFLAGS = 
 BULLET_LIBS = 
@@ -237,7 +239,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing makeinfo
+MAKEINFO = ${SHELL} /v/filer4b/v38q001/madrigal/classes/cs354R/Project1/appdirectory/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
@@ -267,10 +269,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = strip
 VERSION = 0.1
-abs_builddir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
-abs_srcdir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
-abs_top_builddir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
-abs_top_srcdir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
+abs_builddir = /v/filer4b/v38q001/madrigal/classes/cs354R/Project1/appdirectory
+abs_srcdir = /v/filer4b/v38q001/madrigal/classes/cs354R/Project1/appdirectory
+abs_top_builddir = /v/filer4b/v38q001/madrigal/classes/cs354R/Project1/appdirectory
+abs_top_srcdir = /v/filer4b/v38q001/madrigal/classes/cs354R/Project1/appdirectory
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -302,7 +304,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/install-sh
+install_sh = ${SHELL} /v/filer4b/v38q001/madrigal/classes/cs354R/Project1/appdirectory/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -322,9 +324,9 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-noinst_HEADERS = TutorialApplication.h BaseApplication.h Physics.h
+noinst_HEADERS = TutorialApplication.h BaseApplication.h Physics.h MyMotionState.h BulletEntities.h
 assignment2_CPPFLAGS = -I$(top_srcdir)
-assignment2_SOURCES = TutorialApplication.cpp BaseApplication.cpp Physics.cpp
+assignment2_SOURCES = TutorialApplication.cpp BaseApplication.cpp Physics.cpp MyMotionState.cpp BulletEntities.cpp
 assignment2_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS)
 assignment2_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS)
 assignment2_LDFLAGS = -lOgreOverlay -lboost_system
@@ -445,6 +447,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/assignment2-BaseApplication.Po
+include ./$(DEPDIR)/assignment2-BulletEntities.Po
+include ./$(DEPDIR)/assignment2-MyMotionState.Po
 include ./$(DEPDIR)/assignment2-Physics.Po
 include ./$(DEPDIR)/assignment2-TutorialApplication.Po
 
@@ -510,6 +514,34 @@ assignment2-Physics.obj: Physics.cpp
 #	$(AM_V_CXX)source='Physics.cpp' object='assignment2-Physics.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-Physics.obj `if test -f 'Physics.cpp'; then $(CYGPATH_W) 'Physics.cpp'; else $(CYGPATH_W) '$(srcdir)/Physics.cpp'; fi`
+
+assignment2-MyMotionState.o: MyMotionState.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -MT assignment2-MyMotionState.o -MD -MP -MF $(DEPDIR)/assignment2-MyMotionState.Tpo -c -o assignment2-MyMotionState.o `test -f 'MyMotionState.cpp' || echo '$(srcdir)/'`MyMotionState.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment2-MyMotionState.Tpo $(DEPDIR)/assignment2-MyMotionState.Po
+#	$(AM_V_CXX)source='MyMotionState.cpp' object='assignment2-MyMotionState.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-MyMotionState.o `test -f 'MyMotionState.cpp' || echo '$(srcdir)/'`MyMotionState.cpp
+
+assignment2-MyMotionState.obj: MyMotionState.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -MT assignment2-MyMotionState.obj -MD -MP -MF $(DEPDIR)/assignment2-MyMotionState.Tpo -c -o assignment2-MyMotionState.obj `if test -f 'MyMotionState.cpp'; then $(CYGPATH_W) 'MyMotionState.cpp'; else $(CYGPATH_W) '$(srcdir)/MyMotionState.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment2-MyMotionState.Tpo $(DEPDIR)/assignment2-MyMotionState.Po
+#	$(AM_V_CXX)source='MyMotionState.cpp' object='assignment2-MyMotionState.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-MyMotionState.obj `if test -f 'MyMotionState.cpp'; then $(CYGPATH_W) 'MyMotionState.cpp'; else $(CYGPATH_W) '$(srcdir)/MyMotionState.cpp'; fi`
+
+assignment2-BulletEntities.o: BulletEntities.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -MT assignment2-BulletEntities.o -MD -MP -MF $(DEPDIR)/assignment2-BulletEntities.Tpo -c -o assignment2-BulletEntities.o `test -f 'BulletEntities.cpp' || echo '$(srcdir)/'`BulletEntities.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment2-BulletEntities.Tpo $(DEPDIR)/assignment2-BulletEntities.Po
+#	$(AM_V_CXX)source='BulletEntities.cpp' object='assignment2-BulletEntities.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-BulletEntities.o `test -f 'BulletEntities.cpp' || echo '$(srcdir)/'`BulletEntities.cpp
+
+assignment2-BulletEntities.obj: BulletEntities.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -MT assignment2-BulletEntities.obj -MD -MP -MF $(DEPDIR)/assignment2-BulletEntities.Tpo -c -o assignment2-BulletEntities.obj `if test -f 'BulletEntities.cpp'; then $(CYGPATH_W) 'BulletEntities.cpp'; else $(CYGPATH_W) '$(srcdir)/BulletEntities.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment2-BulletEntities.Tpo $(DEPDIR)/assignment2-BulletEntities.Po
+#	$(AM_V_CXX)source='BulletEntities.cpp' object='assignment2-BulletEntities.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-BulletEntities.obj `if test -f 'BulletEntities.cpp'; then $(CYGPATH_W) 'BulletEntities.cpp'; else $(CYGPATH_W) '$(srcdir)/BulletEntities.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
