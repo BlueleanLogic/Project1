@@ -22,6 +22,7 @@ http://www.ogre3d.org/wiki/
 #include <OgreVector3.h>
 #include "Physics.h"
 #include "MyMotionState.h"
+#include "BulletEntities.h"
 
 //---------------------------------------------------------------------------
 
@@ -31,6 +32,7 @@ public:
     TutorialApplication(void);
     virtual ~TutorialApplication(void);
     Physics* physicsEngine;
+    BulletEntities* bulletEntities;
 
 protected:
     virtual void createScene(void);

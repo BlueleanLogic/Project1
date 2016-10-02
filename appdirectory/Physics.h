@@ -24,6 +24,7 @@ class Physics{
 		btDiscreteDynamicsWorld* getDynamicsWorld();
 		void getCollisionShapes();
 		void trackRigidBodyWithName();
+		void stepSimulation();
 	protected:
 
 	private:

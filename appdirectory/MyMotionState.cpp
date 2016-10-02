@@ -22,8 +22,8 @@ void MyMotionState::getWorldTransform(btTransform &worldTrans) const
 
 void MyMotionState::setWorldTransform(const btTransform &worldTrans)
 {
-    if(mSceneNode == 0)
-        return; // silently return before we set a node
+    // if(mSceneNode == 0)
+        // return; // silently return before we set a node
 
     // btQuaternion rot = worldTrans.getRotation();
     // mSceneNode ->setOrientation(rot, true);

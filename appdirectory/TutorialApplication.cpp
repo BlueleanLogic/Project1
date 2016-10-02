@@ -19,9 +19,11 @@ Description: Makes a ball and a room, and alows the user to watch the ball bounc
 #include <ctime>
 #include "MyMotionState.h"
 
+
 //---------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
-    :physicsEngine(0)
+    :physicsEngine(0),
+    bulletEntities(0)
 {
 }
 //---------------------------------------------------------------------------
@@ -47,15 +49,16 @@ void TutorialApplication::createScene(void)
 {
     // Setting Up Physics
     physicsEngine = new Physics();
+    bulletEntities = new BulletEntities();
 
-    btTransform groundTransform;
-    groundTransform.setIdentity();
-    groundTransform.setOrigin(btVector3(0, -50, 0));
+    // btTransform groundTransform;
+    // groundTransform.setIdentity();
+    // groundTransform.setOrigin(btVector3(0, -50, 0));
     btScalar groundMass(0.);
     btVector3 localGroundInertia(0, 0, 0);
 
     btCollisionShape *groundShape = new btBoxShape(btVector3(btScalar(cubeRoomDimention), btScalar(cubeRoomDimention), btScalar(cubeRoomDimention)));
-    btDefaultMotionState *groundMotionState = new btDefaultMotionState(groundTransform);
+    // btDefaultMotionState *groundMotionState = new btDefaultMotionState(groundTransform);
 
     ////////////////FLOOR///////////////
     Ogre::MeshManager::getSingleton().createPlane(
@@ -73,12 +76,12 @@ void TutorialApplication::createScene(void)
     groundEntity->setMaterialName("Examples/Rockwall");
     ////////////////////////////////////////////////
 
-    groundShape->calculateLocalInertia(groundMass, localGroundInertia);
+    // groundShape->calculateLocalInertia(groundMass, localGroundInertia);
 
-    btRigidBody::btRigidBodyConstructionInfo groundRBInfo(groundMass, groundMotionState, groundShape, localGroundInertia);
-    btRigidBody *groundBody = new btRigidBody(groundRBInfo);
+    // btRigidBody::btRigidBodyConstructionInfo groundRBInfo(groundMass, groundMotionState, groundShape, localGroundInertia);
+    // btRigidBody *groundBody = new btRigidBody(groundRBInfo);
 
-    physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
+    // physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
 
     srand(time(NULL)); //for random number
     speed = speedOfBall();
@@ -125,29 +128,30 @@ void TutorialApplication::createScene(void)
     ogreNode2->attachObject(sphereEntity);
 
     //create the new shape, and tell the physics that is a Box
-    btCollisionShape *newRigidShape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
-    // physicsEngine->getCollisionShapes().push_back(newRigidShape);
+    // we are redoing this: btCollisionShape *newRigidShape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
+    btSphereShape btSphereCollider = bulletEntities->makePingPongBall(40); //change this value!
 
-      //set the initial position and transform. For this demo, we set the tranform to be none
+
+    // physicsEngine->getCollisionShapes().push_back(newRigidShape);
     btTransform startTransform;
     startTransform.setIdentity();
     startTransform.setRotation(btQuaternion(1.0f, 1.0f, 1.0f, 0));
 
     //set the mass of the object. a mass of "0" means that it is an immovable object
-    btScalar mass = 0.1f;
+    btScalar mass(0.1f);
     btVector3 localInertia(0,0,0);
 
     startTransform.setOrigin(initialPosition);
-    newRigidShape->calculateLocalInertia(mass, localInertia);
+    // btSphereCollider->calculateLocalInertia(mass, localInertia); // maybe uncomment
 
     //actually contruvc the body and add it to the dynamics world
     MyMotionState *myMotionState = new MyMotionState(startTransform, ogreNode2);
     myMotionState->getWorldTransform(startTransform);
 
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, newRigidShape, localInertia);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, &btSphereCollider, localInertia);
     btRigidBody *body = new btRigidBody(rbInfo);
-    body->setRestitution(1);
-    body->setUserPointer(ogreNode2);
+    // body->setRestitution(1);
+    // body->setUserPointer(ogreNode2);
 
     printf("1\n");
     physicsEngine->getDynamicsWorld()->addRigidBody(body);
@@ -343,9 +347,11 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
   //   }
   // }
-
-  physicsEngine->getDynamicsWorld()->stepSimulation(1.0f/60.0f);
   printf("4\n");
+
+
+  physicsEngine->stepSimulation();
+  printf("6\n");
 
   return ret;
 }
