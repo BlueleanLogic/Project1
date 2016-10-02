@@ -57,7 +57,20 @@ void TutorialApplication::createScene(void)
     btCollisionShape *groundShape = new btBoxShape(btVector3(btScalar(cubeRoomDimention), btScalar(cubeRoomDimention), btScalar(cubeRoomDimention)));
     btDefaultMotionState *groundMotionState = new btDefaultMotionState(groundTransform);
 
-    
+    ////////////////FLOOR///////////////
+    Ogre::MeshManager::getSingleton().createPlane(
+      "ground",
+      Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+      floorPlane, 
+      cubeRoomDimention, cubeRoomDimention, 20, 20, 
+      true, 
+      1, 5, 5, 
+      Ogre::Vector3::UNIT_Z);
+
+    Ogre::Entity* groundEntity = mSceneMgr->createEntity("ground");
+    mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(groundEntity);
+    groundEntity->setCastShadows(false);
+    groundEntity->setMaterialName("Examples/Rockwall");
     ////////////////////////////////////////////////
 
     groundShape->calculateLocalInertia(groundMass, localGroundInertia);
@@ -142,20 +155,6 @@ void TutorialApplication::createScene(void)
 
     // physicsEngine->trackRigidBodyWithName(body, physicsCubeName);
 
-    ////////////////FLOOR///////////////
-    Ogre::MeshManager::getSingleton().createPlane(
-      "ground",
-      Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-      floorPlane, 
-      cubeRoomDimention, cubeRoomDimention, 20, 20, 
-      true, 
-      1, 5, 5, 
-      Ogre::Vector3::UNIT_Z);
-
-    Ogre::Entity* groundEntity = mSceneMgr->createEntity("ground");
-    mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(groundEntity);
-    groundEntity->setCastShadows(false);
-    groundEntity->setMaterialName("Examples/Rockwall");
 
     /////////////CEILING////////////////////////
 
