@@ -35,7 +35,7 @@ TutorialApplication::~TutorialApplication(void)
 int cubeRoomDimention = 5000;
 int sphereRadius = 100;
 Ogre::Entity* sphereEntity;
-Ogre::SceneNode* ogreNode2;
+Ogre::SceneNode* sphereNode;
 Ogre::Vector3 dir;
 Ogre::Plane wallPlane4(Ogre::Vector3::UNIT_Z, 0); //negative z
 Ogre::Plane wallPlane3(Ogre::Vector3::NEGATIVE_UNIT_Z, 0); //positive z
@@ -51,6 +51,8 @@ void TutorialApplication::createScene(void)
     // Setting Up Physics
     physicsEngine = new Physics();
     bulletEntities = new BulletEntities();
+
+    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.5));
 
     // btTransform groundTransform;
     // groundTransform.setIdentity();
@@ -84,75 +86,49 @@ void TutorialApplication::createScene(void)
 
     // physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
 
-    srand(time(NULL)); //for random number
-    speed = speedOfBall();
+    // ***Used for manually setting velocity in Project 1.***
+    // srand(time(NULL)); //for random number
+    // speed = speedOfBall();
+    // dir = directionVector()*speed;
 
-    dir = directionVector()*speed;
-    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.5));
+    // **Initial Position for Sphere. (Used to sync initial Ogre and Bullet sphere positions.)**
+    int ipfsX = 30;
+    int ipfsY = 500;
+    int ipfsZ = 30;
 
-    //purple light
-    Ogre::Light* spotLight = mSceneMgr->createLight("SpotLight");
-    spotLight->setDiffuseColour(1.0, 0, 1.0);
-    spotLight->setSpecularColour(1.0, 0, 1.0);
-    spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
-    spotLight->setDirection(-1, -1, -1);
-    spotLight->setPosition(Ogre::Vector3(cubeRoomDimention/2-30, cubeRoomDimention-1, cubeRoomDimention/4));
+    // ***Create node for sphere.***
+    Ogre::Vector3 ogreSpherePosition = Ogre::Vector3(ipfsX,ipfsY,ipfsZ);
+    Ogre::SceneNode *sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(ogreSpherePosition);
 
-    //green light
-    Ogre::Light* spotLight2 = mSceneMgr->createLight("SpotLight2");
-    spotLight2->setDiffuseColour(0, 1.0, .5);
-    spotLight2->setSpecularColour(0, 1.0, .5);
-    spotLight2->setType(Ogre::Light::LT_SPOTLIGHT);
-    spotLight2->setDirection(1, -1, 1);
-    spotLight2->setPosition(Ogre::Vector3(0-cubeRoomDimention/2+30, cubeRoomDimention-1, 0 - cubeRoomDimention/4));
-
-    //create sphere
+    // ***Add sphere entity to its node.***
     sphereEntity = mSceneMgr->createEntity("sphere.mesh");
     sphereEntity->setCastShadows(true);
-    sphereEntity->setMaterialName("Examples/EnvMappedRustySteel");
-    //place initial sphere
-    // ogreNode2->attachObject(sphereEntity);
+    // sphereEntity->setMaterialName("Examples/EnvMappedRustySteel");        /* TODO: Reapply a texture to the sphere. */
+    sphereNode->attachObject(sphereEntity);
 
-
-
-    //Ogre sphere position
-    Ogre::Vector3 ogreSpherePosition = Ogre::Vector3(30,500,30);
-    //bullet sphere postion
-    btVector3 btSpherePosition = btVector3(30,500,30);
-
-    Ogre::SceneNode *ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(ogreSpherePosition);
-    
-    ogreNode2->attachObject(sphereEntity);
-
-    btSphereShape* btSphereCollider = bulletEntities->makePingPongBall(sphereRadius); //change this value!
-
+    // ***Set up bullet Transform necessary for rigidbody.***
     btTransform startTransform;
     startTransform.setIdentity();
     startTransform.setRotation(btQuaternion(1.0f, 1.0f, 1.0f, 0));
-
-    //set the mass of the object. a mass of "0" means that it is an immovable object
-    btScalar mass(0.1f);
-    btVector3 localInertia(0,0,0);
-
+    btVector3 btSpherePosition = btVector3(ipfsX,ipfsY,ipfsZ);
     startTransform.setOrigin(btSpherePosition);
-    btSphereCollider->calculateLocalInertia(mass, localInertia); // maybe uncomment
 
-    //actually contruvc the body and add it to the dynamics world
-    MyMotionState *myMotionState = new MyMotionState(startTransform, ogreNode2);
-    // myMotionState->getWorldTransform(startTransform);
-    // btDefaultMotionState* fallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
+    // ***Set up bullet Collider necessary for rigidbody.***
+    btSphereShape* btSphereCollider = bulletEntities->makePingPongBall(sphereRadius); //change this value!
+    btScalar mass(0.1f);                 /* "0" -> an immovable object */
+    btVector3 localInertia(0,0,0); 
+    btSphereCollider->calculateLocalInertia(mass, localInertia);
 
+    // ***Set up MotionState necessary for rigidbody.***
+    MyMotionState *myMotionState = new MyMotionState(startTransform, sphereNode);
 
+    // ***Create and track the sphere's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, btSphereCollider, localInertia);
-    sphereBody = new btRigidBody(rbInfo); //global
+    sphereBody = new btRigidBody(rbInfo);
     sphereBody->setRestitution(1);
-    sphereBody->setUserPointer(ogreNode2);
-
-    printf("1\n");
+    sphereBody->setUserPointer(sphereNode);
     physicsEngine->getDynamicsWorld()->addRigidBody(sphereBody);
-    printf("2\n");
 
-    // physicsEngine->trackRigidBodyWithName(body, physicsCubeName);
 
 
     /////////////CEILING////////////////////////
@@ -259,7 +235,6 @@ void TutorialApplication::createScene(void)
     wallEntity4->setCastShadows(false);
 
     wallEntity4->setMaterialName("Examples/Rockwall"); 
-    printf("3\n");
 }
 //---------------------------------------------------------------------------
 
@@ -291,7 +266,7 @@ void TutorialApplication::createViewports()
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   bool ret = BaseApplication::frameRenderingQueued(fe);
-  // Ogre::Vector3 a = ogreNode2->getPosition();
+  // Ogre::Vector3 a = sphereNode->getPosition();
 
   // Ogre::Vector3 R;
 
@@ -308,38 +283,38 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
  
   // if (ret && (!xOutOfRangePos && !yOutOfRangePos && !zOutOfRangePos && !xOutOfRangeNeg && !yOutOfRangeNeg && !zOutOfRangeNeg))
   // {
-  //   ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //   sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
   // }else{
   //   if(zOutOfRangeNeg){
   //     R = dir - 2*(wallPlane4.normal * dir)*wallPlane4.normal;
   //     R.normalise();
   //     dir = R*speed;
-  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
   //   } else if(zOutOfRangePos){
   //     R = dir -2*(wallPlane3.normal * dir)*wallPlane3.normal;
   //     R.normalise();
   //     dir = R*speed;
-  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
   //   } else if(yOutOfRangeNeg){
   //     R = dir -2*(floorPlane.normal * dir)*floorPlane.normal;
   //     R.normalise();
   //     dir = R*speed;
-  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
   //   } else if(yOutOfRangePos){
   //     R = dir -2*(ceilingPlane.normal * dir)*ceilingPlane.normal;
   //     R.normalise();
   //     dir = R*speed;
-  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
   //   } else if(xOutOfRangeNeg){
   //     R = dir -2*(wallPlane2.normal * dir)*wallPlane2.normal;
   //     R.normalise();
   //     dir = R*speed;
-  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
   //   } else if(xOutOfRangePos){
   //     R = dir -2*(wallPlane.normal * dir)*wallPlane.normal;
   //     R.normalise();
   //     dir = R*speed;
-  //     ogreNode2->translate(dir, Ogre::Node::TS_LOCAL);
+  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
   //   }
   // }
   printf("4\n");

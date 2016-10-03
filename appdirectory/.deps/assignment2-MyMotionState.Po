@@ -46,7 +46,7 @@ assignment2-MyMotionState.o: MyMotionState.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
  /usr/include/x86_64-linux-gnu/bits/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreSceneNode.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgrePrerequisites.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgrePlatform.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreConfig.h \
@@ -166,6 +166,7 @@ assignment2-MyMotionState.o: MyMotionState.cpp /usr/include/stdc-predef.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreHeaderSuffix.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreMemorySTLAllocator.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreMemoryNedPooling.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreCommon.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreString.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreMatrix3.h \
@@ -734,9 +735,7 @@ assignment2-MyMotionState.o: MyMotionState.cpp /usr/include/stdc-predef.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreKeyFrame.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgrePose.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreAnimationState.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreController.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreSceneNode.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h
+ /lusr/opt/ogre-1.9/include/OGRE/OgreController.h
 
 /usr/include/stdc-predef.h:
 
@@ -858,7 +857,7 @@ MyMotionState.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdio2.h:
 
-/lusr/opt/ogre-1.9/include/OGRE/OgreNode.h:
+/lusr/opt/ogre-1.9/include/OGRE/OgreSceneNode.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgrePrerequisites.h:
 
@@ -1163,6 +1162,8 @@ MyMotionState.h:
 /lusr/opt/ogre-1.9/include/OGRE/OgreMemorySTLAllocator.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgreMemoryNedPooling.h:
+
+/lusr/opt/ogre-1.9/include/OGRE/OgreNode.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgreCommon.h:
 
@@ -2385,7 +2386,3 @@ MyMotionState.h:
 /lusr/opt/ogre-1.9/include/OGRE/OgreAnimationState.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgreController.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreSceneNode.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreNode.h:

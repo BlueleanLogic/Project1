@@ -1030,10 +1030,10 @@ assignment2-TutorialApplication.o: TutorialApplication.cpp \
  /usr/include/bullet/BulletDynamics/Dynamics/btActionInterface.h \
  /usr/include/bullet/BulletDynamics/Dynamics/btRigidBody.h \
  /usr/include/bullet/BulletCollision/CollisionShapes/btCollisionShape.h \
- MyMotionState.h /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h \
- BulletEntities.h \
+ MyMotionState.h BulletEntities.h \
  /usr/include/bullet/BulletCollision/CollisionShapes/btStaticPlaneShape.h \
- /usr/include/bullet/BulletCollision/CollisionShapes/btSphereShape.h
+ /usr/include/bullet/BulletCollision/CollisionShapes/btSphereShape.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h
 
 /usr/include/stdc-predef.h:
 
@@ -3299,10 +3299,10 @@ Physics.h:
 
 MyMotionState.h:
 
-/lusr/opt/ogre-1.9/include/OGRE/OgreNode.h:
-
 BulletEntities.h:
 
 /usr/include/bullet/BulletCollision/CollisionShapes/btStaticPlaneShape.h:
 
 /usr/include/bullet/BulletCollision/CollisionShapes/btSphereShape.h:
+
+/lusr/opt/ogre-1.9/include/OGRE/OgreNode.h:
