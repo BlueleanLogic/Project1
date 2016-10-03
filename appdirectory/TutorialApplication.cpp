@@ -54,6 +54,27 @@ void TutorialApplication::createScene(void)
     bulletEntities = new BulletEntities();
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.5));
+    // {
+    //   mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
+
+    //   CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
+    //   CEGUI::Font::setDefaultResourceGroup("Fonts");
+    //   CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+    //   CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+    //   CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+
+    //   CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme"); 
+
+    //   CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
+    //   CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+    //   sheet = wmgr.createWindow("DefaultWindow", "Raquetball/Sheet");
+
+    //   scoreBox = wmgr.createWindow("TaharezLook/StaticText", "Raquetball/Pause/PauseMenu/Sound");
+    //   scoreBox->setText("Score: 0");
+    //   scoreBox->setSize(CEGUI::USize(CEGUI::UDim(0.1, 0), CEGUI::UDim(0.05, 0)));
+    //   scoreBox->setPosition(CEGUI::Vector2<CEGUI::UDim>(CEGUI::UDim(0.9,0), CEGUI::UDim(0,0)));
+    // }
+
 
 
     ////////////////FLOOR///////////////
@@ -328,7 +349,6 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   //   }
   // }
   printf("4\n");
-
 
   physicsEngine->stepSimulation();
 

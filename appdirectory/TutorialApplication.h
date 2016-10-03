@@ -23,6 +23,12 @@ http://www.ogre3d.org/wiki/
 #include "Physics.h"
 #include "MyMotionState.h"
 #include "BulletEntities.h"
+#include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
+#include <string>
+#include <iostream>
+
+
 
 //---------------------------------------------------------------------------
 
@@ -33,6 +39,9 @@ public:
     virtual ~TutorialApplication(void);
     Physics* physicsEngine;
     BulletEntities* bulletEntities;
+    CEGUI::Window *scoreBox;
+    CEGUI::Window *sheet;
+
 
 protected:
     virtual void createScene(void);
@@ -42,6 +51,8 @@ protected:
     virtual Ogre::Vector3 directionVector();
     virtual int RandomNum (int min, int max);
     virtual int speedOfBall();
+    CEGUI::OgreRenderer* mRenderer;
+
     
 
 private:
