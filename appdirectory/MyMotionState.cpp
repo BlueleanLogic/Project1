@@ -16,12 +16,12 @@ void MyMotionState::setNode(Ogre::SceneNode *node)
 }
 
 void MyMotionState::getWorldTransform(btTransform &worldTrans) const
-{
+{//from ogre to bullet
     worldTrans = mInitialPosition;
 }
 
 void MyMotionState::setWorldTransform(const btTransform &worldTrans)
-{
+{ //from bullet to ogre
     // if(mSceneNode == 0)
         // return; // silently return before we set a node
 

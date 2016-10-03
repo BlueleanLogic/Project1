@@ -26,8 +26,9 @@ btDiscreteDynamicsWorld* Physics::getDynamicsWorld() {
 }
 
 void Physics::stepSimulation(){
-	printf("5\n");
+	//printf("5\n");
 	dynamicsWorld->stepSimulation(1.0f/60.0f);
+
 	printf("6\n");
 }
 

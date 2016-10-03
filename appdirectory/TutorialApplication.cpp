@@ -44,6 +44,7 @@ Ogre::Plane ceilingPlane(Ogre::Vector3::NEGATIVE_UNIT_Y, 0);// positive y
 Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0); //positive x
 Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0); //negative x
 int speed;
+btRigidBody *sphereBody;
 
 void TutorialApplication::createScene(void)
 {
@@ -114,25 +115,17 @@ void TutorialApplication::createScene(void)
 
 
 
-    //Add physics to sphere
-    Ogre::Vector3 physicsCubeName = Ogre::Vector3(30,500,30);
-    btVector3 initialPosition = btVector3(30,500,30);
+    //Ogre sphere position
+    Ogre::Vector3 ogreSpherePosition = Ogre::Vector3(30,500,30);
+    //bullet sphere postion
+    btVector3 btSpherePosition = btVector3(30,500,30);
 
-    // Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName("Cube.mesh").staticCast<Ogre::Mesh>();
-
-    // Ogre::Entity *entity = mSceneMgr->createEntity("Cube.mesh");
-
-    Ogre::SceneNode *ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(physicsCubeName);
-    // ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
-    // Ogre::Vector3(0, 200, 0));
+    Ogre::SceneNode *ogreNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(ogreSpherePosition);
+    
     ogreNode2->attachObject(sphereEntity);
 
-    //create the new shape, and tell the physics that is a Box
-    // we are redoing this: btCollisionShape *newRigidShape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
     btSphereShape* btSphereCollider = bulletEntities->makePingPongBall(sphereRadius); //change this value!
 
-
-    // physicsEngine->getCollisionShapes().push_back(newRigidShape);
     btTransform startTransform;
     startTransform.setIdentity();
     startTransform.setRotation(btQuaternion(1.0f, 1.0f, 1.0f, 0));
@@ -141,20 +134,20 @@ void TutorialApplication::createScene(void)
     btScalar mass(0.1f);
     btVector3 localInertia(0,0,0);
 
-    startTransform.setOrigin(initialPosition);
-    // btSphereCollider->calculateLocalInertia(mass, localInertia); // maybe uncomment
+    startTransform.setOrigin(btSpherePosition);
+    btSphereCollider->calculateLocalInertia(mass, localInertia); // maybe uncomment
 
     //actually contruvc the body and add it to the dynamics world
     MyMotionState *myMotionState = new MyMotionState(startTransform, ogreNode2);
     myMotionState->getWorldTransform(startTransform);
 
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, btSphereCollider, localInertia);
-    btRigidBody *body = new btRigidBody(rbInfo);
-    // body->setRestitution(1);
-    // body->setUserPointer(ogreNode2);
+    sphereBody = new btRigidBody(rbInfo); //global
+    sphereBody->setRestitution(1);
+    sphereBody->setUserPointer(ogreNode2);
 
     printf("1\n");
-    physicsEngine->getDynamicsWorld()->addRigidBody(body);
+    physicsEngine->getDynamicsWorld()->addRigidBody(sphereBody);
     printf("2\n");
 
     // physicsEngine->trackRigidBodyWithName(body, physicsCubeName);
@@ -351,6 +344,12 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 
 
   physicsEngine->stepSimulation();
+
+  btTransform trans;
+  sphereBody->getMotionState()->getWorldTransform(trans);
+  printf("\nposition of Y: ");
+  printf("%f", (float)(trans.getOrigin().getY()));
+
   printf("7\n");
 
   return ret;
