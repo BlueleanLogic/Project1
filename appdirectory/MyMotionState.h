@@ -2,7 +2,7 @@
 #define __MyMotionState_h_
 #include "LinearMath/btMotionState.h"
 #include <OgreNode.h>
-
+#include <OgreSceneNode.h>
 
 //---------
 // includes

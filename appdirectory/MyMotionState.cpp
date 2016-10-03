@@ -22,11 +22,11 @@ void MyMotionState::getWorldTransform(btTransform &worldTrans) const
 
 void MyMotionState::setWorldTransform(const btTransform &worldTrans)
 { //from bullet to ogre
-    // if(mSceneNode == 0)
-        // return; // silently return before we set a node
+    if(mSceneNode == 0)
+        return; // silently return before we set a node
 
-    // btQuaternion rot = worldTrans.getRotation();
-    // mSceneNode ->setOrientation(rot, true);
-    // btVector3 pos = worldTrans.getOrigin();
-    // mSceneNode ->setPosition(pos.x(), pos.y(), pos.z());
+    btQuaternion rot = worldTrans.getRotation();
+    mSceneNode->setOrientation(rot.w(), rot.x(), rot.y(), rot.z());
+    btVector3 pos = worldTrans.getOrigin();
+    mSceneNode->setPosition(pos.x(), pos.y(), pos.z());
 }
