@@ -45,6 +45,7 @@ Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0); //positive x
 Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0); //negative x
 int speed;
 btRigidBody *sphereBody;
+btRigidBody *groundBody;
 
 void TutorialApplication::createScene(void)
 {
@@ -54,16 +55,11 @@ void TutorialApplication::createScene(void)
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.5));
 
-    // btTransform groundTransform;
-    // groundTransform.setIdentity();
-    // groundTransform.setOrigin(btVector3(0, -50, 0));
-    btScalar groundMass(0.);
-    btVector3 localGroundInertia(0, 0, 0);
-
-    btCollisionShape *groundShape = new btBoxShape(btVector3(btScalar(cubeRoomDimention), btScalar(cubeRoomDimention), btScalar(cubeRoomDimention)));
-    // btDefaultMotionState *groundMotionState = new btDefaultMotionState(groundTransform);
 
     ////////////////FLOOR///////////////
+
+    Ogre::SceneNode *groundNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+
     Ogre::MeshManager::getSingleton().createPlane(
       "ground",
       Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
@@ -74,22 +70,32 @@ void TutorialApplication::createScene(void)
       Ogre::Vector3::UNIT_Z);
 
     Ogre::Entity* groundEntity = mSceneMgr->createEntity("ground");
-    mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(groundEntity);
     groundEntity->setCastShadows(false);
     groundEntity->setMaterialName("Examples/Rockwall");
-    ////////////////////////////////////////////////
+    groundNode->attachObject(groundEntity);
 
-    // groundShape->calculateLocalInertia(groundMass, localGroundInertia);
 
-    // btRigidBody::btRigidBodyConstructionInfo groundRBInfo(groundMass, groundMotionState, groundShape, localGroundInertia);
-    // btRigidBody *groundBody = new btRigidBody(groundRBInfo);
+    // ***Set up bullet Transform necessary for rigidbody.***
+    btTransform groundTransform;
+    groundTransform.setIdentity();
+    groundTransform.setOrigin(btVector3(0, -50, 0));
 
-    // physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
+    // ***Set up CollisionShape necessary for rigidbody.***
+    btCollisionShape *groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+    btScalar groundMass(0.);
+    btVector3 localGroundInertia(0, 0, 0);
+    groundShape->calculateLocalInertia(groundMass, localGroundInertia);
 
-    // ***Used for manually setting velocity in Project 1.***
-    // srand(time(NULL)); //for random number
-    // speed = speedOfBall();
-    // dir = directionVector()*speed;
+    // ***Set up MotionState necessary for rigidbody.***
+    MyMotionState *groundMotionState = new MyMotionState(groundTransform, groundNode);
+
+    // ***Create and track the ground's rigidbody.***
+    btRigidBody::btRigidBodyConstructionInfo groundRBInfo(groundMass, groundMotionState, groundShape, localGroundInertia);
+    groundBody = new btRigidBody(groundRBInfo);
+    groundBody->setRestitution(1);
+    physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
+
+    ////////////////SPHERE///////////////
 
     // **Initial Position for Sphere. (Used to sync initial Ogre and Bullet sphere positions.)**
     int ipfsX = 30;
@@ -125,11 +131,9 @@ void TutorialApplication::createScene(void)
     // ***Create and track the sphere's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, btSphereCollider, localInertia);
     sphereBody = new btRigidBody(rbInfo);
-    sphereBody->setRestitution(1);
+    sphereBody->setRestitution(2);
     sphereBody->setUserPointer(sphereNode);
     physicsEngine->getDynamicsWorld()->addRigidBody(sphereBody);
-
-
 
     /////////////CEILING////////////////////////
 
@@ -235,6 +239,12 @@ void TutorialApplication::createScene(void)
     wallEntity4->setCastShadows(false);
 
     wallEntity4->setMaterialName("Examples/Rockwall"); 
+
+    ////////////////////////////////////////////////
+    // ***Used for manually setting velocity in Project 1.***
+    // srand(time(NULL)); //for random number
+    // speed = speedOfBall();
+    // dir = directionVector()*speed;
 }
 //---------------------------------------------------------------------------
 
