@@ -139,7 +139,9 @@ void TutorialApplication::createScene(void)
 
     //actually contruvc the body and add it to the dynamics world
     MyMotionState *myMotionState = new MyMotionState(startTransform, ogreNode2);
-    myMotionState->getWorldTransform(startTransform);
+    // myMotionState->getWorldTransform(startTransform);
+    // btDefaultMotionState* fallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
+
 
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, btSphereCollider, localInertia);
     sphereBody = new btRigidBody(rbInfo); //global

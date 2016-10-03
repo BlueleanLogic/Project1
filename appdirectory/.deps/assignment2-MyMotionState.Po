@@ -734,7 +734,9 @@ assignment2-MyMotionState.o: MyMotionState.cpp /usr/include/stdc-predef.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreKeyFrame.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgrePose.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreAnimationState.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreController.h
+ /lusr/opt/ogre-1.9/include/OGRE/OgreController.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreSceneNode.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h
 
 /usr/include/stdc-predef.h:
 
@@ -2383,3 +2385,7 @@ MyMotionState.h:
 /lusr/opt/ogre-1.9/include/OGRE/OgreAnimationState.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgreController.h:
+
+/lusr/opt/ogre-1.9/include/OGRE/OgreSceneNode.h:
+
+/lusr/opt/ogre-1.9/include/OGRE/OgreNode.h:
