@@ -33,7 +33,7 @@ TutorialApplication::~TutorialApplication(void)
 
 //---------------------------------------------------------------------------
 int cubeRoomDimention = 5000;
-int sphereRadius = 95;
+int sphereRadius = 100;
 Ogre::Entity* sphereEntity;
 Ogre::SceneNode* ogreNode2;
 Ogre::Vector3 dir;
@@ -129,7 +129,7 @@ void TutorialApplication::createScene(void)
 
     //create the new shape, and tell the physics that is a Box
     // we are redoing this: btCollisionShape *newRigidShape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
-    btSphereShape btSphereCollider = bulletEntities->makePingPongBall(40); //change this value!
+    btSphereShape* btSphereCollider = bulletEntities->makePingPongBall(sphereRadius); //change this value!
 
 
     // physicsEngine->getCollisionShapes().push_back(newRigidShape);
@@ -148,7 +148,7 @@ void TutorialApplication::createScene(void)
     MyMotionState *myMotionState = new MyMotionState(startTransform, ogreNode2);
     myMotionState->getWorldTransform(startTransform);
 
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, &btSphereCollider, localInertia);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, btSphereCollider, localInertia);
     btRigidBody *body = new btRigidBody(rbInfo);
     // body->setRestitution(1);
     // body->setUserPointer(ogreNode2);
@@ -351,7 +351,7 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 
 
   physicsEngine->stepSimulation();
-  printf("6\n");
+  printf("7\n");
 
   return ret;
 }

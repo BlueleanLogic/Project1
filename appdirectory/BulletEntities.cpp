@@ -13,9 +13,9 @@ BulletEntities::~BulletEntities(void)
 {
 }
 
-btSphereShape BulletEntities::makePingPongBall(int radius)	{
+btSphereShape* BulletEntities::makePingPongBall(int radius)	{
 	btScalar rad(radius);
-	return btSphereShape(rad);
+	return new btSphereShape(rad);
 }
 
 btStaticPlaneShape BulletEntities::makePlane(Ogre::Vector3 normal, int planeConstant){

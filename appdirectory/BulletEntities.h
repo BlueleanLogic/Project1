@@ -10,7 +10,7 @@ class BulletEntities{
 	public:
 		BulletEntities(void);
 		~BulletEntities(void);
-		btSphereShape makePingPongBall(int radius);
+		btSphereShape* makePingPongBall(int radius);
 		btStaticPlaneShape makePlane(Ogre::Vector3 normal, int planeConstant);
 
 	protected:
