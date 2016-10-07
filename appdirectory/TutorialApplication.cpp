@@ -46,6 +46,12 @@ Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0); //negative x
 int speed;
 btRigidBody *sphereBody;
 btRigidBody *groundBody;
+btRigidBody *ceilingBody;
+btRigidBody *wall1Body;
+btRigidBody *wall2Body;
+btRigidBody *wall3Body;
+btRigidBody *wall4Body;
+
 
 void TutorialApplication::createScene(void)
 {
@@ -152,7 +158,7 @@ void TutorialApplication::createScene(void)
     // ***Create and track the sphere's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, btSphereCollider, localInertia);
     sphereBody = new btRigidBody(rbInfo);
-    sphereBody->setRestitution(2);
+    sphereBody->setRestitution(3);
     sphereBody->setUserPointer(sphereNode);
     physicsEngine->getDynamicsWorld()->addRigidBody(sphereBody);
 
@@ -169,13 +175,32 @@ void TutorialApplication::createScene(void)
 
     Ogre::Entity* ceilingEntity = mSceneMgr->createEntity("ceiling");
 
-    Ogre::SceneNode* ogreNode3 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
+    Ogre::SceneNode* ceilingNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(
     Ogre::Vector3(0, cubeRoomDimention, 0));
-    ogreNode3->attachObject(ceilingEntity);
+    ceilingNode->attachObject(ceilingEntity);
 
     ceilingEntity->setCastShadows(false);
 
     ceilingEntity->setMaterialName("Examples/CloudySky");
+
+    btTransform ceilingTransform;
+    ceilingTransform.setIdentity();
+    ceilingTransform.setOrigin(btVector3(0, 50, 0));  // probably have to do something here
+
+    // ***Set up CollisionShape necessary for rigidbody.***
+    btCollisionShape *ceilingShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+    btScalar ceilingMass(0.);
+    btVector3 localCeilingInertia(0, 0, 0);
+    ceilingShape->calculateLocalInertia(ceilingMass, localCeilingInertia);
+
+    // ***Set up MotionState necessary for rigidbody.***
+    MyMotionState *ceilingMotionState = new MyMotionState(ceilingTransform, ceilingNode);
+
+    // ***Create and track the ground's rigidbody.***
+    btRigidBody::btRigidBodyConstructionInfo ceilingRBInfo(ceilingMass, ceilingMotionState, ceilingShape, localCeilingInertia);
+    ceilingBody = new btRigidBody(ceilingRBInfo);
+    ceilingBody->setRestitution(1);
+    physicsEngine->getDynamicsWorld()->addRigidBody(ceilingBody);
 
     ////////////WALL 1 ALONG POS X/////////////////////////////
 
@@ -190,13 +215,34 @@ void TutorialApplication::createScene(void)
 
     Ogre::Entity* wallEntity = mSceneMgr->createEntity("wall");
 
-    Ogre::SceneNode* ogreNode4 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
+    Ogre::SceneNode* wall1Node = mSceneMgr->getRootSceneNode()->createChildSceneNode(
     Ogre::Vector3(cubeRoomDimention/2, cubeRoomDimention/2, 0));
-    ogreNode4->attachObject(wallEntity);
+    wall1Node->attachObject(wallEntity);
 
     wallEntity->setCastShadows(false);
 
     wallEntity->setMaterialName("Examples/Rockwall");
+
+    // adding physics
+
+    btTransform wall1;
+    wall1.setIdentity();
+    wall1.setOrigin(btVector3(0, 50, 0));  // probably have to do something here
+
+    // ***Set up CollisionShape necessary for rigidbody.***
+    btCollisionShape *wall1Shape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+    btScalar wall1Mass(0.);
+    btVector3 localWall1Inertia(0, 0, 0);
+    wall1Shape->calculateLocalInertia(wall1Mass, localWall1Inertia);
+
+    // ***Set up MotionState necessary for rigidbody.***
+    MyMotionState *wall1MotionState = new MyMotionState(wall1, wall1Node);
+
+    // ***Create and track the ground's rigidbody.***
+    btRigidBody::btRigidBodyConstructionInfo wall1RBInfo(wall1Mass, wall1MotionState, wall1Shape, localWall1Inertia);
+    wall1Body = new btRigidBody(wall1RBInfo);
+    wall1Body->setRestitution(1);
+    physicsEngine->getDynamicsWorld()->addRigidBody(wall1Body);
 
     ////////////WALL 2 ALONG NEG X/////////////////////////////
 
@@ -211,13 +257,32 @@ void TutorialApplication::createScene(void)
 
     Ogre::Entity* wallEntity2 = mSceneMgr->createEntity("wall2");
 
-    Ogre::SceneNode* ogreNode5 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
+    Ogre::SceneNode* wall2Node = mSceneMgr->getRootSceneNode()->createChildSceneNode(
     Ogre::Vector3(-(cubeRoomDimention/2), cubeRoomDimention/2, 0));
-    ogreNode5->attachObject(wallEntity2);
+    wall2Node->attachObject(wallEntity2);
 
     wallEntity2->setCastShadows(false);
 
     wallEntity2->setMaterialName("Examples/Rockwall");
+
+    btTransform wall2;
+    wall2.setIdentity();
+    wall2.setOrigin(btVector3(0, 50, 0));  // probably have to do something here
+
+    // ***Set up CollisionShape necessary for rigidbody.***
+    btCollisionShape *wall2Shape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+    btScalar wall2Mass(0.);
+    btVector3 localwall2Inertia(0, 0, 0);
+    wall2Shape->calculateLocalInertia(wall2Mass, localwall2Inertia);
+
+    // ***Set up MotionState necessary for rigidbody.***
+    MyMotionState *wall2MotionState = new MyMotionState(wall2, wall2Node);
+
+    // ***Create and track the ground's rigidbody.***
+    btRigidBody::btRigidBodyConstructionInfo wall2RBInfo(wall2Mass, wall2MotionState, wall2Shape, localwall2Inertia);
+    wall2Body = new btRigidBody(wall2RBInfo);
+    wall2Body->setRestitution(1);
+    physicsEngine->getDynamicsWorld()->addRigidBody(wall2Body);
 
     ////////////WALL 3 ALONG POS Z/////////////////////////////
 
@@ -232,13 +297,32 @@ void TutorialApplication::createScene(void)
 
     Ogre::Entity* wallEntity3 = mSceneMgr->createEntity("wall3");
 
-    Ogre::SceneNode* ogreNode6 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
+    Ogre::SceneNode* wall3Node = mSceneMgr->getRootSceneNode()->createChildSceneNode(
     Ogre::Vector3(0, cubeRoomDimention/2, cubeRoomDimention/2));
-    ogreNode6->attachObject(wallEntity3);
+    wall3Node->attachObject(wallEntity3);
 
     wallEntity3->setCastShadows(false);
 
     wallEntity3->setMaterialName("Examples/Rockwall"); 
+
+    btTransform wall3;
+    wall3.setIdentity();
+    wall3.setOrigin(btVector3(0, 50, 0));  // probably have to do something here
+
+    // ***Set up CollisionShape necessary for rigidbody.***
+    btCollisionShape *wall3Shape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+    btScalar wall3Mass(0.);
+    btVector3 localwall3Inertia(0, 0, 0);
+    wall3Shape->calculateLocalInertia(wall3Mass, localwall3Inertia);
+
+    // ***Set up MotionState necessary for rigidbody.***
+    MyMotionState *wall3MotionState = new MyMotionState(wall3, wall3Node);
+
+    // ***Create and track the ground's rigidbody.***
+    btRigidBody::btRigidBodyConstructionInfo wall3RBInfo(wall3Mass, wall3MotionState, wall3Shape, localwall3Inertia);
+    wall3Body = new btRigidBody(wall3RBInfo);
+    wall3Body->setRestitution(1);
+    physicsEngine->getDynamicsWorld()->addRigidBody(wall3Body);
 
     ////////////WALL 4 ALONG NEG Z/////////////////////////////
 
@@ -253,13 +337,32 @@ void TutorialApplication::createScene(void)
 
     Ogre::Entity* wallEntity4 = mSceneMgr->createEntity("wall4");
 
-    Ogre::SceneNode* ogreNode7 = mSceneMgr->getRootSceneNode()->createChildSceneNode(
+    Ogre::SceneNode* wall4Node = mSceneMgr->getRootSceneNode()->createChildSceneNode(
     Ogre::Vector3(0, cubeRoomDimention/2, -(cubeRoomDimention/2)));
-    ogreNode7->attachObject(wallEntity4);
+    wall4Node->attachObject(wallEntity4);
 
     wallEntity4->setCastShadows(false);
 
     wallEntity4->setMaterialName("Examples/Rockwall"); 
+
+    btTransform wall4;
+    wall4.setIdentity();
+    wall4.setOrigin(btVector3(0, 50, 0));  // probably have to do something here
+
+    // ***Set up CollisionShape necessary for rigidbody.***
+    btCollisionShape *wall4Shape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+    btScalar wall4Mass(0.);
+    btVector3 localwall4Inertia(0, 0, 0);
+    wall4Shape->calculateLocalInertia(wall4Mass, localwall4Inertia);
+
+    // ***Set up MotionState necessary for rigidbody.***
+    MyMotionState *wall4MotionState = new MyMotionState(wall4, wall4Node);
+
+    // ***Create and track the ground's rigidbody.***
+    btRigidBody::btRigidBodyConstructionInfo wall4RBInfo(wall4Mass, wall4MotionState, wall4Shape, localwall4Inertia);
+    wall4Body = new btRigidBody(wall4RBInfo);
+    wall4Body->setRestitution(1);
+    physicsEngine->getDynamicsWorld()->addRigidBody(wall4Body);
 
     ////////////////////////////////////////////////
     // ***Used for manually setting velocity in Project 1.***

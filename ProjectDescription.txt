@@ -1,5 +1,0 @@
-Project Description:
-
-Functionality: Other than adding the standard features, the camera is in a fixed point, but is able to rotate with movement of the mouse. There are also added lights in the scene as well as wall and ball textures. In order to generate random numbers for the speed and direction I used srand() with it's seed set at the time when the user opens the program. To use, move the mouse to change camera angle if you wish to follow the ball's movement.
-
-
