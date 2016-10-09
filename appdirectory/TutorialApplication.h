@@ -21,6 +21,7 @@ http://www.ogre3d.org/wiki/
 #include "BaseApplication.h"
 #include <OgreVector3.h>
 #include "Physics.h"
+#include "Sound.h"
 #include "MyMotionState.h"
 #include "BulletEntities.h"
 #include <CEGUI/CEGUI.h>
@@ -41,6 +42,7 @@ public:
     BulletEntities* bulletEntities;
     CEGUI::Window *scoreBox;
     CEGUI::Window *sheet;
+    Sound *sound;
 
 
 protected:

@@ -58,6 +58,7 @@ void TutorialApplication::createScene(void)
     // Setting Up Physics
     physicsEngine = new Physics();
     bulletEntities = new BulletEntities();
+    sound = new Sound();
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.5));
     // {

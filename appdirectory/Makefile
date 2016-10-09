@@ -101,10 +101,12 @@ am_assignment2_OBJECTS = assignment2-TutorialApplication.$(OBJEXT) \
 	assignment2-BaseApplication.$(OBJEXT) \
 	assignment2-Physics.$(OBJEXT) \
 	assignment2-MyMotionState.$(OBJEXT) \
-	assignment2-BulletEntities.$(OBJEXT)
+	assignment2-BulletEntities.$(OBJEXT) \
+	assignment2-Sound.$(OBJEXT)
 assignment2_OBJECTS = $(am_assignment2_OBJECTS)
 am__DEPENDENCIES_1 =
 assignment2_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
@@ -195,13 +197,13 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /u/rtx129/Documents/cs354r/project2/Project1/appdirectory/missing aclocal-1.14
+ACLOCAL = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing aclocal-1.14
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /u/rtx129/Documents/cs354r/project2/Project1/appdirectory/missing autoconf
-AUTOHEADER = ${SHELL} /u/rtx129/Documents/cs354r/project2/Project1/appdirectory/missing autoheader
-AUTOMAKE = ${SHELL} /u/rtx129/Documents/cs354r/project2/Project1/appdirectory/missing automake-1.14
+AUTOCONF = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing autoconf
+AUTOHEADER = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing autoheader
+AUTOMAKE = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing automake-1.14
 AWK = gawk
 BULLET_CFLAGS = 
 BULLET_LIBS = 
@@ -244,7 +246,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /u/rtx129/Documents/cs354r/project2/Project1/appdirectory/missing makeinfo
+MAKEINFO = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
@@ -269,15 +271,17 @@ PKG_CONFIG = /usr/bin/pkg-config
 PKG_CONFIG_LIBDIR = 
 PKG_CONFIG_PATH = 
 RANLIB = ranlib
+SDLMIXER_CFLAGS = -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT
+SDLMIXER_LIBS = -L/usr/lib/x86_64-linux-gnu -lSDL -lSDL_mixer
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = strip
 VERSION = 0.1
-abs_builddir = /u/rtx129/Documents/cs354r/project2/Project1/appdirectory
-abs_srcdir = /u/rtx129/Documents/cs354r/project2/Project1/appdirectory
-abs_top_builddir = /u/rtx129/Documents/cs354r/project2/Project1/appdirectory
-abs_top_srcdir = /u/rtx129/Documents/cs354r/project2/Project1/appdirectory
+abs_builddir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
+abs_srcdir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
+abs_top_builddir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
+abs_top_srcdir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -309,7 +313,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /u/rtx129/Documents/cs354r/project2/Project1/appdirectory/install-sh
+install_sh = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -322,6 +326,8 @@ prefix = /usr/local
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
+sdl_CFLAGS = -D_GNU_SOURCE=1 -D_REENTRANT -I/usr/include/SDL  
+sdl_LIBS = -lSDL  
 sharedstatedir = ${prefix}/com
 srcdir = .
 sysconfdir = ${prefix}/etc
@@ -329,11 +335,11 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-noinst_HEADERS = TutorialApplication.h BaseApplication.h Physics.h MyMotionState.h BulletEntities.h
+noinst_HEADERS = TutorialApplication.h BaseApplication.h Physics.h MyMotionState.h BulletEntities.h Sound.h
 assignment2_CPPFLAGS = -I$(top_srcdir)
-assignment2_SOURCES = TutorialApplication.cpp BaseApplication.cpp Physics.cpp MyMotionState.cpp BulletEntities.cpp
-assignment2_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS)
-assignment2_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS)
+assignment2_SOURCES = TutorialApplication.cpp BaseApplication.cpp Physics.cpp MyMotionState.cpp BulletEntities.cpp Sound.cpp
+assignment2_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS) $(sdl_CFLAGS) $(SDLMIXER_CFLAGS)
+assignment2_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS) $(sdl_LIBS) $(SDLMIXER_LIBS)
 assignment2_LDFLAGS = -lOgreOverlay -lboost_system
 EXTRA_DIST = buildit makeit
 AUTOMAKE_OPTIONS = foreign
@@ -455,6 +461,7 @@ include ./$(DEPDIR)/assignment2-BaseApplication.Po
 include ./$(DEPDIR)/assignment2-BulletEntities.Po
 include ./$(DEPDIR)/assignment2-MyMotionState.Po
 include ./$(DEPDIR)/assignment2-Physics.Po
+include ./$(DEPDIR)/assignment2-Sound.Po
 include ./$(DEPDIR)/assignment2-TutorialApplication.Po
 
 .cpp.o:
@@ -547,6 +554,20 @@ assignment2-BulletEntities.obj: BulletEntities.cpp
 #	$(AM_V_CXX)source='BulletEntities.cpp' object='assignment2-BulletEntities.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-BulletEntities.obj `if test -f 'BulletEntities.cpp'; then $(CYGPATH_W) 'BulletEntities.cpp'; else $(CYGPATH_W) '$(srcdir)/BulletEntities.cpp'; fi`
+
+assignment2-Sound.o: Sound.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -MT assignment2-Sound.o -MD -MP -MF $(DEPDIR)/assignment2-Sound.Tpo -c -o assignment2-Sound.o `test -f 'Sound.cpp' || echo '$(srcdir)/'`Sound.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment2-Sound.Tpo $(DEPDIR)/assignment2-Sound.Po
+#	$(AM_V_CXX)source='Sound.cpp' object='assignment2-Sound.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-Sound.o `test -f 'Sound.cpp' || echo '$(srcdir)/'`Sound.cpp
+
+assignment2-Sound.obj: Sound.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -MT assignment2-Sound.obj -MD -MP -MF $(DEPDIR)/assignment2-Sound.Tpo -c -o assignment2-Sound.obj `if test -f 'Sound.cpp'; then $(CYGPATH_W) 'Sound.cpp'; else $(CYGPATH_W) '$(srcdir)/Sound.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment2-Sound.Tpo $(DEPDIR)/assignment2-Sound.Po
+#	$(AM_V_CXX)source='Sound.cpp' object='assignment2-Sound.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-Sound.obj `if test -f 'Sound.cpp'; then $(CYGPATH_W) 'Sound.cpp'; else $(CYGPATH_W) '$(srcdir)/Sound.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
