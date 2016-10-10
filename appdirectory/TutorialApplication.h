@@ -57,6 +57,8 @@ protected:
     virtual Ogre::Vector3 directionVector();
     virtual int RandomNum (int min, int max);
     virtual int speedOfBall();
+    void makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
+                   const char *materialName, btVector3 btOriginVector, btVector3 planeNormal, int planeConstant);
     CEGUI::OgreRenderer* mRenderer;
 
     
