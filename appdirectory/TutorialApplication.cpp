@@ -68,7 +68,6 @@ btRigidBody *wall1Body;
 btRigidBody *wall2Body;
 btRigidBody *wall3Body;
 btRigidBody *wall4Body;
-<<<<<<< HEAD
 btTransform paddleTransformation;
 
 
