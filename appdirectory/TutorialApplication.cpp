@@ -20,7 +20,18 @@ Description: Makes a ball and a room, and alows the user to watch the ball bounc
 #include <ctime>
 #include "MyMotionState.h"
 #include <OgreRectangle2D.h>
+#include "scoreBoard.h"
+#include <string>
+#include <iostream>
+#include <sstream>
 
+template <typename T>
+  std::string NumberToString ( T Number )
+  {
+    std::ostringstream ss;
+    ss << Number;
+    return ss.str();
+  }
 
 //---------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
@@ -55,7 +66,7 @@ btRigidBody *wall1Body;
 btRigidBody *wall2Body;
 btRigidBody *wall3Body;
 btRigidBody *wall4Body;
-
+int a = 0;
 
 void TutorialApplication::createScene(void)
 {
@@ -65,26 +76,29 @@ void TutorialApplication::createScene(void)
     // sound = new Sound();
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
-    // {
-    //   mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
+    {
+      mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
 
-    //   CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
-    //   CEGUI::Font::setDefaultResourceGroup("Fonts");
-    //   CEGUI::Scheme::setDefaultResourceGroup("Schemes");
-    //   CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
-    //   CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+      CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
+      CEGUI::Font::setDefaultResourceGroup("Fonts");
+      CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+      CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+      CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
 
-    //   CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme"); 
+      CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme"); 
 
-    //   CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
-    //   CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-    //   sheet = wmgr.createWindow("DefaultWindow", "Raquetball/Sheet");
+      CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
+      CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+      sheet = wmgr.createWindow("DefaultWindow", "Raquetball/Sheet");
 
-    //   scoreBox = wmgr.createWindow("TaharezLook/StaticText", "Raquetball/Pause/PauseMenu/Sound");
-    //   scoreBox->setText("Score: 0");
-    //   scoreBox->setSize(CEGUI::USize(CEGUI::UDim(0.1, 0), CEGUI::UDim(0.05, 0)));
-    //   scoreBox->setPosition(CEGUI::Vector2<CEGUI::UDim>(CEGUI::UDim(0.9,0), CEGUI::UDim(0,0)));
-    // }
+      scoreBox = wmgr.createWindow("TaharezLook/StaticText", "Raquetball/Pause/PauseMenu/Sound");
+      scoreBox->setText("Score: 0");
+      scoreBox->setSize(CEGUI::USize(CEGUI::UDim(0.1, 0), CEGUI::UDim(0.05, 0)));
+      scoreBox->setPosition(CEGUI::Vector2<CEGUI::UDim>(CEGUI::UDim(0.9,0), CEGUI::UDim(0,0)));
+      sheet->addChild(scoreBox);
+      scoreBox->setText("Score: 0");           
+      CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+    }
 
 
     ////////////////PADDLE//////////////
@@ -313,7 +327,9 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   sphereBody->getMotionState()->getWorldTransform(trans);
   //printf("\nposition of Y: ");
   //printf("%f", (float)(trans.getOrigin().getY()));
-
+  a++;
+  std::string s = NumberToString(a);
+  scoreBox->setText("Score: "+s);
   //printf("7\n");
 
   return ret;

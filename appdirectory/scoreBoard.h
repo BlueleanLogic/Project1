@@ -6,7 +6,6 @@
 class scoreBoard
 {
     private:
-        bool gameOver;
 
     public:
         int getScore();
