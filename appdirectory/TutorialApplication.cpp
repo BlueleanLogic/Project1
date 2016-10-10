@@ -23,7 +23,11 @@ Description: Makes a ball and a room, and alows the user to watch the ball bounc
 //---------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
     :physicsEngine(0),
-    bulletEntities(0)
+    bulletEntities(0),
+
+    mPlane(0),
+    mPlaneEntity(0),
+    mPlaneNode(0)
 {
 }
 //---------------------------------------------------------------------------
@@ -60,7 +64,7 @@ void TutorialApplication::createScene(void)
     bulletEntities = new BulletEntities();
     sound = new Sound();
 
-    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.5));
+    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
     // {
     //   mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
 
@@ -83,6 +87,25 @@ void TutorialApplication::createScene(void)
     // }
 
 
+    ////////////////PADDLE//////////////
+    /*mPlane = new Ogre::MovablePlane("Plane");
+    mPlane->d = 0;
+    mPlane->normal = Ogre::Vector3::UNIT_Y;
+     
+    Ogre::MeshManager::getSingleton().createPlane(
+      "Paddle",
+      Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+      *mPlane,
+      120, 120, 1, 1,
+      true,
+      1, 1, 1,
+      Ogre::Vector3::UNIT_Z);
+    mPlaneEntity = mSceneMgr->createEntity("Paddle");
+    //mPlaneEntity->setMaterialName("PlaneMat");
+     
+    mPlaneNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+    mPlaneNode->attachObject(mPlaneEntity); */
+
 
     ////////////////FLOOR///////////////
 
@@ -99,7 +122,7 @@ void TutorialApplication::createScene(void)
 
     Ogre::Entity* groundEntity = mSceneMgr->createEntity("ground");
     groundEntity->setCastShadows(false);
-    groundEntity->setMaterialName("Examples/Rockwall");
+    groundEntity->setMaterialName("MyMaterials/WoodenFloor");
     groundNode->attachObject(groundEntity);
 
 
@@ -137,7 +160,7 @@ void TutorialApplication::createScene(void)
     // ***Add sphere entity to its node.***
     sphereEntity = mSceneMgr->createEntity("sphere.mesh");
     sphereEntity->setCastShadows(true);
-    // sphereEntity->setMaterialName("Examples/EnvMappedRustySteel");        /* TODO: Reapply a texture to the sphere. */
+    sphereEntity->setMaterialName("MyMaterials/GreenRubberBall");
     sphereNode->attachObject(sphereEntity);
 
     // ***Set up bullet Transform necessary for rigidbody.***
@@ -182,7 +205,7 @@ void TutorialApplication::createScene(void)
 
     ceilingEntity->setCastShadows(false);
 
-    ceilingEntity->setMaterialName("Examples/CloudySky");
+    ceilingEntity->setMaterialName("MyMaterials/White");
 
     btTransform ceilingTransform;
     ceilingTransform.setIdentity();
@@ -222,7 +245,7 @@ void TutorialApplication::createScene(void)
 
     wallEntity->setCastShadows(false);
 
-    wallEntity->setMaterialName("Examples/Rockwall");
+    wallEntity->setMaterialName("MyMaterials/HexagonsAndStars");
 
     // adding physics
 
@@ -264,7 +287,7 @@ void TutorialApplication::createScene(void)
 
     wallEntity2->setCastShadows(false);
 
-    wallEntity2->setMaterialName("Examples/Rockwall");
+    wallEntity2->setMaterialName("MyMaterials/HexagonsAndStars");
 
     btTransform wall2;
     wall2.setIdentity();
@@ -304,7 +327,7 @@ void TutorialApplication::createScene(void)
 
     wallEntity3->setCastShadows(false);
 
-    wallEntity3->setMaterialName("Examples/Rockwall"); 
+    wallEntity3->setMaterialName("MyMaterials/HexagonsAndStars"); 
 
     btTransform wall3;
     wall3.setIdentity();
@@ -344,7 +367,7 @@ void TutorialApplication::createScene(void)
 
     wallEntity4->setCastShadows(false);
 
-    wallEntity4->setMaterialName("Examples/Rockwall"); 
+    wallEntity4->setMaterialName("MyMaterials/HexagonsAndStars"); 
 
     btTransform wall4;
     wall4.setIdentity();

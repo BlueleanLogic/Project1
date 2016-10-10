@@ -44,6 +44,10 @@ public:
     CEGUI::Window *sheet;
     Sound *sound;
 
+    Ogre::MovablePlane* mPlane;
+    Ogre::Entity* mPlaneEntity;
+    Ogre::SceneNode* mPlaneNode;
+
 
 protected:
     virtual void createScene(void);

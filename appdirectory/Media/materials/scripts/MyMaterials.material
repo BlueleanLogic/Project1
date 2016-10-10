@@ -1,0 +1,58 @@
+material MyMaterials/WoodenFloor
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture WoodenFloor.png
+			}
+		}
+	}
+}
+
+material MyMaterials/HexagonsAndStars
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture HexagonsAndStars.jpg
+			}
+
+		}
+	}
+}
+
+material MyMaterials/White
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture White.png
+			}
+
+		}
+	}
+}
+
+material MyMaterials/GreenRubberBall
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture GreenRubber.jpg
+				env_map spherical
+			}
+		}
+	}
+}
