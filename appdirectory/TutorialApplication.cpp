@@ -115,23 +115,27 @@ void TutorialApplication::createScene(void)
     //                                    const char *materialName, btVector3 btOriginVector, btVector3 planeNormal, int planeConstant)
 
     makePlane(Ogre::Vector3(0, 0, 0),                                      "ground", floorPlane, Ogre::Vector3::UNIT_Z,
-              "MyMaterials/WoodenFloor",      btVector3(0, -50, 0),   btVector3(0, 1, 0), 0);
+              "MyMaterials/WoodenFloor",      btVector3(0, -50, 0),     btVector3(0, 1, 0), 0);
     makePlane(Ogre::Vector3(0, cubeRoomDimention, 0),                     "ceiling",  ceilingPlane, Ogre::Vector3::UNIT_Z,
-              "MyMaterials/White",            btVector3(0, 50, 0),                        btVector3(0, 1, 0), 0);
+              "MyMaterials/White",            btVector3(0, 4950, 0),      -1.0f*btVector3(0, 1, 0), 0);
+
     makePlane(Ogre::Vector3(cubeRoomDimention/2, cubeRoomDimention/2, 0),    "wall", wallPlane, Ogre::Vector3::UNIT_Y,
-              "MyMaterials/HexagonsAndStars", btVector3(0, -50, 0),    btVector3(0, 1, 0), 0);
+              "MyMaterials/HexagonsAndStars", btVector3(0, 0, 4950/2),     -1.0f*btVector3(0, 0, 1), 0);
+
     makePlane(Ogre::Vector3(-(cubeRoomDimention/2), cubeRoomDimention/2, 0), "wall2", wallPlane2, Ogre::Vector3::UNIT_Y,
-              "MyMaterials/HexagonsAndStars", btVector3(0, -50, 0), btVector3(0, 1, 0), 0);
+              "MyMaterials/HexagonsAndStars", btVector3(0, 0, -4950/2),     1.0f*btVector3(0, 0, 1), 0);
+
     makePlane(Ogre::Vector3(0, cubeRoomDimention/2, cubeRoomDimention/2),    "wall3", wallPlane3, Ogre::Vector3::UNIT_Y,
-              "MyMaterials/HexagonsAndStars", btVector3(0, -50, 0),    btVector3(0, 1, 0), 0);
+              "MyMaterials/HexagonsAndStars", btVector3(4950/2, 0, 0),     -1.0f*btVector3(1, 0, 0), 0);
+
     makePlane(Ogre::Vector3(0, cubeRoomDimention/2, -(cubeRoomDimention/2)), "wall4", wallPlane4, Ogre::Vector3::UNIT_Y,
-              "MyMaterials/HexagonsAndStars", btVector3(0, -50, 0),  btVector3(0, 1, 0), 0);
+              "MyMaterials/HexagonsAndStars", btVector3(-4950/2, 0, 0),     1.0f*btVector3(1, 0, 0), 0);
 
     ////////////////SPHERE///////////////
 
     // **Initial Position for Sphere. (Used to sync initial Ogre and Bullet sphere positions.)**
     int ipfsX = 30;
-    int ipfsY = 500;
+    int ipfsY = 4500;
     int ipfsZ = 30;
 
     // ***Create node for sphere.***
@@ -164,8 +168,14 @@ void TutorialApplication::createScene(void)
     // ***Create and track the sphere's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, btSphereCollider, localInertia);
     sphereBody = new btRigidBody(rbInfo);
-    sphereBody->setRestitution(3);
+    sphereBody->setRestitution(1.1f);
     sphereBody->setUserPointer(sphereNode);
+    srand(time(NULL));
+    btVector3 direction(100.0f * (rand() * 1.0f / RAND_MAX),
+                        100.0f * (rand() * 1.0f / RAND_MAX),
+                        100.0f * (rand() * 1.0f / RAND_MAX));
+
+    sphereBody->setLinearVelocity(direction);
     physicsEngine->getDynamicsWorld()->addRigidBody(sphereBody);
 
     ////////////////////////////////////////////////
@@ -213,7 +223,7 @@ void TutorialApplication::makePlane(Ogre::Vector3 nodeLocation, const char *plan
     // ***Create and track the ground's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo groundRBInfo(groundMass, groundMotionState, groundShape, localGroundInertia);
     groundBody = new btRigidBody(groundRBInfo);
-    groundBody->setRestitution(1);
+    groundBody->setRestitution(1.1f);
     physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
 
 }
@@ -222,9 +232,9 @@ void TutorialApplication::createCamera()
 {
     mCamera = mSceneMgr->createCamera("PlayerCam");
     //position the camera
-    mCamera->setPosition(Ogre::Vector3(0, 300, 500)); //0 300 500
+    mCamera->setPosition(Ogre::Vector3(0, -1000, 500)); //0 300 500
     //sets direction of camera
-    mCamera->lookAt(Ogre::Vector3(0, 0, 0));
+    mCamera->lookAt(Ogre::Vector3(0, 3000, 0));
     //the distance at which the Camera will no longer render any mesh
     mCamera->setNearClipDistance(1);
     //camera controller, can control camera passed to it
