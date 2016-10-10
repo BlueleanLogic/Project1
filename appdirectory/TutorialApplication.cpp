@@ -168,7 +168,7 @@ void TutorialApplication::createScene(void)
     // ***Create and track the sphere's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, btSphereCollider, localInertia);
     sphereBody = new btRigidBody(rbInfo);
-    sphereBody->setRestitution(1.1f);
+    sphereBody->setRestitution(1.0f);
     sphereBody->setUserPointer(sphereNode);
     srand(time(NULL));
     btVector3 direction(100.0f * (rand() * 1.0f / RAND_MAX),
@@ -223,7 +223,7 @@ void TutorialApplication::makePlane(Ogre::Vector3 nodeLocation, const char *plan
     // ***Create and track the ground's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo groundRBInfo(groundMass, groundMotionState, groundShape, localGroundInertia);
     groundBody = new btRigidBody(groundRBInfo);
-    groundBody->setRestitution(1.1f);
+    groundBody->setRestitution(1.0f);
     physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
 
 }
