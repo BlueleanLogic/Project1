@@ -61,6 +61,9 @@ assignment2-BulletEntities.o: BulletEntities.cpp \
  /usr/include/bullet/BulletCollision/CollisionShapes/btCollisionMargin.h \
  /usr/include/bullet/LinearMath/btAabbUtil2.h \
  /usr/include/bullet/LinearMath/btTransform.h \
+ /usr/include/bullet/BulletCollision/CollisionShapes/btBoxShape.h \
+ /usr/include/bullet/BulletCollision/CollisionShapes/btPolyhedralConvexShape.h \
+ /usr/include/bullet/LinearMath/btMinMax.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreVector3.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgrePrerequisites.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgrePlatform.h \
@@ -331,6 +334,12 @@ BulletEntities.h:
 /usr/include/bullet/LinearMath/btAabbUtil2.h:
 
 /usr/include/bullet/LinearMath/btTransform.h:
+
+/usr/include/bullet/BulletCollision/CollisionShapes/btBoxShape.h:
+
+/usr/include/bullet/BulletCollision/CollisionShapes/btPolyhedralConvexShape.h:
+
+/usr/include/bullet/LinearMath/btMinMax.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgreVector3.h:
 

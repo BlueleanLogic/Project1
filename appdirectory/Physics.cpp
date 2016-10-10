@@ -29,7 +29,7 @@ void Physics::stepSimulation(){
 	//printf("5\n");
 	dynamicsWorld->stepSimulation(1.0f/60.0f);
 
-	printf("6\n");
+	//printf("6\n");
 }
 
 void getCollisionShapes() { //change from void
