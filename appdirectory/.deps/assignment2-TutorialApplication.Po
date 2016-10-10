@@ -1308,7 +1308,9 @@ assignment2-TutorialApplication.o: TutorialApplication.cpp \
  /lusr/opt/cegui-0.8.4/include/cegui-0/CEGUI/RendererModules/Ogre/../../Renderer.h \
  /lusr/opt/cegui-0.8.4/include/cegui-0/CEGUI/RendererModules/Ogre/../../Size.h \
  /lusr/opt/cegui-0.8.4/include/cegui-0/CEGUI/RendererModules/Ogre/../../Vector.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h
+ /lusr/opt/ogre-1.9/include/OGRE/OgreQuaternion.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreRectangle2D.h
 
 /usr/include/stdc-predef.h:
 
@@ -4164,4 +4166,8 @@ BulletEntities.h:
 
 /lusr/opt/cegui-0.8.4/include/cegui-0/CEGUI/RendererModules/Ogre/../../Vector.h:
 
+/lusr/opt/ogre-1.9/include/OGRE/OgreQuaternion.h:
+
 /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h:
+
+/lusr/opt/ogre-1.9/include/OGRE/OgreRectangle2D.h:

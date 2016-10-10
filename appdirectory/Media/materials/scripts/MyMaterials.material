@@ -56,3 +56,20 @@ material MyMaterials/GreenRubberBall
 		}
 	}
 }
+
+material MyMaterials/HexagonalMesh
+{
+	technique
+	{
+		pass
+		{
+			scene_blend alpha_blend
+			texture_unit
+			{
+				texture HexagonalMesh.png
+				
+			}
+
+		}
+	}
+}
