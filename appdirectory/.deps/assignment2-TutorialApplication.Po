@@ -1048,6 +1048,7 @@ assignment2-TutorialApplication.o: TutorialApplication.cpp \
  /usr/include/SDL/SDL_types.h MyMotionState.h BulletEntities.h \
  /usr/include/bullet/BulletCollision/CollisionShapes/btStaticPlaneShape.h \
  /usr/include/bullet/BulletCollision/CollisionShapes/btSphereShape.h \
+ /usr/include/bullet/BulletCollision/CollisionShapes/btBoxShape.h \
  /lusr/opt/cegui-0.8.4/include/cegui-0/CEGUI/CEGUI.h \
  /lusr/opt/cegui-0.8.4/include/cegui-0/CEGUI/Affector.h \
  /lusr/opt/cegui-0.8.4/include/cegui-0/CEGUI/String.h \
@@ -3646,6 +3647,8 @@ BulletEntities.h:
 /usr/include/bullet/BulletCollision/CollisionShapes/btStaticPlaneShape.h:
 
 /usr/include/bullet/BulletCollision/CollisionShapes/btSphereShape.h:
+
+/usr/include/bullet/BulletCollision/CollisionShapes/btBoxShape.h:
 
 /lusr/opt/cegui-0.8.4/include/cegui-0/CEGUI/CEGUI.h:
 

@@ -33,6 +33,7 @@ template <typename T>
     return ss.str();
   }
 
+
 //---------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
     :physicsEngine(0),
@@ -60,13 +61,18 @@ Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0); //positive x
 Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0); //negative x
 int speed;
 btRigidBody *sphereBody;
+btRigidBody *paddleBody;
 btRigidBody *groundBody;
 btRigidBody *ceilingBody;
 btRigidBody *wall1Body;
 btRigidBody *wall2Body;
 btRigidBody *wall3Body;
 btRigidBody *wall4Body;
+btTransform paddleTransformation;
+
+
 int a = 0;
+
 
 void TutorialApplication::createScene(void)
 {
@@ -101,15 +107,44 @@ void TutorialApplication::createScene(void)
     }
 
 
-    ////////////////PADDLE//////////////
-    
-    Ogre::Vector3 ogrePaddlePosition = Ogre::Vector3(100,500,0);
+    ////////////////PADDLE////////////// //MEOW
+    int paddleX = 0;
+    int paddleY = 100;
+    int paddleZ = 0;
+
+    Ogre::Vector3 ogrePaddlePosition = Ogre::Vector3(paddleX,paddleY,paddleZ);
     paddleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(ogrePaddlePosition);
     paddleEntity = mSceneMgr->createEntity("cube.mesh");
     paddleEntity->setCastShadows(true);
     paddleEntity->setMaterialName("MyMaterials/HexagonalMesh");
     paddleNode->setScale(.7, .7, .1); 
     paddleNode->attachObject(paddleEntity);
+
+    // ***Set up bullet Transform necessary for rigidbody.***
+    //btTransform paddleTransformation;
+    paddleTransformation.setIdentity();
+    //paddleTransformation.setRotation(btQuaternion(1.0f, 1.0f, 1.0f, 0)); UNCOMMENT if we want paddle to rotate
+    btVector3 btPaddlePosition = btVector3(paddleX,paddleY,paddleZ);
+    paddleTransformation.setOrigin(btPaddlePosition);
+
+    // ***Set up bullet Collider necessary for rigidbody.***
+    btVector3 btPaddleScale(.7, .7, .1);
+    btBoxShape* btPaddleCollider = bulletEntities->makePaddle(btPaddlePosition);
+    btPaddleCollider->setLocalScaling(btPaddleScale);
+    btScalar paddleMass(6000);                 /* "0" -> an immovable object */
+    btVector3 localPaddleInertia(70,70,70); 
+    btPaddleCollider->calculateLocalInertia(paddleMass, localPaddleInertia);
+
+    // ***Set up MotionState necessary for rigidbody.***
+    MyMotionState *paddleMotionState = new MyMotionState(paddleTransformation, paddleNode);
+
+    // ***Create and track the paddle's rigidbody.***
+    btRigidBody::btRigidBodyConstructionInfo rbPInfo(paddleMass, paddleMotionState, btPaddleCollider, localPaddleInertia);
+    paddleBody = new btRigidBody(rbPInfo);
+    //paddleBody->setRestitution(1);
+    //paddleBody->setUserPointer(paddleNode);
+    physicsEngine->getDynamicsWorld()->addRigidBody(paddleBody);
+
 
     //void TutorialApplication::makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
     //                                    const char *materialName, btVector3 btOriginVector, btVector3 planeNormal, int planeConstant)
@@ -157,7 +192,7 @@ void TutorialApplication::createScene(void)
     startTransform.setOrigin(btSpherePosition);
 
     // ***Set up bullet Collider necessary for rigidbody.***
-    btSphereShape* btSphereCollider = bulletEntities->makePingPongBall(sphereRadius); //change this value!
+    btSphereShape* btSphereCollider = bulletEntities->makeBall(sphereRadius); //change this value!
     btScalar mass(0.1f);                 /* "0" -> an immovable object */
     btVector3 localInertia(0,0,0); 
     btSphereCollider->calculateLocalInertia(mass, localInertia);
@@ -170,6 +205,9 @@ void TutorialApplication::createScene(void)
     sphereBody = new btRigidBody(rbInfo);
     sphereBody->setRestitution(1.0f);
     sphereBody->setUserPointer(sphereNode);
+    physicsEngine->getDynamicsWorld()->addRigidBody(sphereBody);
+
+
     srand(time(NULL));
     btVector3 direction(100.0f * (rand() * 1.0f / RAND_MAX),
                         100.0f * (rand() * 1.0f / RAND_MAX),
@@ -309,26 +347,27 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   // }
   //printf("4\n");
 
-  //////////////////PADDLE MOVEMENT//////////////////
+  //////////////////PADDLE MOVEMENT////////////////// //MEOW
   float followDist = 300.0;
   Ogre::Vector3 campos = mCamera->getPosition();
   Ogre::Vector3 camdir = mCamera->getDirection();
   camdir.normalise();
   camdir *= followDist;
 
+  Ogre::Vector3 pos = camdir + campos;
+
   //printf("[ %f, %f, %f ] + ", campos.x, campos.y, campos.z);
   //printf("[ %f, %f, %f ] = ", camdir.x, camdir.y, camdir.z);
   //printf("[ %f, %f, %f ]", (float)(paddleNode->getPosition().x), (float)(paddleNode->getPosition().y), (float)(paddleNode->getPosition().z));
 
-  //Ogre::Quaternion* camquat = new Ogre::Quaternion(Ogre::Radian(0), camdir);
+  //paddleNode->setPosition(pos);
+  //paddleNode->setOrientation(mCamera->getOrientation()); 
 
-  paddleNode->setPosition(camdir + campos);
-  //paddleNode->roll();
-  //paddleNode->yaw();
-  //paddleNode->pitch();
-  paddleNode->setOrientation(mCamera->getOrientation());
-
-  ////////////////////////////////////
+  btQuaternion newPaddleQuaternion(mCamera->getOrientation().x, mCamera->getOrientation().y, mCamera->getOrientation().z, 0);
+  btVector3 newPaddlePos(pos.x, pos.y, pos.z);
+  btMotionState* paddleMSToUpdate = paddleBody->getMotionState();
+  paddleMSToUpdate->setWorldTransform(btTransform(newPaddleQuaternion, newPaddlePos));
+  //////////////////////////////////// 
 
 
   physicsEngine->stepSimulation();
@@ -337,9 +376,11 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   sphereBody->getMotionState()->getWorldTransform(trans);
   //printf("\nposition of Y: ");
   //printf("%f", (float)(trans.getOrigin().getY()));
+
   a++;
   std::string s = NumberToString(a);
   scoreBox->setText("Score: "+s);
+
   //printf("7\n");
 
   return ret;
