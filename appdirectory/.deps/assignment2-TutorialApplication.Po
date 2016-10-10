@@ -1311,7 +1311,8 @@ assignment2-TutorialApplication.o: TutorialApplication.cpp \
  /lusr/opt/cegui-0.8.4/include/cegui-0/CEGUI/RendererModules/Ogre/../../Vector.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreQuaternion.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreRectangle2D.h
+ /lusr/opt/ogre-1.9/include/OGRE/OgreRectangle2D.h scoreBoard.h \
+ /lusr/opt/ogre-1.9/include/OGRE/Ogre.h
 
 /usr/include/stdc-predef.h:
 
@@ -4174,3 +4175,7 @@ BulletEntities.h:
 /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgreRectangle2D.h:
+
+scoreBoard.h:
+
+/lusr/opt/ogre-1.9/include/OGRE/Ogre.h:
