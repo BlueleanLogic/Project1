@@ -141,7 +141,7 @@ void TutorialApplication::createScene(void)
     // ***Create and track the paddle's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo rbPInfo(paddleMass, paddleMotionState, btPaddleCollider, localPaddleInertia);
     paddleBody = new btRigidBody(rbPInfo);
-    //paddleBody->setRestitution(1);
+    paddleBody->setRestitution(2);
     //paddleBody->setUserPointer(paddleNode);
     physicsEngine->getDynamicsWorld()->addRigidBody(paddleBody);
 
@@ -175,7 +175,7 @@ void TutorialApplication::createScene(void)
 
     // ***Create node for sphere.***
     Ogre::Vector3 ogreSpherePosition = Ogre::Vector3(ipfsX,ipfsY,ipfsZ);
-    Ogre::SceneNode *sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(ogreSpherePosition);
+    Ogre::SceneNode *sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("sphereNode",ogreSpherePosition);
     // sphereNode->setScale(sphereRadius/20,sphereRadius/20,sphereRadius/20);
 
     // ***Add sphere entity to its node.***
@@ -270,13 +270,14 @@ void TutorialApplication::createCamera()
 {
     mCamera = mSceneMgr->createCamera("PlayerCam");
     //position the camera
-    mCamera->setPosition(Ogre::Vector3(0, -1000, 500)); //0 300 500
+    mCamera->setPosition(Ogre::Vector3(0, 300, 500)); //0 300 500
     //sets direction of camera
     mCamera->lookAt(Ogre::Vector3(0, 3000, 0));
     //the distance at which the Camera will no longer render any mesh
     mCamera->setNearClipDistance(1);
     //camera controller, can control camera passed to it
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);
+    mCameraMan->setTopSpeed(2000.0f);
 }
  
 void TutorialApplication::createViewports()
@@ -294,7 +295,7 @@ void TutorialApplication::createViewports()
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   bool ret = BaseApplication::frameRenderingQueued(fe);
-  // Ogre::Vector3 a = sphereNode->getPosition();
+  // Ogre::Vector3 b = sphereNode->getPosition();
 
   // Ogre::Vector3 R;
 
@@ -376,8 +377,14 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   sphereBody->getMotionState()->getWorldTransform(trans);
   //printf("\nposition of Y: ");
   //printf("%f", (float)(trans.getOrigin().getY()));
-
-  a++;
+  printf("1\n");
+  // mSceneMgr->getSceneNode("sphereNode")->getPosition().y;
+  // Ogre::Vector3 bPosition = sphereNode->getPosition();
+  printf("2\n");
+  if (mSceneMgr->getSceneNode("sphereNode")->getPosition().y <= 50){
+    a++;
+  }
+  printf("3\n");
   std::string s = NumberToString(a);
   scoreBox->setText("Score: "+s);
 
