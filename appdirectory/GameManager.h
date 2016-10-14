@@ -21,10 +21,10 @@ http://www.ogre3d.org/wiki/
 #include "BaseApplication.h"
 #include <OgreVector3.h>
 #include "Physics.h"
+#include "GUI.h"
 #include "Sound.h"
 #include "MyMotionState.h"
-#include <CEGUI/CEGUI.h>
-#include <CEGUI/RendererModules/Ogre/Renderer.h>
+
 #include <string>
 #include <iostream>
 
@@ -38,8 +38,7 @@ public:
     GameManager(void);
     virtual ~GameManager(void);
     Physics* physicsEngine;
-    CEGUI::Window *scoreBox;
-    CEGUI::Window *sheet;
+    GUI *gui;
     Sound *sound;
 
     Ogre::MovablePlane* mPlane;
@@ -57,7 +56,6 @@ protected:
     virtual int speedOfBall();
     void makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
                    const char *materialName, btVector3 btOriginVector, btVector3 planeNormal, int planeConstant);
-    CEGUI::OgreRenderer* mRenderer;
 
     
 
