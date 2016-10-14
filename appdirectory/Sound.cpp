@@ -4,6 +4,8 @@
 
 //---------------------------------------------------------------------------
 Mix_Music *music = NULL;
+Mix_Chunk *bounce = NULL;
+Mix_Chunk *hit = NULL;
 
 Sound::Sound(void)
 {
@@ -19,19 +21,53 @@ Sound::Sound(void)
 	    printf("Mix_OpenAudio: %s\n", Mix_GetError());
 	    exit(3);
 	}
-	printf("1=====================================================================\n");
+}
+
+void Sound::loadSounds()
+{
 	music = Mix_LoadMUS("Sounds/music.wav");
-	printf("2=====================================================================\n");
+	bounce = Mix_LoadWAV("Sounds/bounce.wav");
+	hit = Mix_LoadWAV("Sounds/hit.wav");
 	Mix_PlayMusic(music,-1);
-	printf("3=====================================================================\n");
 
 }
 //---------------------------------------------------------------------------
 Sound::~Sound(void)
 {
 	Mix_FreeMusic(music);
+	Mix_FreeChunk(bounce);
+	Mix_FreeChunk(hit);
 	Mix_CloseAudio();
 	Mix_Quit();
 	SDL_Quit();
 }
 
+int Sound::toggleMusic()
+{
+	if(Mix_PlayingMusic() == 0)
+	{
+		return Mix_PlayMusic(music,-1);
+	}
+	else
+	{
+		if(Mix_PausedMusic() == 1)
+		{
+			Mix_ResumeMusic();
+		}
+		else
+		{
+			Mix_PauseMusic();
+		}
+	}
+	return 0;
+}
+
+int Sound::playBounce()
+{
+	return Mix_PlayChannel(-1, bounce, 0);
+}
+
+int Sound::playHit()
+{
+	return Mix_PlayChannel(-1, hit, 0);
+}
