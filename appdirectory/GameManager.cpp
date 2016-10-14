@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-Filename:    TutorialApplication.cpp
+Filename:    GameManager.cpp
 -----------------------------------------------------------------------------
 
 This source file is part of the
@@ -13,7 +13,7 @@ Description: Makes a ball and a room, and alows the user to watch the ball bounc
 -----------------------------------------------------------------------------
 */
 
-#include "TutorialApplication.h"
+#include "GameManager.h"
 #include <OgreVector3.h>
 #include <OgreQuaternion.h>
 #include <OgreNode.h>
@@ -35,13 +35,13 @@ template <typename T>
 
 
 //---------------------------------------------------------------------------
-TutorialApplication::TutorialApplication(void)
+GameManager::GameManager(void)
     :physicsEngine(0),
     bulletEntities(0)
 {
 }
 //---------------------------------------------------------------------------
-TutorialApplication::~TutorialApplication(void)
+GameManager::~GameManager(void)
 {
 }
 
@@ -74,7 +74,7 @@ btTransform paddleTransformation;
 int a = 0;
 
 
-void TutorialApplication::createScene(void)
+void GameManager::createScene(void)
 {
     // Setting Up Physics
     physicsEngine = new Physics();
@@ -146,7 +146,7 @@ void TutorialApplication::createScene(void)
     physicsEngine->getDynamicsWorld()->addRigidBody(paddleBody);
 
 
-    //void TutorialApplication::makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
+    //void GameManager::makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
     //                                    const char *materialName, btVector3 btOriginVector, btVector3 planeNormal, int planeConstant)
 
     makePlane(Ogre::Vector3(0, 0, 0),                                      "ground", floorPlane, Ogre::Vector3::UNIT_Z,
@@ -224,7 +224,7 @@ void TutorialApplication::createScene(void)
 }
 //---------------------------------------------------------------------------
 
-void TutorialApplication::makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
+void GameManager::makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
                                     const char *materialName, btVector3 btOriginVector, btVector3 planeNormal, int planeConstant)
 {
     Ogre::SceneNode *groundNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(nodeLocation);
@@ -266,7 +266,7 @@ void TutorialApplication::makePlane(Ogre::Vector3 nodeLocation, const char *plan
 
 }
 
-void TutorialApplication::createCamera()
+void GameManager::createCamera()
 {
     mCamera = mSceneMgr->createCamera("PlayerCam");
     //position the camera
@@ -280,7 +280,7 @@ void TutorialApplication::createCamera()
     mCameraMan->setTopSpeed(2000.0f);
 }
  
-void TutorialApplication::createViewports()
+void GameManager::createViewports()
 {
     Ogre::Viewport* vp = mWindow->addViewport(mCamera);
     //set the background color of the Viewport
@@ -292,7 +292,7 @@ void TutorialApplication::createViewports()
     Ogre::Real(vp->getActualHeight()));
 }
 
-bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
+bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   bool ret = BaseApplication::frameRenderingQueued(fe);
   // Ogre::Vector3 b = sphereNode->getPosition();
@@ -393,14 +393,14 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   return ret;
 }
  
-bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe)
+bool GameManager::processUnbufferedInput(const Ogre::FrameEvent& fe)
 {
   return true;
 }
 
 //borrowed idea from http://stackoverflow.com/questions/11758809/what-is-the-optimal-
 //algorithm-for-generating-an-unbiased-random-integer-within-a?answertab=votes#tab-top
-int TutorialApplication::RandomNum (int min, int max)
+int GameManager::RandomNum (int min, int max)
 {
     int n = max - min + 1;
     int remainder = RAND_MAX % n;
@@ -412,7 +412,7 @@ int TutorialApplication::RandomNum (int min, int max)
     return min + x % n;
 }
 
-Ogre::Vector3 TutorialApplication::directionVector()
+Ogre::Vector3 GameManager::directionVector()
 {
   int randX = RandomNum(-1, 1);
   int randY = RandomNum(-1, 1);
@@ -428,7 +428,7 @@ Ogre::Vector3 TutorialApplication::directionVector()
   return v;
 }
 
-int TutorialApplication::speedOfBall()
+int GameManager::speedOfBall()
 {
   int s = RandomNum(2, 3); 
   return s;
@@ -450,7 +450,7 @@ extern "C" {
 #endif
     {
         // Create application object
-        TutorialApplication app;
+        GameManager app;
 
         try {
             app.go();

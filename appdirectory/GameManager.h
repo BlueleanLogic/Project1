@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-Filename:    TutorialApplication.h
+Filename:    GameManager.h
 -----------------------------------------------------------------------------
 
 This source file is part of the
@@ -15,8 +15,8 @@ http://www.ogre3d.org/wiki/
 -----------------------------------------------------------------------------
 */
 
-#ifndef __TutorialApplication_h_
-#define __TutorialApplication_h_
+#ifndef __GameManager_h_
+#define __GameManager_h_
 
 #include "BaseApplication.h"
 #include <OgreVector3.h>
@@ -33,11 +33,11 @@ http://www.ogre3d.org/wiki/
 
 //---------------------------------------------------------------------------
 
-class TutorialApplication : public BaseApplication
+class GameManager : public BaseApplication
 {
 public:
-    TutorialApplication(void);
-    virtual ~TutorialApplication(void);
+    GameManager(void);
+    virtual ~GameManager(void);
     Physics* physicsEngine;
     BulletEntities* bulletEntities;
     CEGUI::Window *scoreBox;
@@ -69,6 +69,6 @@ private:
 
 //---------------------------------------------------------------------------
 
-#endif // #ifndef __TutorialApplication_h_
+#endif // #ifndef __GameManager_h_
 
 //---------------------------------------------------------------------------
