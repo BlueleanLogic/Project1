@@ -3,6 +3,7 @@
 
 #include <btBulletDynamicsCommon.h>
 #include "BulletCollision/CollisionShapes/btCollisionShape.h"
+#include <OgreVector3.h>
 
 #include <vector>
 #include <map>
@@ -22,9 +23,10 @@ class Physics{
 		~Physics(void);
 		void initObjects(void);
 		btDiscreteDynamicsWorld* getDynamicsWorld();
-		void getCollisionShapes();
-		void trackRigidBodyWithName();
 		void stepSimulation();
+		btSphereShape* makeBall(int radius);
+		btStaticPlaneShape makePlane(Ogre::Vector3 normal, int planeConstant);
+		btBoxShape* makePaddle(btVector3 position);
 	protected:
 
 	private:

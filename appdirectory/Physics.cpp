@@ -32,10 +32,21 @@ void Physics::stepSimulation(){
 	//printf("6\n");
 }
 
-void getCollisionShapes() { //change from void
-
+btSphereShape* Physics::makeBall(int radius)	{
+	btScalar rad(radius);
+	return new btSphereShape(rad);
 }
 
-void trackRigidBodyWithName() {
+btStaticPlaneShape Physics::makePlane(Ogre::Vector3 normal, int planeConstant){
+	btVector3 v(normal.x, normal.y, normal.z);
+	btScalar c(planeConstant);
+	return btStaticPlaneShape(v, c);
+}
 
+btBoxShape* Physics::makePaddle(btVector3 position){
+	//btVector3 v(position.x, position.y, position.z);
+	//btVector3 s(scale.x, scale.y, scale.z);
+	//btBoxShape box = btBoxShape(position);
+	//box->setLocalScaling(s);
+	return new btBoxShape(position);
 }

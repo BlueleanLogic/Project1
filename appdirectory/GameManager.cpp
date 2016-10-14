@@ -36,8 +36,7 @@ template <typename T>
 
 //---------------------------------------------------------------------------
 GameManager::GameManager(void)
-    :physicsEngine(0),
-    bulletEntities(0)
+    :physicsEngine(0)
 {
 }
 //---------------------------------------------------------------------------
@@ -78,7 +77,6 @@ void GameManager::createScene(void)
 {
     // Setting Up Physics
     physicsEngine = new Physics();
-    bulletEntities = new BulletEntities();
     // sound = new Sound();
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
@@ -129,7 +127,7 @@ void GameManager::createScene(void)
 
     // ***Set up bullet Collider necessary for rigidbody.***
     btVector3 btPaddleScale(.7, .7, .1);
-    btBoxShape* btPaddleCollider = bulletEntities->makePaddle(btPaddlePosition);
+    btBoxShape* btPaddleCollider = physicsEngine->makePaddle(btPaddlePosition);
     btPaddleCollider->setLocalScaling(btPaddleScale);
     btScalar paddleMass(6000);                 /* "0" -> an immovable object */
     btVector3 localPaddleInertia(70,70,70); 
@@ -192,7 +190,7 @@ void GameManager::createScene(void)
     startTransform.setOrigin(btSpherePosition);
 
     // ***Set up bullet Collider necessary for rigidbody.***
-    btSphereShape* btSphereCollider = bulletEntities->makeBall(sphereRadius); //change this value!
+    btSphereShape* btSphereCollider = physicsEngine->makeBall(sphereRadius); //change this value!
     btScalar mass(0.1f);                 /* "0" -> an immovable object */
     btVector3 localInertia(0,0,0); 
     btSphereCollider->calculateLocalInertia(mass, localInertia);

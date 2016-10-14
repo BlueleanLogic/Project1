@@ -23,7 +23,6 @@ http://www.ogre3d.org/wiki/
 #include "Physics.h"
 #include "Sound.h"
 #include "MyMotionState.h"
-#include "BulletEntities.h"
 #include <CEGUI/CEGUI.h>
 #include <CEGUI/RendererModules/Ogre/Renderer.h>
 #include <string>
@@ -39,7 +38,6 @@ public:
     GameManager(void);
     virtual ~GameManager(void);
     Physics* physicsEngine;
-    BulletEntities* bulletEntities;
     CEGUI::Window *scoreBox;
     CEGUI::Window *sheet;
     Sound *sound;
