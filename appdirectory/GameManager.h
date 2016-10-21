@@ -40,7 +40,6 @@ public:
     Physics* physicsEngine;
     GUI *gui;
     Sound *sound;
-
     Ogre::MovablePlane* mPlane;
     Ogre::Entity* mPlaneEntity;
     Ogre::SceneNode* mPlaneNode;
@@ -54,13 +53,24 @@ protected:
     virtual Ogre::Vector3 directionVector();
     virtual int RandomNum (int min, int max);
     virtual int speedOfBall();
+    virtual bool keyReleased( const OIS::KeyEvent &arg );
+    virtual bool keyPressed( const OIS::KeyEvent &arg );
+    virtual bool mouseMoved( const OIS::MouseEvent &arg );
+    virtual bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
+    virtual bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
+
+
+    // bool quit(const CEGUI::EventArgs &e);
     void makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
                    const char *materialName, btVector3 btOriginVector, btVector3 planeNormal, int planeConstant);
 
     
 
 private:
-	bool processUnbufferedInput(const Ogre::FrameEvent& fe);
+    enum GameState {PLAY,PAUSE,MENU,OVER};
+    GameState mMode;
+    bool processUnbufferedInput(const Ogre::FrameEvent& fe);
+    // virtual bool quit(const CEGUI::EventArgs &e);
 };
 
 //---------------------------------------------------------------------------

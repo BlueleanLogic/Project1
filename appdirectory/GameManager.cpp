@@ -12,6 +12,7 @@ and edited by Brittany Madrigal for her own project 1 in Game Tech
 Description: Makes a ball and a room, and alows the user to watch the ball bounce around the room unbound by gravity.
 -----------------------------------------------------------------------------
 */
+#include "BaseApplication.h"
 
 #include "GameManager.h"
 #include <OgreVector3.h>
@@ -29,7 +30,9 @@ Description: Makes a ball and a room, and alows the user to watch the ball bounc
 //---------------------------------------------------------------------------
 GameManager::GameManager(void)
     :physicsEngine(0),
-    gui(0)
+    gui(0),
+    mMode(MENU)
+    // mShutDown(false)
 {
 }
 //---------------------------------------------------------------------------
@@ -40,6 +43,7 @@ GameManager::~GameManager(void)
 //---------------------------------------------------------------------------
 int cubeRoomDimention = 5000;
 int sphereRadius = 100;
+std::string mMode = "PAUSE";
 Ogre::Entity* sphereEntity;
 Ogre::Entity* paddleEntity;
 Ogre::SceneNode* paddleNode;
@@ -61,15 +65,73 @@ btRigidBody *wall2Body;
 btRigidBody *wall3Body;
 btRigidBody *wall4Body;
 btTransform paddleTransformation;
+bool roomInitiated = false;
+CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID);
+CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
+
+{
+    switch (buttonID)
+    {
+    case OIS::MB_Left:
+        return CEGUI::LeftButton;
+ 
+    case OIS::MB_Right:
+        return CEGUI::RightButton;
+ 
+    case OIS::MB_Middle:
+        return CEGUI::MiddleButton;
+ 
+    default:
+        return CEGUI::LeftButton;
+    }
+}
+
+bool GameManager::keyReleased( const OIS::KeyEvent &arg )
+{
+  CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp((CEGUI::Key::Scan)arg.key);
+
+  
+}
+
+bool GameManager::keyPressed( const OIS::KeyEvent &arg )
+{
+  CEGUI::GUIContext &context = CEGUI::System::getSingleton().getDefaultGUIContext();
+  context.injectKeyDown((CEGUI::Key::Scan)arg.key);
+  context.injectChar((CEGUI::Key::Scan)arg.text);
 
 
+  return true;
+}
+
+bool GameManager::mouseMoved( const OIS::MouseEvent &arg )
+{
+  CEGUI::GUIContext &context = CEGUI::System::getSingleton().getDefaultGUIContext();
+  context.injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
+  
+  // Scroll wheel.
+  if (arg.state.Z.rel)
+    context.injectMouseWheelChange(arg.state.Z.rel / 120.0f);
+  return true;
+}
+
+bool GameManager::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
+{
+  CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(convertButton(id));
+  return true;  
+}
+
+bool GameManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
+{
+  CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(convertButton(id));
+  return true;
+}
 
 void GameManager::createScene(void)
 {
     // Setting Up Physics
     physicsEngine = new Physics();
     gui = new GUI();
-    // sound = new Sound();
+    sound = new Sound();
 
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
@@ -263,6 +325,8 @@ void GameManager::createViewports()
 bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   bool ret = BaseApplication::frameRenderingQueued(fe);
+  if(gui->mShutDown)
+    return false;
   // Ogre::Vector3 b = sphereNode->getPosition();
 
   // Ogre::Vector3 R;
@@ -347,7 +411,7 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   //printf("%f", (float)(trans.getOrigin().getY()));
   // mSceneMgr->getSceneNode("sphereNode")->getPosition().y;
   // Ogre::Vector3 bPosition = sphereNode->getPosition();
-  if (mSceneMgr->getSceneNode("sphereNode")->getPosition().y <= 50){
+  if (mSceneMgr->getSceneNode("sphereNode")->getPosition().y <= 51){
     gui->incrementScore();
   }
 
@@ -396,6 +460,12 @@ int GameManager::speedOfBall()
   int s = RandomNum(2, 3); 
   return s;
 }
+
+// bool GameManager::quit(const CEGUI::EventArgs &e)
+// {
+//   mShutDown = true;
+//   return true;
+// }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
