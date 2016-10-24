@@ -24,6 +24,7 @@ http://www.ogre3d.org/wiki/
 #include "GUI.h"
 #include "Sound.h"
 #include "MyMotionState.h"
+#include "NetManager.h"
 
 #include <string>
 #include <iostream>
