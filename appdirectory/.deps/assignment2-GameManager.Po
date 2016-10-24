@@ -1304,7 +1304,8 @@ assignment2-GameManager.o: GameManager.cpp /usr/include/stdc-predef.h \
  /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h \
  /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h \
  /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_mixer.h \
- /usr/include/SDL/SDL_types.h MyMotionState.h \
+ /usr/include/SDL/SDL_types.h MyMotionState.h NetManager.h \
+ /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreQuaternion.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreRectangle2D.h scoreBoard.h \
@@ -4159,6 +4160,12 @@ Sound.h:
 /usr/include/SDL/SDL_types.h:
 
 MyMotionState.h:
+
+NetManager.h:
+
+/usr/include/SDL/SDL_net.h:
+
+/usr/include/SDL/SDL.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgreQuaternion.h:
 

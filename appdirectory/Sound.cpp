@@ -23,23 +23,36 @@ Sound::Sound(void)
 	Mix_Init(0);
 }
 
+
 void Sound::loadSounds()
 {
+	printf("a\n");
 	music = Mix_LoadMUS("Sounds/music.wav");
+	printf("b\n");
 	bounce = Mix_LoadWAV("Sounds/bounce.wav");
+	printf("c\n");
 	hit = Mix_LoadWAV("Sounds/hit.wav");
+	printf("d\n");
 	Mix_PlayMusic(music,-1);
+	printf("e\n");
 
 }
+
 //---------------------------------------------------------------------------
 Sound::~Sound(void)
 {
-	Mix_FreeMusic(music);
+	// Mix_FreeMusic(music);
+	printf("1\n");
 	Mix_FreeChunk(bounce);
+	printf("2\n");
 	Mix_FreeChunk(hit);
+	printf("3\n");
 	Mix_CloseAudio();
+	printf("4\n");
 	Mix_Quit();
+	printf("5\n");
 	SDL_Quit();
+	printf("6\n");
 }
 
 int Sound::toggleMusic()

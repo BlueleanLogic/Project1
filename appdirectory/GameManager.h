@@ -40,6 +40,7 @@ public:
     virtual ~GameManager(void);
     Physics* physicsEngine;
     GUI *gui;
+    NetManager *nm;
     Sound *sound;
     Ogre::MovablePlane* mPlane;
     Ogre::Entity* mPlaneEntity;
@@ -51,12 +52,9 @@ protected:
     virtual void createCamera();
     virtual void createViewports();
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
-    virtual Ogre::Vector3 directionVector();
-    virtual int RandomNum (int min, int max);
-    virtual int speedOfBall();
     // virtual bool keyReleased( const OIS::KeyEvent &arg );
     // virtual bool keyPressed( const OIS::KeyEvent &arg );
-    // virtual bool mouseMoved( const OIS::MouseEvent &arg );
+    virtual bool mouseMoved( const OIS::MouseEvent &arg );
     virtual bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
     virtual bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
 
@@ -72,6 +70,9 @@ private:
     GameState mMode;
     bool processUnbufferedInput(const Ogre::FrameEvent& fe);
     // virtual bool quit(const CEGUI::EventArgs &e);
+    void startServer();
+    void endNetwork();
+    // void startMulti();
 };
 
 //---------------------------------------------------------------------------

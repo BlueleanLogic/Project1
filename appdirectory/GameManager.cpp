@@ -31,7 +31,8 @@ Description: Makes a ball and a room, and alows the user to watch the ball bounc
 GameManager::GameManager(void)
     :physicsEngine(0),
     gui(0),
-    mMode(MENU)
+    mMode(MENU),
+    nm(NULL)
     // mShutDown(false)
 {
 }
@@ -107,16 +108,17 @@ CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID) {
   
 // }
 
-// bool GameManager::mouseMoved( const OIS::MouseEvent &arg )
-// {
-//   CEGUI::GUIContext &context = CEGUI::System::getSingleton().getDefaultGUIContext();
-//   context.injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
-  
-//   // Scroll wheel.
-//   if (arg.state.Z.rel)
-//     context.injectMouseWheelChange(arg.state.Z.rel / 120.0f);
-//   return true;
-// }
+bool GameManager::mouseMoved( const OIS::MouseEvent &arg )
+{
+  CEGUI::GUIContext &context = CEGUI::System::getSingleton().getDefaultGUIContext();
+  if (gui->isGui())
+    context.injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
+
+  if (gui->isPlay())
+    mCameraMan->injectMouseMove(arg);
+
+  return true;
+}
 
 bool GameManager::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
@@ -136,7 +138,8 @@ void GameManager::createScene(void)
     physicsEngine = new Physics();
     gui = new GUI();
     sound = new Sound();
-
+    // sound->loadSounds();
+    // nm = new NetManager();
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
 
@@ -331,6 +334,11 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   bool ret = BaseApplication::frameRenderingQueued(fe);
   if(gui->mShutDown)
     return false;
+
+  if (gui->isServer) {
+    startServer();
+  }
+
   // Ogre::Vector3 b = sphereNode->getPosition();
 
   // Ogre::Vector3 R;
@@ -429,47 +437,40 @@ bool GameManager::processUnbufferedInput(const Ogre::FrameEvent& fe)
   return true;
 }
 
-//borrowed idea from http://stackoverflow.com/questions/11758809/what-is-the-optimal-
-//algorithm-for-generating-an-unbiased-random-integer-within-a?answertab=votes#tab-top
-int GameManager::RandomNum (int min, int max)
-{
-    int n = max - min + 1;
-    int remainder = RAND_MAX % n;
-    int x;
-    do{
-        x = rand();
-    }while (x >= RAND_MAX - remainder);
-
-    return min + x % n;
-}
-
-Ogre::Vector3 GameManager::directionVector()
-{
-  int randX = RandomNum(-1, 1);
-  int randY = RandomNum(-1, 1);
-  int randZ = RandomNum(-1, 1);
-
-  if(randX && randY && randZ == 0){
-    int randY = -1;
-    int randZ = 1;
+void GameManager::startServer() {
+  if (nm) {
+    endNetwork();
   }
-
-  Ogre::Vector3 v = Ogre::Vector3(randX, randY, randZ);
-  v.normalise();
-  return v;
+  nm = new NetManager();
+  nm->initNetManager();
+  nm->addNetworkInfo();
+  if ( nm->startServer() ) {
+    nm->acceptConnections();
+    // return true;
+  }
+  // return false;
 }
 
-int GameManager::speedOfBall()
-{
-  int s = RandomNum(2, 3); 
-  return s;
+void GameManager::endNetwork() {
+  if ( nm ) {
+    nm->close();
+    delete nm;
+    nm = NULL;
+  }
 }
 
-// bool GameManager::quit(const CEGUI::EventArgs &e)
-// {
-//   mShutDown = true;
-//   return true;
+// void GameManager::startMulti() {
+//   if (startServer){
+//     if (nm->pollForActivity(5000)) {
+//       if (nm->getClients()){
+//         gui->setPlay();
+//       }
+//     }
+//   }
 // }
+
+
+
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN

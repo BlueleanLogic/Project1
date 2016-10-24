@@ -101,7 +101,8 @@ am_assignment2_OBJECTS = assignment2-GameManager.$(OBJEXT) \
 	assignment2-BaseApplication.$(OBJEXT) \
 	assignment2-Physics.$(OBJEXT) \
 	assignment2-MyMotionState.$(OBJEXT) \
-	assignment2-Sound.$(OBJEXT) assignment2-GUI.$(OBJEXT)
+	assignment2-Sound.$(OBJEXT) assignment2-GUI.$(OBJEXT) \
+	assignment2-NetManager.$(OBJEXT)
 assignment2_OBJECTS = $(am_assignment2_OBJECTS)
 am__DEPENDENCIES_1 =
 assignment2_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -334,11 +335,11 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-noinst_HEADERS = GameManager.h BaseApplication.h Physics.h MyMotionState.h Sound.h GUI.h
+noinst_HEADERS = GameManager.h BaseApplication.h Physics.h MyMotionState.h Sound.h GUI.h NetManager.h
 assignment2_CPPFLAGS = -I$(top_srcdir)
-assignment2_SOURCES = GameManager.cpp BaseApplication.cpp Physics.cpp MyMotionState.cpp Sound.cpp GUI.cpp
-assignment2_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS) $(sdl_CFLAGS) $(SDLMIXER_CFLAGS)
-assignment2_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS) $(sdl_LIBS) $(SDLMIXER_LIBS)
+assignment2_SOURCES = GameManager.cpp BaseApplication.cpp Physics.cpp MyMotionState.cpp Sound.cpp GUI.cpp NetManager.cpp
+assignment2_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS) $(sdl_CFLAGS) $(SDLMIXER_CFLAGS) $(SDLNET_CFLAGS)
+assignment2_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS) $(sdl_LIBS) -lSDL_net $(SDLMIXER_LIBS) $(SDLNET_LIBS)
 assignment2_LDFLAGS = -lOgreOverlay -lboost_system
 EXTRA_DIST = buildit makeit
 AUTOMAKE_OPTIONS = foreign
@@ -460,6 +461,7 @@ include ./$(DEPDIR)/assignment2-BaseApplication.Po
 include ./$(DEPDIR)/assignment2-GUI.Po
 include ./$(DEPDIR)/assignment2-GameManager.Po
 include ./$(DEPDIR)/assignment2-MyMotionState.Po
+include ./$(DEPDIR)/assignment2-NetManager.Po
 include ./$(DEPDIR)/assignment2-Physics.Po
 include ./$(DEPDIR)/assignment2-Sound.Po
 
@@ -567,6 +569,20 @@ assignment2-GUI.obj: GUI.cpp
 #	$(AM_V_CXX)source='GUI.cpp' object='assignment2-GUI.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-GUI.obj `if test -f 'GUI.cpp'; then $(CYGPATH_W) 'GUI.cpp'; else $(CYGPATH_W) '$(srcdir)/GUI.cpp'; fi`
+
+assignment2-NetManager.o: NetManager.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -MT assignment2-NetManager.o -MD -MP -MF $(DEPDIR)/assignment2-NetManager.Tpo -c -o assignment2-NetManager.o `test -f 'NetManager.cpp' || echo '$(srcdir)/'`NetManager.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment2-NetManager.Tpo $(DEPDIR)/assignment2-NetManager.Po
+#	$(AM_V_CXX)source='NetManager.cpp' object='assignment2-NetManager.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-NetManager.o `test -f 'NetManager.cpp' || echo '$(srcdir)/'`NetManager.cpp
+
+assignment2-NetManager.obj: NetManager.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -MT assignment2-NetManager.obj -MD -MP -MF $(DEPDIR)/assignment2-NetManager.Tpo -c -o assignment2-NetManager.obj `if test -f 'NetManager.cpp'; then $(CYGPATH_W) 'NetManager.cpp'; else $(CYGPATH_W) '$(srcdir)/NetManager.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment2-NetManager.Tpo $(DEPDIR)/assignment2-NetManager.Po
+#	$(AM_V_CXX)source='NetManager.cpp' object='assignment2-NetManager.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment2_CPPFLAGS) $(CPPFLAGS) $(assignment2_CXXFLAGS) $(CXXFLAGS) -c -o assignment2-NetManager.obj `if test -f 'NetManager.cpp'; then $(CYGPATH_W) 'NetManager.cpp'; else $(CYGPATH_W) '$(srcdir)/NetManager.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
