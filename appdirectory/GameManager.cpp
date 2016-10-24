@@ -66,53 +66,57 @@ btRigidBody *wall3Body;
 btRigidBody *wall4Body;
 btTransform paddleTransformation;
 bool roomInitiated = false;
-CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID);
-CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
-
-{
-    switch (buttonID)
-    {
+// CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID);
+CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID) {
+  switch (buttonID)
+  {
     case OIS::MB_Left:
-        return CEGUI::LeftButton;
- 
+      return CEGUI::LeftButton;
+
     case OIS::MB_Right:
-        return CEGUI::RightButton;
- 
+      return CEGUI::RightButton;
+
     case OIS::MB_Middle:
-        return CEGUI::MiddleButton;
- 
+      return CEGUI::MiddleButton;
+
     default:
-        return CEGUI::LeftButton;
-    }
+      return CEGUI::LeftButton;
+  }
 }
 
-bool GameManager::keyReleased( const OIS::KeyEvent &arg )
-{
-  CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp((CEGUI::Key::Scan)arg.key);
+// bool GameManager::keyPressed( const OIS::KeyEvent &arg )
+// {
+//   CEGUI::GUIContext &context = CEGUI::System::getSingleton().getDefaultGUIContext();
+//   context.injectKeyDown((CEGUI::Key::Scan)arg.key);
+//   context.injectChar((CEGUI::Key::Scan)arg.text);
 
+//   if (arg.key == OIS::KC_ESCAPE)
+//   {
+//       mShutDown = true;
+//   }
+
+//   mCameraMan->injectKeyDown(arg);
+
+
+//   return true;
+// }
+
+// bool GameManager::keyReleased( const OIS::KeyEvent &arg )
+// {
+//   CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp((CEGUI::Key::Scan)arg.key);
   
-}
+// }
 
-bool GameManager::keyPressed( const OIS::KeyEvent &arg )
-{
-  CEGUI::GUIContext &context = CEGUI::System::getSingleton().getDefaultGUIContext();
-  context.injectKeyDown((CEGUI::Key::Scan)arg.key);
-  context.injectChar((CEGUI::Key::Scan)arg.text);
-
-
-  return true;
-}
-
-bool GameManager::mouseMoved( const OIS::MouseEvent &arg )
-{
-  CEGUI::GUIContext &context = CEGUI::System::getSingleton().getDefaultGUIContext();
-  context.injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
+// bool GameManager::mouseMoved( const OIS::MouseEvent &arg )
+// {
+//   CEGUI::GUIContext &context = CEGUI::System::getSingleton().getDefaultGUIContext();
+//   context.injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
   
-  // Scroll wheel.
-  if (arg.state.Z.rel)
-    context.injectMouseWheelChange(arg.state.Z.rel / 120.0f);
-  return true;
-}
+//   // Scroll wheel.
+//   if (arg.state.Z.rel)
+//     context.injectMouseWheelChange(arg.state.Z.rel / 120.0f);
+//   return true;
+// }
 
 bool GameManager::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
