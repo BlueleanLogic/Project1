@@ -30,12 +30,16 @@ class GUI{
 		CEGUI::Window *sheet;
 		CEGUI::Window *menu;
 		CEGUI::Window *multiMenu;
+      CEGUI::Window *editBox;
+      CEGUI::Window *hostIP;
 		// CEGUI::Window *sound;	
 		void player1Win(bool win);
 		bool startSinglePlayer(const CEGUI::EventArgs &e);
 		bool startMultiPlayer(const CEGUI::EventArgs &e);
       bool multiBack(const CEGUI::EventArgs &e);
       bool startServer(const CEGUI::EventArgs &e);
+      bool clientBack(const CEGUI::EventArgs &e);
+      bool clientStart(const CEGUI::EventArgs &e);
 
 
 

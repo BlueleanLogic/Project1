@@ -66,12 +66,12 @@ protected:
     
 
 private:
-    enum GameState {PLAY,PAUSE,MENU,OVER};
-    GameState mMode;
     bool processUnbufferedInput(const Ogre::FrameEvent& fe);
     // virtual bool quit(const CEGUI::EventArgs &e);
-    void startServer();
+    bool startServer();
+    bool beginClient(const char* IP);
     void endNetwork();
+    void startMulti();
     // void startMulti();
 };
 

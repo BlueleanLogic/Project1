@@ -31,7 +31,6 @@ Description: Makes a ball and a room, and alows the user to watch the ball bounc
 GameManager::GameManager(void)
     :physicsEngine(0),
     gui(0),
-    mMode(MENU),
     nm(NULL)
     // mShutDown(false)
 {
@@ -44,7 +43,6 @@ GameManager::~GameManager(void)
 //---------------------------------------------------------------------------
 int cubeRoomDimention = 5000;
 int sphereRadius = 100;
-std::string mMode = "PAUSE";
 Ogre::Entity* sphereEntity;
 Ogre::Entity* paddleEntity;
 Ogre::SceneNode* paddleNode;
@@ -336,7 +334,8 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
     return false;
 
   if (gui->isServer) {
-    startServer();
+    startMulti();
+    gui->isServer=false;
   }
 
   // Ogre::Vector3 b = sphereNode->getPosition();
@@ -437,7 +436,7 @@ bool GameManager::processUnbufferedInput(const Ogre::FrameEvent& fe)
   return true;
 }
 
-void GameManager::startServer() {
+bool GameManager::startServer() {
   if (nm) {
     endNetwork();
   }
@@ -446,9 +445,22 @@ void GameManager::startServer() {
   nm->addNetworkInfo();
   if ( nm->startServer() ) {
     nm->acceptConnections();
-    // return true;
+    return true;
   }
-  // return false;
+  return false;
+}
+
+bool GameManager::beginClient(const char* IP) {
+  if ( nm ) {
+    endNetwork();
+  }
+  nm = new NetManager();
+  nm->initNetManager();
+  nm->addNetworkInfo(PROTOCOL_ALL,IP);
+  if ( nm->startClient() ) {
+    return true;
+  }
+  return false;
 }
 
 void GameManager::endNetwork() {
@@ -459,15 +471,15 @@ void GameManager::endNetwork() {
   }
 }
 
-// void GameManager::startMulti() {
-//   if (startServer){
-//     if (nm->pollForActivity(5000)) {
-//       if (nm->getClients()){
-//         gui->setPlay();
-//       }
-//     }
-//   }
-// }
+void GameManager::startMulti() {
+  if (startServer()){
+    if (nm->pollForActivity(5000)) {
+      if (nm->getClients()){
+        gui->setPlay();
+      }
+    }
+  }
+}
 
 
 
