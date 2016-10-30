@@ -336,6 +336,11 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
     gui->isServer=false;
   }
 
+  if (gui->isClient) {
+    searchGame();
+    gui->isClient=false;
+  }
+
   // Ogre::Vector3 b = sphereNode->getPosition();
 
   // Ogre::Vector3 R;
@@ -444,7 +449,7 @@ bool GameManager::startServer() {
 }
 
 bool GameManager::startClient(const char* IP) {
-  if ( nm ) {
+  if (nm) {
     endNetwork();
   }
   nm = new NetManager();
@@ -456,8 +461,16 @@ bool GameManager::startClient(const char* IP) {
   return false;
 }
 
+void GameManager::searchGame() {
+  if (startClient(gui->address.c_str())){
+    if (gui->address.compare(nm->getIPstring()))
+      gui->setPlay();
+  }
+}
+
+
 void GameManager::endNetwork() {
-  if ( nm ) {
+  if (nm) {
     nm->close();
     delete nm;
     nm = NULL;

@@ -20,6 +20,7 @@ class GUI{
       bool isGui();
       bool isPlay();
       bool isServer;
+      bool isClient;
       void setPlay();
       CEGUI::String address;
 

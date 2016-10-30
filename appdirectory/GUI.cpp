@@ -16,6 +16,7 @@ template <typename T>
 GUI::GUI(void)
 :mShutDown(false),
 isServer(false),
+isClient(false),
 stategui(true),
 stateplay(false)
 {
@@ -216,8 +217,10 @@ bool GUI::startServer(const CEGUI::EventArgs &e){
 bool GUI::searchIP(const CEGUI::EventArgs &e)
 {
   address = editBox->getText();
+  isClient = true;
   printf(address.c_str());
   printf("\n");
+
   return true;
 }
 

@@ -72,6 +72,8 @@ private:
     bool startClient(const char* IP);
     void endNetwork();
     void startMulti();
+    void searchGame();
+
     // void startMulti();
 };
 
