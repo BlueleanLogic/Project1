@@ -123,6 +123,7 @@ stateplay(false)
   server->      subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUI::startServer, this));  
   clientBack->  subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUI::clientBack, this)); 
   client->      subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUI::clientStart, this)); 
+  search->      subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUI::searchIP, this)); 
 
 }
 //---------------------------------------------------------------------------
@@ -211,6 +212,17 @@ bool GUI::startServer(const CEGUI::EventArgs &e){
   }
   return true;
 }
+
+bool GUI::searchIP(const CEGUI::EventArgs &e)
+{
+  address = editBox->getText();
+  printf(address.c_str());
+  printf("\n");
+  return true;
+}
+
+
+
 
 // void GUI::stopServer(){
 //   isServer = false;

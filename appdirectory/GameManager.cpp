@@ -83,22 +83,22 @@ CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID) {
   }
 }
 
-// bool GameManager::keyPressed( const OIS::KeyEvent &arg )
-// {
-//   CEGUI::GUIContext &context = CEGUI::System::getSingleton().getDefaultGUIContext();
-//   context.injectKeyDown((CEGUI::Key::Scan)arg.key);
-//   context.injectChar((CEGUI::Key::Scan)arg.text);
+bool GameManager::keyPressed( const OIS::KeyEvent &arg )
+{
+  CEGUI::GUIContext &context = CEGUI::System::getSingleton().getDefaultGUIContext();
+  context.injectKeyDown((CEGUI::Key::Scan)arg.key);
+  context.injectChar((CEGUI::Key::Scan)arg.text);
 
-//   if (arg.key == OIS::KC_ESCAPE)
-//   {
-//       mShutDown = true;
-//   }
+  if (arg.key == OIS::KC_ESCAPE)
+  {
+      mShutDown = true;
+  }
 
-//   mCameraMan->injectKeyDown(arg);
+  mCameraMan->injectKeyDown(arg);
 
 
-//   return true;
-// }
+  return true;
+}
 
 // bool GameManager::keyReleased( const OIS::KeyEvent &arg )
 // {
@@ -443,7 +443,7 @@ bool GameManager::startServer() {
   return false;
 }
 
-bool GameManager::beginClient(const char* IP) {
+bool GameManager::startClient(const char* IP) {
   if ( nm ) {
     endNetwork();
   }
