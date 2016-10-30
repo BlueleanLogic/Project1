@@ -148,11 +148,11 @@ void GameManager::createScene(void)
     int paddleZ = 0;
 
     Ogre::Vector3 ogrePaddlePosition = Ogre::Vector3(paddleX,paddleY,paddleZ);
-    paddleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(ogrePaddlePosition);
+    paddleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Paddle", ogrePaddlePosition);
     paddleEntity = mSceneMgr->createEntity("cube.mesh");
     paddleEntity->setCastShadows(true);
-    paddleEntity->setMaterialName("MyMaterials/HexagonalMesh");
-    paddleNode->setScale(.7, .7, .1); 
+    paddleEntity->setMaterialName("Examples/Rockwall");
+    paddleNode->setScale(7, 1, 7); 
     paddleNode->attachObject(paddleEntity);
 
     // ***Set up bullet Transform necessary for rigidbody.***
@@ -163,7 +163,7 @@ void GameManager::createScene(void)
     paddleTransformation.setOrigin(btPaddlePosition);
 
     // ***Set up bullet Collider necessary for rigidbody.***
-    btVector3 btPaddleScale(.7, .7, .1);
+    btVector3 btPaddleScale(7, 1, 7);
     btBoxShape* btPaddleCollider = physicsEngine->makePaddle(btPaddlePosition);
     btPaddleCollider->setLocalScaling(btPaddleScale);
     btScalar paddleMass(6000);                 /* "0" -> an immovable object */
@@ -305,11 +305,9 @@ void GameManager::createCamera()
 {
     mCamera = mSceneMgr->createCamera("PlayerCam");
     //position the camera
-    mCamera->setPosition(Ogre::Vector3(0, 300, 500)); //0 300 500
+    mCamera->setPosition(Ogre::Vector3(cubeRoomDimention/4, cubeRoomDimention*1.3, cubeRoomDimention/1.2)); //0 300 500
     //sets direction of camera
-    mCamera->lookAt(Ogre::Vector3(0, 3000, 0));
-    //the distance at which the Camera will no longer render any mesh
-    mCamera->setNearClipDistance(1);
+    mCamera->lookAt(Ogre::Vector3(0, 0, 0));
     //camera controller, can control camera passed to it
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);
     mCameraMan->setTopSpeed(2000.0f);
@@ -390,28 +388,23 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   //   }
   // }
   //printf("4\n");
+  
+  static Ogre::Real move = 750;
 
-  //////////////////PADDLE MOVEMENT////////////////// //MEOW
-  float followDist = 300.0;
-  Ogre::Vector3 campos = mCamera->getPosition();
-  Ogre::Vector3 camdir = mCamera->getDirection();
-  camdir.normalise();
-  camdir *= followDist;
+  Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
+  if (mKeyboard->isKeyDown(OIS::KC_I))
+      dirVec.z -= move;
+  if (mKeyboard->isKeyDown(OIS::KC_K))
+      dirVec.z += move;
 
-  Ogre::Vector3 pos = camdir + campos;
+  if (mKeyboard->isKeyDown(OIS::KC_J))
+      dirVec.x -= move;
+  if (mKeyboard->isKeyDown(OIS::KC_L))
+      dirVec.x += move;
 
-  //printf("[ %f, %f, %f ] + ", campos.x, campos.y, campos.z);
-  //printf("[ %f, %f, %f ] = ", camdir.x, camdir.y, camdir.z);
-  //printf("[ %f, %f, %f ]", (float)(paddleNode->getPosition().x), (float)(paddleNode->getPosition().y), (float)(paddleNode->getPosition().z));
-
-  //paddleNode->setPosition(pos);
-  //paddleNode->setOrientation(mCamera->getOrientation()); 
-
-  btQuaternion newPaddleQuaternion(mCamera->getOrientation().x, mCamera->getOrientation().y, mCamera->getOrientation().z, 0);
-  btVector3 newPaddlePos(pos.x, pos.y, pos.z);
-  btMotionState* paddleMSToUpdate = paddleBody->getMotionState();
-  paddleMSToUpdate->setWorldTransform(btTransform(newPaddleQuaternion, newPaddlePos));
-  //////////////////////////////////// 
+  mSceneMgr->getSceneNode("Paddle")->translate(
+      dirVec * fe.timeSinceLastFrame,
+      Ogre::Node::TS_LOCAL);
 
 
   physicsEngine->stepSimulation();
