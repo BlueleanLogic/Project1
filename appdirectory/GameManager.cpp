@@ -107,7 +107,7 @@ bool GameManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID 
 void GameManager::createScene(void)
 {
     // Setting Up Physics
-    physicsEngine = new Physics();
+    physicsEngine = new Physics();   
     gui = new GUI();
     sound = new Sound();
     // sound->loadSounds();
@@ -285,7 +285,7 @@ bool GameManager::startClient(const char* IP) {
 void GameManager::searchGame() {
   if (startClient(gui->address.c_str())){
     if (gui->address.compare(nm->getIPstring()))
-      gui->setPlay();
+      gui->startClientGame();
   }
 }
 
@@ -300,9 +300,11 @@ void GameManager::endNetwork() {
 
 void GameManager::startMulti() {
   if (startServer()){
+    // gui->getIP(nm->getIPstring().c_str());
+
     if (nm->pollForActivity(5000)) {
       if (nm->getClients()){
-        gui->setPlay();
+        gui->startServerGame();
       }
     }
   }

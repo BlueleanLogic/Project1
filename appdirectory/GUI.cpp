@@ -115,6 +115,8 @@ stateplay(false)
   multiMenu->addChild(multiback);
 
 
+
+
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 	sheet->       addChild(menu);
 	onePlayer->   subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUI::startSinglePlayer, this));
@@ -175,8 +177,8 @@ bool GUI::startSinglePlayer(const CEGUI::EventArgs &e)
 }
 
 bool GUI::clientStart(const CEGUI::EventArgs &e){
-  sheet->removeChild(multiMenu);
   sheet->addChild(hostIP);
+  sheet->removeChild(multiMenu);
   return true;
 }
 
@@ -187,8 +189,8 @@ bool GUI::quit(const CEGUI::EventArgs &e)
 }
 
 bool GUI::multiBack(const CEGUI::EventArgs &e) {
-  sheet->removeChild(multiMenu);
   sheet->addChild(menu);
+  sheet->removeChild(multiMenu);
   return true;
 }
 
@@ -206,11 +208,6 @@ bool GUI::isPlay(){
 
 bool GUI::startServer(const CEGUI::EventArgs &e){
   isServer = true;
-  if (stateplay){
-    sheet->addChild(scoreBox);
-    sheet->removeChild(multiMenu);
-    stategui = false;
-  }
   return true;
 }
 
@@ -221,10 +218,19 @@ bool GUI::searchIP(const CEGUI::EventArgs &e)
   printf(address.c_str());
   printf("\n");
 
+
   return true;
 }
 
+void GUI::startServerGame(){
+  sheet->addChild(scoreBox);
+  sheet->removeChild(multiMenu);
+}
 
+void GUI::startClientGame(){
+  sheet->addChild(scoreBox);
+  sheet->removeChild(hostIP);
+}
 
 
 // void GUI::stopServer(){

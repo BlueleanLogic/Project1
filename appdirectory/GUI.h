@@ -23,6 +23,8 @@ class GUI{
       bool isClient;
       void setPlay();
       CEGUI::String address;
+      void startServerGame();
+      void startClientGame();
 
       private:
       CEGUI::OgreRenderer* mRenderer;
