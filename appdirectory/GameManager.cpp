@@ -215,19 +215,30 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   // }
   //printf("4\n");
   
+
   static Ogre::Real move = 2000;
+  Ogre::Vector3 n = mSceneMgr->getSceneNode("Paddle")->getPosition();
 
   Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
-  if (mKeyboard->isKeyDown(OIS::KC_I))
+  if (mKeyboard->isKeyDown(OIS::KC_I)){
+    if (!(n.z <= 0-cubeRoomDimension/2 + (700/2)))
       dirVec.z -= move;
-  if (mKeyboard->isKeyDown(OIS::KC_K))
+  }
+  if (mKeyboard->isKeyDown(OIS::KC_K)){
+    if (!(n.z >= cubeRoomDimension/2 - (700/2)))
       dirVec.z += move;
-
-  if (mKeyboard->isKeyDown(OIS::KC_J))
+  }
+  if (mKeyboard->isKeyDown(OIS::KC_J)){
+    if(!(n.x <= 0-cubeRoomDimension/2 + (700/2)))
       dirVec.x -= move;
-  if (mKeyboard->isKeyDown(OIS::KC_L))
+  }
+  if (mKeyboard->isKeyDown(OIS::KC_L)){
+    if(!(n.x >= cubeRoomDimension/2 - (700/2)))
       dirVec.x += move;
+  }
 
+  
+  
   mSceneMgr->getSceneNode("Paddle")->translate(
       dirVec * fe.timeSinceLastFrame,
       Ogre::Node::TS_LOCAL);
