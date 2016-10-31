@@ -102,7 +102,7 @@ am_assignment3_OBJECTS = assignment3-GameManager.$(OBJEXT) \
 	assignment3-Physics.$(OBJEXT) \
 	assignment3-MyMotionState.$(OBJEXT) \
 	assignment3-Sound.$(OBJEXT) assignment3-GUI.$(OBJEXT) \
-	assignment3-NetManager.$(OBJEXT)
+	assignment3-NetManager.$(OBJEXT) assignment3-Paddle.$(OBJEXT)
 assignment3_OBJECTS = $(am_assignment3_OBJECTS)
 am__DEPENDENCIES_1 =
 assignment3_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -197,13 +197,13 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /v/filer4b/v38q001/rtx129/Documents/cs354r/project2/project2/appdirectory/missing aclocal-1.14
+ACLOCAL = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing aclocal-1.14
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /v/filer4b/v38q001/rtx129/Documents/cs354r/project2/project2/appdirectory/missing autoconf
-AUTOHEADER = ${SHELL} /v/filer4b/v38q001/rtx129/Documents/cs354r/project2/project2/appdirectory/missing autoheader
-AUTOMAKE = ${SHELL} /v/filer4b/v38q001/rtx129/Documents/cs354r/project2/project2/appdirectory/missing automake-1.14
+AUTOCONF = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing autoconf
+AUTOHEADER = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing autoheader
+AUTOMAKE = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing automake-1.14
 AWK = gawk
 BULLET_CFLAGS = 
 BULLET_LIBS = 
@@ -246,7 +246,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /v/filer4b/v38q001/rtx129/Documents/cs354r/project2/project2/appdirectory/missing makeinfo
+MAKEINFO = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
@@ -278,10 +278,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = strip
 VERSION = 0.1
-abs_builddir = /v/filer4b/v38q001/rtx129/Documents/cs354r/project2/project2/appdirectory
-abs_srcdir = /v/filer4b/v38q001/rtx129/Documents/cs354r/project2/project2/appdirectory
-abs_top_builddir = /v/filer4b/v38q001/rtx129/Documents/cs354r/project2/project2/appdirectory
-abs_top_srcdir = /v/filer4b/v38q001/rtx129/Documents/cs354r/project2/project2/appdirectory
+abs_builddir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
+abs_srcdir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
+abs_top_builddir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
+abs_top_srcdir = /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -313,7 +313,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /v/filer4b/v38q001/rtx129/Documents/cs354r/project2/project2/appdirectory/install-sh
+install_sh = ${SHELL} /v/filer4b/v38q001/paulo/Documents/cs354R/Project1/appdirectory/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -335,9 +335,9 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-noinst_HEADERS = GameManager.h BaseApplication.h Physics.h MyMotionState.h Sound.h GUI.h NetManager.h
+noinst_HEADERS = GameManager.h BaseApplication.h Physics.h MyMotionState.h Sound.h GUI.h NetManager.h Paddle.h
 assignment3_CPPFLAGS = -I$(top_srcdir)
-assignment3_SOURCES = GameManager.cpp BaseApplication.cpp Physics.cpp MyMotionState.cpp Sound.cpp GUI.cpp NetManager.cpp
+assignment3_SOURCES = GameManager.cpp BaseApplication.cpp Physics.cpp MyMotionState.cpp Sound.cpp GUI.cpp NetManager.cpp Paddle.cpp
 assignment3_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS) $(sdl_CFLAGS) $(SDLMIXER_CFLAGS) $(SDLNET_CFLAGS)
 assignment3_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS) $(sdl_LIBS) -lSDL_net $(SDLMIXER_LIBS) $(SDLNET_LIBS)
 assignment3_LDFLAGS = -lOgreOverlay -lboost_system
@@ -462,6 +462,7 @@ include ./$(DEPDIR)/assignment3-GUI.Po
 include ./$(DEPDIR)/assignment3-GameManager.Po
 include ./$(DEPDIR)/assignment3-MyMotionState.Po
 include ./$(DEPDIR)/assignment3-NetManager.Po
+include ./$(DEPDIR)/assignment3-Paddle.Po
 include ./$(DEPDIR)/assignment3-Physics.Po
 include ./$(DEPDIR)/assignment3-Sound.Po
 
@@ -583,6 +584,20 @@ assignment3-NetManager.obj: NetManager.cpp
 #	$(AM_V_CXX)source='NetManager.cpp' object='assignment3-NetManager.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -c -o assignment3-NetManager.obj `if test -f 'NetManager.cpp'; then $(CYGPATH_W) 'NetManager.cpp'; else $(CYGPATH_W) '$(srcdir)/NetManager.cpp'; fi`
+
+assignment3-Paddle.o: Paddle.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -MT assignment3-Paddle.o -MD -MP -MF $(DEPDIR)/assignment3-Paddle.Tpo -c -o assignment3-Paddle.o `test -f 'Paddle.cpp' || echo '$(srcdir)/'`Paddle.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment3-Paddle.Tpo $(DEPDIR)/assignment3-Paddle.Po
+#	$(AM_V_CXX)source='Paddle.cpp' object='assignment3-Paddle.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -c -o assignment3-Paddle.o `test -f 'Paddle.cpp' || echo '$(srcdir)/'`Paddle.cpp
+
+assignment3-Paddle.obj: Paddle.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -MT assignment3-Paddle.obj -MD -MP -MF $(DEPDIR)/assignment3-Paddle.Tpo -c -o assignment3-Paddle.obj `if test -f 'Paddle.cpp'; then $(CYGPATH_W) 'Paddle.cpp'; else $(CYGPATH_W) '$(srcdir)/Paddle.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment3-Paddle.Tpo $(DEPDIR)/assignment3-Paddle.Po
+#	$(AM_V_CXX)source='Paddle.cpp' object='assignment3-Paddle.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -c -o assignment3-Paddle.obj `if test -f 'Paddle.cpp'; then $(CYGPATH_W) 'Paddle.cpp'; else $(CYGPATH_W) '$(srcdir)/Paddle.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

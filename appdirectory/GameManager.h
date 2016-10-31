@@ -25,6 +25,7 @@ http://www.ogre3d.org/wiki/
 #include "Sound.h"
 #include "MyMotionState.h"
 #include "NetManager.h"
+#include "Paddle.h"
 
 #include <string>
 #include <iostream>

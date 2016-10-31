@@ -44,8 +44,8 @@ GameManager::~GameManager(void)
 int cubeRoomDimention = 5000;
 int sphereRadius = 100;
 Ogre::Entity* sphereEntity;
-Ogre::Entity* paddleEntity;
-Ogre::SceneNode* paddleNode;
+// Ogre::Entity* paddleEntity;
+// Ogre::SceneNode* paddleNode;
 Ogre::SceneNode* sphereNode;
 Ogre::Vector3 dir;
 Ogre::Plane wallPlane4(Ogre::Vector3::UNIT_Z, 0); //negative z
@@ -56,14 +56,14 @@ Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0); //positive x
 Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0); //negative x
 int speed;
 btRigidBody *sphereBody;
-btRigidBody *paddleBody;
+// btRigidBody *paddleBody;
 btRigidBody *groundBody;
 btRigidBody *ceilingBody;
 btRigidBody *wall1Body;
 btRigidBody *wall2Body;
 btRigidBody *wall3Body;
 btRigidBody *wall4Body;
-btTransform paddleTransformation;
+// btTransform paddleTransformation;
 bool roomInitiated = false;
 // CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID);
 CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID) {
@@ -141,44 +141,44 @@ void GameManager::createScene(void)
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
 
-
+    Paddle *paddle = new Paddle(mSceneMgr, physicsEngine);
     ////////////////PADDLE////////////// //MEOW
-    int paddleX = 0;
-    int paddleY = 100;
-    int paddleZ = 0;
+    // int paddleX = 0;
+    // int paddleY = 100;
+    // int paddleZ = 0;
 
-    Ogre::Vector3 ogrePaddlePosition = Ogre::Vector3(paddleX,paddleY,paddleZ);
-    paddleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Paddle", ogrePaddlePosition);
-    paddleEntity = mSceneMgr->createEntity("cube.mesh");
-    paddleEntity->setCastShadows(true);
-    paddleEntity->setMaterialName("Examples/Rockwall");
-    paddleNode->setScale(7, 1, 7); 
-    paddleNode->attachObject(paddleEntity);
+    // Ogre::Vector3 ogrePaddlePosition = Ogre::Vector3(paddleX,paddleY,paddleZ);
+    // paddleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Paddle", ogrePaddlePosition);
+    // paddleEntity = mSceneMgr->createEntity("cube.mesh");
+    // paddleEntity->setCastShadows(true);
+    // paddleEntity->setMaterialName("Examples/Rockwall");
+    // paddleNode->setScale(7, 1, 7); 
+    // paddleNode->attachObject(paddleEntity);
 
-    // ***Set up bullet Transform necessary for rigidbody.***
-    //btTransform paddleTransformation;
-    paddleTransformation.setIdentity();
-    //paddleTransformation.setRotation(btQuaternion(1.0f, 1.0f, 1.0f, 0)); UNCOMMENT if we want paddle to rotate
-    btVector3 btPaddlePosition = btVector3(paddleX,paddleY,paddleZ);
-    paddleTransformation.setOrigin(btPaddlePosition);
+    // // ***Set up bullet Transform necessary for rigidbody.***
+    // //btTransform paddleTransformation;
+    // paddleTransformation.setIdentity();
+    // //paddleTransformation.setRotation(btQuaternion(1.0f, 1.0f, 1.0f, 0)); UNCOMMENT if we want paddle to rotate
+    // btVector3 btPaddlePosition = btVector3(paddleX,paddleY,paddleZ);
+    // paddleTransformation.setOrigin(btPaddlePosition);
 
-    // ***Set up bullet Collider necessary for rigidbody.***
-    btVector3 btPaddleScale(7, 1, 7);
-    btBoxShape* btPaddleCollider = physicsEngine->makePaddle(btPaddlePosition);
-    btPaddleCollider->setLocalScaling(btPaddleScale);
-    btScalar paddleMass(6000);                 /* "0" -> an immovable object */
-    btVector3 localPaddleInertia(70,70,70); 
-    btPaddleCollider->calculateLocalInertia(paddleMass, localPaddleInertia);
+    // // ***Set up bullet Collider necessary for rigidbody.***
+    // btVector3 btPaddleScale(7, 1, 7);
+    // btBoxShape* btPaddleCollider = physicsEngine->makePaddle(btPaddlePosition);
+    // btPaddleCollider->setLocalScaling(btPaddleScale);
+    // btScalar paddleMass(6000);                 /* "0" -> an immovable object */
+    // btVector3 localPaddleInertia(70,70,70); 
+    // btPaddleCollider->calculateLocalInertia(paddleMass, localPaddleInertia);
 
-    // ***Set up MotionState necessary for rigidbody.***
-    MyMotionState *paddleMotionState = new MyMotionState(paddleTransformation, paddleNode);
+    // // ***Set up MotionState necessary for rigidbody.***
+    // MyMotionState *paddleMotionState = new MyMotionState(paddleTransformation, paddleNode);
 
-    // ***Create and track the paddle's rigidbody.***
-    btRigidBody::btRigidBodyConstructionInfo rbPInfo(paddleMass, paddleMotionState, btPaddleCollider, localPaddleInertia);
-    paddleBody = new btRigidBody(rbPInfo);
-    paddleBody->setRestitution(2);
-    //paddleBody->setUserPointer(paddleNode);
-    physicsEngine->getDynamicsWorld()->addRigidBody(paddleBody);
+    // // ***Create and track the paddle's rigidbody.***
+    // btRigidBody::btRigidBodyConstructionInfo rbPInfo(paddleMass, paddleMotionState, btPaddleCollider, localPaddleInertia);
+    // paddleBody = new btRigidBody(rbPInfo);
+    // paddleBody->setRestitution(2);
+    // //paddleBody->setUserPointer(paddleNode);
+    // physicsEngine->getDynamicsWorld()->addRigidBody(paddleBody);
 
 
     //void GameManager::makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
