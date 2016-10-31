@@ -102,7 +102,8 @@ am_assignment3_OBJECTS = assignment3-GameManager.$(OBJEXT) \
 	assignment3-Physics.$(OBJEXT) \
 	assignment3-MyMotionState.$(OBJEXT) \
 	assignment3-Sound.$(OBJEXT) assignment3-GUI.$(OBJEXT) \
-	assignment3-NetManager.$(OBJEXT) assignment3-Paddle.$(OBJEXT)
+	assignment3-NetManager.$(OBJEXT) assignment3-Paddle.$(OBJEXT) \
+	assignment3-Ball.$(OBJEXT) assignment3-Room.$(OBJEXT)
 assignment3_OBJECTS = $(am_assignment3_OBJECTS)
 am__DEPENDENCIES_1 =
 assignment3_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -335,9 +336,9 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-noinst_HEADERS = GameManager.h BaseApplication.h Physics.h MyMotionState.h Sound.h GUI.h NetManager.h Paddle.h
+noinst_HEADERS = GameManager.h BaseApplication.h Physics.h MyMotionState.h Sound.h GUI.h NetManager.h Paddle.h Ball.h Room.h
 assignment3_CPPFLAGS = -I$(top_srcdir)
-assignment3_SOURCES = GameManager.cpp BaseApplication.cpp Physics.cpp MyMotionState.cpp Sound.cpp GUI.cpp NetManager.cpp Paddle.cpp
+assignment3_SOURCES = GameManager.cpp BaseApplication.cpp Physics.cpp MyMotionState.cpp Sound.cpp GUI.cpp NetManager.cpp Paddle.cpp Ball.cpp Room.cpp
 assignment3_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS) $(sdl_CFLAGS) $(SDLMIXER_CFLAGS) $(SDLNET_CFLAGS)
 assignment3_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS) $(sdl_LIBS) -lSDL_net $(SDLMIXER_LIBS) $(SDLNET_LIBS)
 assignment3_LDFLAGS = -lOgreOverlay -lboost_system
@@ -457,6 +458,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include ./$(DEPDIR)/assignment3-Ball.Po
 include ./$(DEPDIR)/assignment3-BaseApplication.Po
 include ./$(DEPDIR)/assignment3-GUI.Po
 include ./$(DEPDIR)/assignment3-GameManager.Po
@@ -464,6 +466,7 @@ include ./$(DEPDIR)/assignment3-MyMotionState.Po
 include ./$(DEPDIR)/assignment3-NetManager.Po
 include ./$(DEPDIR)/assignment3-Paddle.Po
 include ./$(DEPDIR)/assignment3-Physics.Po
+include ./$(DEPDIR)/assignment3-Room.Po
 include ./$(DEPDIR)/assignment3-Sound.Po
 
 .cpp.o:
@@ -598,6 +601,34 @@ assignment3-Paddle.obj: Paddle.cpp
 #	$(AM_V_CXX)source='Paddle.cpp' object='assignment3-Paddle.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -c -o assignment3-Paddle.obj `if test -f 'Paddle.cpp'; then $(CYGPATH_W) 'Paddle.cpp'; else $(CYGPATH_W) '$(srcdir)/Paddle.cpp'; fi`
+
+assignment3-Ball.o: Ball.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -MT assignment3-Ball.o -MD -MP -MF $(DEPDIR)/assignment3-Ball.Tpo -c -o assignment3-Ball.o `test -f 'Ball.cpp' || echo '$(srcdir)/'`Ball.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment3-Ball.Tpo $(DEPDIR)/assignment3-Ball.Po
+#	$(AM_V_CXX)source='Ball.cpp' object='assignment3-Ball.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -c -o assignment3-Ball.o `test -f 'Ball.cpp' || echo '$(srcdir)/'`Ball.cpp
+
+assignment3-Ball.obj: Ball.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -MT assignment3-Ball.obj -MD -MP -MF $(DEPDIR)/assignment3-Ball.Tpo -c -o assignment3-Ball.obj `if test -f 'Ball.cpp'; then $(CYGPATH_W) 'Ball.cpp'; else $(CYGPATH_W) '$(srcdir)/Ball.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment3-Ball.Tpo $(DEPDIR)/assignment3-Ball.Po
+#	$(AM_V_CXX)source='Ball.cpp' object='assignment3-Ball.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -c -o assignment3-Ball.obj `if test -f 'Ball.cpp'; then $(CYGPATH_W) 'Ball.cpp'; else $(CYGPATH_W) '$(srcdir)/Ball.cpp'; fi`
+
+assignment3-Room.o: Room.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -MT assignment3-Room.o -MD -MP -MF $(DEPDIR)/assignment3-Room.Tpo -c -o assignment3-Room.o `test -f 'Room.cpp' || echo '$(srcdir)/'`Room.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment3-Room.Tpo $(DEPDIR)/assignment3-Room.Po
+#	$(AM_V_CXX)source='Room.cpp' object='assignment3-Room.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -c -o assignment3-Room.o `test -f 'Room.cpp' || echo '$(srcdir)/'`Room.cpp
+
+assignment3-Room.obj: Room.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -MT assignment3-Room.obj -MD -MP -MF $(DEPDIR)/assignment3-Room.Tpo -c -o assignment3-Room.obj `if test -f 'Room.cpp'; then $(CYGPATH_W) 'Room.cpp'; else $(CYGPATH_W) '$(srcdir)/Room.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/assignment3-Room.Tpo $(DEPDIR)/assignment3-Room.Po
+#	$(AM_V_CXX)source='Room.cpp' object='assignment3-Room.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(assignment3_CPPFLAGS) $(CPPFLAGS) $(assignment3_CXXFLAGS) $(CXXFLAGS) -c -o assignment3-Room.obj `if test -f 'Room.cpp'; then $(CYGPATH_W) 'Room.cpp'; else $(CYGPATH_W) '$(srcdir)/Room.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

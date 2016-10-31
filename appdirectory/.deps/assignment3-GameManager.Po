@@ -1,5 +1,6 @@
 assignment3-GameManager.o: GameManager.cpp /usr/include/stdc-predef.h \
- BaseApplication.h /lusr/opt/ogre-1.9/include/OGRE/OgreCamera.h \
+ GameManager.h BaseApplication.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreCamera.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgrePrerequisites.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgrePlatform.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreConfig.h \
@@ -896,7 +897,7 @@ assignment3-GameManager.o: GameManager.cpp /usr/include/stdc-predef.h \
  /usr/include/ois/OISInputManager.h /usr/include/ois/OISFactoryCreator.h \
  /usr/include/ois/OISException.h /usr/include/ois/OISEffect.h \
  /usr/include/ois/OISForceFeedback.h \
- /lusr/opt/ogre-1.9/include/OGRE/SdkCameraMan.h GameManager.h \
+ /lusr/opt/ogre-1.9/include/OGRE/SdkCameraMan.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreVector3.h Physics.h \
  /usr/include/bullet/btBulletDynamicsCommon.h \
  /usr/include/bullet/btBulletCollisionCommon.h \
@@ -1305,13 +1306,16 @@ assignment3-GameManager.o: GameManager.cpp /usr/include/stdc-predef.h \
  /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h \
  /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_mixer.h \
  /usr/include/SDL/SDL_types.h MyMotionState.h NetManager.h \
- /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h Paddle.h \
+ /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h Paddle.h Ball.h \
+ /lusr/opt/ogre-1.9/include/OGRE/OgreMeshManager.h \
+ /lusr/opt/ogre-1.9/include/OGRE/Ogre.h Room.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreQuaternion.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreRectangle2D.h scoreBoard.h \
- /lusr/opt/ogre-1.9/include/OGRE/Ogre.h
+ /lusr/opt/ogre-1.9/include/OGRE/OgreRectangle2D.h scoreBoard.h
 
 /usr/include/stdc-predef.h:
+
+GameManager.h:
 
 BaseApplication.h:
 
@@ -3303,8 +3307,6 @@ BaseApplication.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/SdkCameraMan.h:
 
-GameManager.h:
-
 /lusr/opt/ogre-1.9/include/OGRE/OgreVector3.h:
 
 Physics.h:
@@ -4169,6 +4171,14 @@ NetManager.h:
 
 Paddle.h:
 
+Ball.h:
+
+/lusr/opt/ogre-1.9/include/OGRE/OgreMeshManager.h:
+
+/lusr/opt/ogre-1.9/include/OGRE/Ogre.h:
+
+Room.h:
+
 /lusr/opt/ogre-1.9/include/OGRE/OgreQuaternion.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgreNode.h:
@@ -4176,5 +4186,3 @@ Paddle.h:
 /lusr/opt/ogre-1.9/include/OGRE/OgreRectangle2D.h:
 
 scoreBoard.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Ogre.h:

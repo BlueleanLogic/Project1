@@ -26,6 +26,8 @@ http://www.ogre3d.org/wiki/
 #include "MyMotionState.h"
 #include "NetManager.h"
 #include "Paddle.h"
+#include "Ball.h"
+#include "Room.h"
 
 #include <string>
 #include <iostream>
@@ -46,6 +48,7 @@ public:
     Ogre::MovablePlane* mPlane;
     Ogre::Entity* mPlaneEntity;
     Ogre::SceneNode* mPlaneNode;
+    Ball *ball;
 
 
 protected:
@@ -58,13 +61,7 @@ protected:
     virtual bool mouseMoved( const OIS::MouseEvent &arg );
     virtual bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
     virtual bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
-
-
     // bool quit(const CEGUI::EventArgs &e);
-    void makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
-                   const char *materialName, btVector3 btOriginVector, btVector3 planeNormal, int planeConstant);
-
-    
 
 private:
     bool processUnbufferedInput(const Ogre::FrameEvent& fe);

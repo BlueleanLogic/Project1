@@ -12,18 +12,12 @@ and edited by Brittany Madrigal for her own project 1 in Game Tech
 Description: Makes a ball and a room, and alows the user to watch the ball bounce around the room unbound by gravity.
 -----------------------------------------------------------------------------
 */
-#include "BaseApplication.h"
-
 #include "GameManager.h"
-#include <OgreVector3.h>
 #include <OgreQuaternion.h>
 #include <OgreNode.h>
 #include <ctime>
-#include "MyMotionState.h"
 #include <OgreRectangle2D.h>
 #include "scoreBoard.h"
-#include <string>
-#include <iostream>
 #include <sstream>
 
 
@@ -41,27 +35,11 @@ GameManager::~GameManager(void)
 }
 
 //---------------------------------------------------------------------------
-int cubeRoomDimention = 5000;
-int sphereRadius = 100;
-Ogre::Entity* sphereEntity;
-Ogre::SceneNode* sphereNode;
+int cubeRoomDimension;
 Ogre::Vector3 dir;
-Ogre::Plane wallPlane4(Ogre::Vector3::UNIT_Z, 0); //negative z
-Ogre::Plane wallPlane3(Ogre::Vector3::NEGATIVE_UNIT_Z, 0); //positive z
-Ogre::Plane floorPlane(Ogre::Vector3::UNIT_Y, 0); // "negative" y
-Ogre::Plane ceilingPlane(Ogre::Vector3::NEGATIVE_UNIT_Y, 0);// positive y
-Ogre::Plane wallPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0); //positive x
-Ogre::Plane wallPlane2(Ogre::Vector3::UNIT_X, 0); //negative x
 int speed;
-btRigidBody *sphereBody;
-btRigidBody *groundBody;
-btRigidBody *ceilingBody;
-btRigidBody *wall1Body;
-btRigidBody *wall2Body;
-btRigidBody *wall3Body;
-btRigidBody *wall4Body;
-bool roomInitiated = false;
 // CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID);
+
 CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID) {
   switch (buttonID)
   {
@@ -138,132 +116,17 @@ void GameManager::createScene(void)
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
 
     Paddle *paddle = new Paddle(mSceneMgr, physicsEngine);
-
-    //void GameManager::makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
-    //                                    const char *materialName, btVector3 btOriginVector, btVector3 planeNormal, int planeConstant)
-
-    makePlane(Ogre::Vector3(0, 0, 0),                                      "ground", floorPlane, Ogre::Vector3::UNIT_Z,
-              "MyMaterials/WoodenFloor",      btVector3(0, -50, 0),     btVector3(0, 1, 0), 0);
-    makePlane(Ogre::Vector3(0, cubeRoomDimention, 0),                     "ceiling",  ceilingPlane, Ogre::Vector3::UNIT_Z,
-              "MyMaterials/White",            btVector3(0, 4950, 0),      -1.0f*btVector3(0, 1, 0), 0);
-
-    makePlane(Ogre::Vector3(cubeRoomDimention/2, cubeRoomDimention/2, 0),    "wall", wallPlane, Ogre::Vector3::UNIT_Y,
-              "MyMaterials/HexagonsAndStars", btVector3(0, 0, 4950/2),     -1.0f*btVector3(0, 0, 1), 0);
-
-    makePlane(Ogre::Vector3(-(cubeRoomDimention/2), cubeRoomDimention/2, 0), "wall2", wallPlane2, Ogre::Vector3::UNIT_Y,
-              "MyMaterials/HexagonsAndStars", btVector3(0, 0, -4950/2),     1.0f*btVector3(0, 0, 1), 0);
-
-    makePlane(Ogre::Vector3(0, cubeRoomDimention/2, cubeRoomDimention/2),    "wall3", wallPlane3, Ogre::Vector3::UNIT_Y,
-              "MyMaterials/HexagonsAndStars", btVector3(4950/2, 0, 0),     -1.0f*btVector3(1, 0, 0), 0);
-
-    makePlane(Ogre::Vector3(0, cubeRoomDimention/2, -(cubeRoomDimention/2)), "wall4", wallPlane4, Ogre::Vector3::UNIT_Y,
-              "MyMaterials/HexagonsAndStars", btVector3(-4950/2, 0, 0),     1.0f*btVector3(1, 0, 0), 0);
-
-    ////////////////SPHERE///////////////
-
-    // **Initial Position for Sphere. (Used to sync initial Ogre and Bullet sphere positions.)**
-    int ipfsX = 30;
-    int ipfsY = 4500;
-    int ipfsZ = 30;
-
-    // ***Create node for sphere.***
-    Ogre::Vector3 ogreSpherePosition = Ogre::Vector3(ipfsX,ipfsY,ipfsZ);
-    Ogre::SceneNode *sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("sphereNode",ogreSpherePosition);
-    // sphereNode->setScale(sphereRadius/20,sphereRadius/20,sphereRadius/20);
-
-    // ***Add sphere entity to its node.***
-    sphereEntity = mSceneMgr->createEntity("sphere.mesh");
-    sphereEntity->setCastShadows(true);
-    sphereEntity->setMaterialName("MyMaterials/GreenRubberBall");
-    sphereNode->attachObject(sphereEntity);
-
-    // ***Set up bullet Transform necessary for rigidbody.***
-    btTransform startTransform;
-    startTransform.setIdentity();
-    startTransform.setRotation(btQuaternion(1.0f, 1.0f, 1.0f, 0));
-    btVector3 btSpherePosition = btVector3(ipfsX,ipfsY,ipfsZ);
-    startTransform.setOrigin(btSpherePosition);
-
-    // ***Set up bullet Collider necessary for rigidbody.***
-    btSphereShape* btSphereCollider = physicsEngine->makeBall(sphereRadius); //change this value!
-    btScalar mass(0.1f);                 /* "0" -> an immovable object */
-    btVector3 localInertia(0,0,0); 
-    btSphereCollider->calculateLocalInertia(mass, localInertia);
-
-    // ***Set up MotionState necessary for rigidbody.***
-    MyMotionState *myMotionState = new MyMotionState(startTransform, sphereNode);
-
-    // ***Create and track the sphere's rigidbody.***
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, btSphereCollider, localInertia);
-    sphereBody = new btRigidBody(rbInfo);
-    sphereBody->setRestitution(1.0f);
-    sphereBody->setUserPointer(sphereNode);
-    physicsEngine->getDynamicsWorld()->addRigidBody(sphereBody);
-
-
-    srand(time(NULL));
-    btVector3 direction(100.0f * (rand() * 1.0f / RAND_MAX),
-                        100.0f * (rand() * 1.0f / RAND_MAX),
-                        100.0f * (rand() * 1.0f / RAND_MAX));
-
-    sphereBody->setLinearVelocity(direction);
-    physicsEngine->getDynamicsWorld()->addRigidBody(sphereBody);
-
-    ////////////////////////////////////////////////
-    // ***Used for manually setting velocity in Project 1.***
-    // srand(time(NULL)); //for random number
-    // speed = speedOfBall();
-    // dir = directionVector()*speed;
+    ball = new Ball(mSceneMgr, physicsEngine);
+    Room *room = new Room(mSceneMgr, physicsEngine);
+    cubeRoomDimension = room->getDimension();
 }
-//---------------------------------------------------------------------------
 
-void GameManager::makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Plane planePlane, Ogre::Vector3 upVector,
-                                    const char *materialName, btVector3 btOriginVector, btVector3 planeNormal, int planeConstant)
-{
-    Ogre::SceneNode *groundNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(nodeLocation);
-
-    Ogre::MeshManager::getSingleton().createPlane(
-      planeName,
-      Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-      planePlane, 
-      cubeRoomDimention, cubeRoomDimention, 20, 20, 
-      true, 
-      1, 5, 5, 
-      upVector);
-
-    Ogre::Entity* groundEntity = mSceneMgr->createEntity(planeName);
-    groundEntity->setCastShadows(false);
-    groundEntity->setMaterialName(materialName);
-    groundNode->attachObject(groundEntity);
-
-
-    // ***Set up bullet Transform necessary for rigidbody.***
-    btTransform groundTransform;
-    groundTransform.setIdentity();
-    groundTransform.setOrigin(btOriginVector);
-
-    // ***Set up CollisionShape necessary for rigidbody.***
-    btCollisionShape *groundShape = new btStaticPlaneShape(planeNormal, planeConstant);
-    btScalar groundMass(0.);
-    btVector3 localGroundInertia(0, 0, 0);
-    groundShape->calculateLocalInertia(groundMass, localGroundInertia);
-
-    // ***Set up MotionState necessary for rigidbody.***
-    MyMotionState *groundMotionState = new MyMotionState(groundTransform, groundNode);
-
-    // ***Create and track the ground's rigidbody.***
-    btRigidBody::btRigidBodyConstructionInfo groundRBInfo(groundMass, groundMotionState, groundShape, localGroundInertia);
-    groundBody = new btRigidBody(groundRBInfo);
-    groundBody->setRestitution(1.0f);
-    physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
-
-}
 
 void GameManager::createCamera()
 {
     mCamera = mSceneMgr->createCamera("PlayerCam");
     //position the camera
-    mCamera->setPosition(Ogre::Vector3(cubeRoomDimention/4, cubeRoomDimention*1.3, cubeRoomDimention/1.2)); //0 300 500
+    mCamera->setPosition(Ogre::Vector3(5000/4, 5000*1.3, 5000/1.2)); //0 300 500
     //sets direction of camera
     mCamera->lookAt(Ogre::Vector3(0, 0, 0));
     //camera controller, can control camera passed to it
@@ -304,13 +167,13 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   // Ogre::Vector3 R;
 
  
-  // bool xOutOfRangeNeg = (a.x <= (0-cubeRoomDimention/2 + sphereRadius));
+  // bool xOutOfRangeNeg = (a.x <= (0-cubeRoomDimension/2 + sphereRadius));
   // physicsEngine->getDynamicsWorld()->stepSimulation(1.0f/60.0f);
-  // bool xOutOfRangePos = (a.x >= (cubeRoomDimention/2 - sphereRadius));
+  // bool xOutOfRangePos = (a.x >= (cubeRoomDimension/2 - sphereRadius));
   // bool yOutOfRangeNeg = (a.y <= (0 + sphereRadius));
-  // bool yOutOfRangePos = (a.y >= (cubeRoomDimention - sphereRadius));
-  // bool zOutOfRangeNeg = (a.z <= (0-cubeRoomDimention/2 + sphereRadius));
-  // bool zOutOfRangePos = (a.z >= (cubeRoomDimention/2 - sphereRadius));
+  // bool yOutOfRangePos = (a.y >= (cubeRoomDimension - sphereRadius));
+  // bool zOutOfRangeNeg = (a.z <= (0-cubeRoomDimension/2 + sphereRadius));
+  // bool zOutOfRangePos = (a.z >= (cubeRoomDimension/2 - sphereRadius));
  
  
  
@@ -352,7 +215,7 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   // }
   //printf("4\n");
   
-  static Ogre::Real move = 750;
+  static Ogre::Real move = 2000;
 
   Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
   if (mKeyboard->isKeyDown(OIS::KC_I))
@@ -373,7 +236,7 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   physicsEngine->stepSimulation();
 
   btTransform trans;
-  sphereBody->getMotionState()->getWorldTransform(trans);
+  ball->GetBody()->getMotionState()->getWorldTransform(trans);
   //printf("\nposition of Y: ");
   //printf("%f", (float)(trans.getOrigin().getY()));
   // mSceneMgr->getSceneNode("sphereNode")->getPosition().y;
