@@ -86,7 +86,7 @@ bool GameManager::mouseMoved( const OIS::MouseEvent &arg )
   if (gui->isGui())
     context.injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
 
-  if (gui->isPlay())
+  if (gui->playingSingle || gui->playingServer || gui->playingClient)
     mCameraMan->injectMouseMove(arg);
 
   return true;
@@ -115,8 +115,7 @@ void GameManager::createScene(void)
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
 
-    Paddle *paddle = new Paddle(mSceneMgr, physicsEngine);
-    ball = new Ball(mSceneMgr, physicsEngine);
+
     Room *room = new Room(mSceneMgr, physicsEngine);
     cubeRoomDimension = room->getDimension();
 }
@@ -152,6 +151,7 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   if(gui->mShutDown)
     return false;
 
+  //These two open socket connects for server and client
   if (gui->isServer) {
     startMulti();
     gui->isServer=false;
@@ -161,6 +161,13 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
     searchGame();
     gui->isClient=false;
   }
+
+  //This starts singleplayer once prompted by the gui
+  if (gui->startingSinglePlayer) {
+    singlePlayerGame();
+    gui->startingSinglePlayer=false;
+  }
+
 
   // Ogre::Vector3 b = sphereNode->getPosition();
 
@@ -215,47 +222,48 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   // }
   //printf("4\n");
   
+  if(gui->playingSingle || gui->playingServer || gui->playingClient)
+  {
+    static Ogre::Real move = 2000;
+    Ogre::Vector3 n = mSceneMgr->getSceneNode("Paddle")->getPosition();
 
-  static Ogre::Real move = 2000;
-  Ogre::Vector3 n = mSceneMgr->getSceneNode("Paddle")->getPosition();
+    Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
+    if (mKeyboard->isKeyDown(OIS::KC_I)){
+      if (!(n.z <= 0-cubeRoomDimension/2 + (700/2)))
+        dirVec.z -= move;
+    }
+    if (mKeyboard->isKeyDown(OIS::KC_K)){
+      if (!(n.z >= cubeRoomDimension/2 - (700/2)))
+        dirVec.z += move;
+    }
+    if (mKeyboard->isKeyDown(OIS::KC_J)){
+      if(!(n.x <= 0-cubeRoomDimension/2 + (700/2)))
+        dirVec.x -= move;
+    }
+    if (mKeyboard->isKeyDown(OIS::KC_L)){
+      if(!(n.x >= cubeRoomDimension/2 - (700/2)))
+        dirVec.x += move;
+    }
 
-  Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
-  if (mKeyboard->isKeyDown(OIS::KC_I)){
-    if (!(n.z <= 0-cubeRoomDimension/2 + (700/2)))
-      dirVec.z -= move;
+    
+    
+    mSceneMgr->getSceneNode("Paddle")->translate(
+        dirVec * fe.timeSinceLastFrame,
+        Ogre::Node::TS_LOCAL);
+
+
+    physicsEngine->stepSimulation();
+
+    btTransform trans;
+    ball->GetBody()->getMotionState()->getWorldTransform(trans);
+    //printf("\nposition of Y: ");
+    //printf("%f", (float)(trans.getOrigin().getY()));
+    // mSceneMgr->getSceneNode("sphereNode")->getPosition().y;
+    // Ogre::Vector3 bPosition = sphereNode->getPosition();
+    if (mSceneMgr->getSceneNode("sphereNode")->getPosition().y <= 51){
+      gui->incrementScore();
+    }
   }
-  if (mKeyboard->isKeyDown(OIS::KC_K)){
-    if (!(n.z >= cubeRoomDimension/2 - (700/2)))
-      dirVec.z += move;
-  }
-  if (mKeyboard->isKeyDown(OIS::KC_J)){
-    if(!(n.x <= 0-cubeRoomDimension/2 + (700/2)))
-      dirVec.x -= move;
-  }
-  if (mKeyboard->isKeyDown(OIS::KC_L)){
-    if(!(n.x >= cubeRoomDimension/2 - (700/2)))
-      dirVec.x += move;
-  }
-
-  
-  
-  mSceneMgr->getSceneNode("Paddle")->translate(
-      dirVec * fe.timeSinceLastFrame,
-      Ogre::Node::TS_LOCAL);
-
-
-  physicsEngine->stepSimulation();
-
-  btTransform trans;
-  ball->GetBody()->getMotionState()->getWorldTransform(trans);
-  //printf("\nposition of Y: ");
-  //printf("%f", (float)(trans.getOrigin().getY()));
-  // mSceneMgr->getSceneNode("sphereNode")->getPosition().y;
-  // Ogre::Vector3 bPosition = sphereNode->getPosition();
-  if (mSceneMgr->getSceneNode("sphereNode")->getPosition().y <= 51){
-    gui->incrementScore();
-  }
-
   //printf("7\n");
 
   return ret;
@@ -321,7 +329,11 @@ void GameManager::startMulti() {
   }
 }
 
-
+void GameManager::singlePlayerGame() {
+    Paddle *paddle = new Paddle(mSceneMgr, physicsEngine, false);
+    ball = new Ball(mSceneMgr, physicsEngine);
+    gui->playingSingle=true;
+}
 
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

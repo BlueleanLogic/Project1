@@ -10,7 +10,7 @@
 class Paddle{
 
 	public:
-		Paddle(Ogre::SceneManager *mSceneMgr, Physics *physicsEngine);
+		Paddle(Ogre::SceneManager *mSceneMgr, Physics *physicsEngine, bool client);
 		~Paddle(void);
 };
 

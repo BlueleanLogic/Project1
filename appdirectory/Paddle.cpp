@@ -7,17 +7,24 @@ btTransform paddleTransformation;
 
 
 //---------------------------------------------------------------------------
-Paddle::Paddle(Ogre::SceneManager *mSceneMgr, Physics *physicsEngine)
+Paddle::Paddle(Ogre::SceneManager *mSceneMgr, Physics *physicsEngine, bool client)
 {
     int paddleX = 0;
     int paddleY = 100;
     int paddleZ = 0;
 
     Ogre::Vector3 ogrePaddlePosition = Ogre::Vector3(paddleX,paddleY,paddleZ);
-    paddleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Paddle", ogrePaddlePosition);
     paddleEntity = mSceneMgr->createEntity("cube.mesh");
+
+    if(client) {
+        paddleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Paddle2", ogrePaddlePosition);
+        paddleEntity->setMaterialName("MyMaterials/HexagonalMesh");
+    } else {
+        paddleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Paddle", ogrePaddlePosition);
+        paddleEntity->setMaterialName("Examples/Rockwall");
+    }
+
     paddleEntity->setCastShadows(true);
-    paddleEntity->setMaterialName("Examples/Rockwall");
     paddleNode->setScale(7, 1, 7); 
     paddleNode->attachObject(paddleEntity);
 

@@ -18,7 +18,10 @@ GUI::GUI(void)
 isServer(false),
 isClient(false),
 stategui(true),
-stateplay(false)
+startingSinglePlayer(false),
+playingSingle(false),
+playingServer(false),
+playingClient(false)
 {
 	score = 0;
 	score2 = 0;
@@ -172,7 +175,7 @@ bool GUI::startSinglePlayer(const CEGUI::EventArgs &e)
   sheet->addChild(scoreBox);
   sheet->removeChild(menu);
   stategui = false;
-  stateplay = true;
+  startingSinglePlayer = true;
   return true;
 }
 
@@ -194,16 +197,8 @@ bool GUI::multiBack(const CEGUI::EventArgs &e) {
   return true;
 }
 
-void GUI::setPlay() {
-  stateplay = true;
-}
-
 bool GUI::isGui(){
   return stategui == true;
-}
-
-bool GUI::isPlay(){
-  return stateplay == true;
 }
 
 bool GUI::startServer(const CEGUI::EventArgs &e){

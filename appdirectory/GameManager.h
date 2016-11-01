@@ -73,6 +73,7 @@ private:
     void searchGame();
 
     // void startMulti();
+    void singlePlayerGame();
 };
 
 //---------------------------------------------------------------------------

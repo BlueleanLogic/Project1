@@ -18,13 +18,16 @@ class GUI{
       bool stategui;
       bool stateplay;
       bool isGui();
-      bool isPlay();
       bool isServer;
       bool isClient;
-      void setPlay();
       CEGUI::String address;
       void startServerGame();
       void startClientGame();
+
+      bool startingSinglePlayer;
+      bool playingSingle;
+      bool playingServer;
+      bool playingClient;
 
       private:
       CEGUI::OgreRenderer* mRenderer;
