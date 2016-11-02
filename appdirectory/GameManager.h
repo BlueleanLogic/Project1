@@ -49,6 +49,8 @@ public:
     Ogre::Entity* mPlaneEntity;
     Ogre::SceneNode* mPlaneNode;
     Ball *ball;
+    Paddle *paddle;
+    Paddle *paddle2;
 
 
 protected:
@@ -71,6 +73,7 @@ private:
     void endNetwork();
     void startMulti();
     void searchGame();
+    void multiPlayerGame();
 
     // void startMulti();
     void singlePlayerGame();

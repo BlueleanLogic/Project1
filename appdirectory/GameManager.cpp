@@ -221,37 +221,43 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   //   }
   // }
   //printf("4\n");
-  
   if(gui->playingSingle || gui->playingServer || gui->playingClient)
   {
-    static Ogre::Real move = 2000;
+    static Ogre::Real speed = 5000;
     Ogre::Vector3 n = mSceneMgr->getSceneNode("Paddle")->getPosition();
 
-    Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
+    // Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
     if (mKeyboard->isKeyDown(OIS::KC_I)){
       if (!(n.z <= 0-cubeRoomDimension/2 + (700/2)))
-        dirVec.z -= move;
+        paddle->move[1] = -1;
+
+        // dirVec.z -= move;
     }
-    if (mKeyboard->isKeyDown(OIS::KC_K)){
+     if (mKeyboard->isKeyDown(OIS::KC_K)){
       if (!(n.z >= cubeRoomDimension/2 - (700/2)))
-        dirVec.z += move;
+        paddle->move[1] = 1;
+        // dirVec.z += move;
     }
+
     if (mKeyboard->isKeyDown(OIS::KC_J)){
       if(!(n.x <= 0-cubeRoomDimension/2 + (700/2)))
-        dirVec.x -= move;
+        paddle->move[0] = -1;
+        // dirVec.x -= move;
     }
-    if (mKeyboard->isKeyDown(OIS::KC_L)){
+     if (mKeyboard->isKeyDown(OIS::KC_L)){
       if(!(n.x >= cubeRoomDimension/2 - (700/2)))
-        dirVec.x += move;
+        // dirVec.x += move;
+        paddle->move[0] = 1;
     }
 
     
     
     mSceneMgr->getSceneNode("Paddle")->translate(
-        dirVec * fe.timeSinceLastFrame,
+        speed * Ogre::Vector3(paddle->move[0],0,paddle->move[1]) * fe.timeSinceLastFrame,
         Ogre::Node::TS_LOCAL);
-
-
+    paddle->move[0]=0;
+    paddle->move[1]=0;
+    
     physicsEngine->stepSimulation();
 
     btTransform trans;
@@ -265,7 +271,6 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
     }
   }
   //printf("7\n");
-
   return ret;
 }
  
@@ -335,6 +340,25 @@ void GameManager::singlePlayerGame() {
     gui->playingSingle=true;
 }
 
+void GameManager::multiPlayerGame() {
+  
+}
+
+// void GameManager::sendToClient() {
+// //server checks client player position
+//   if ( nm->pollForActivity(10) ) {
+//     ClientData& msg = *(nm->tcpClientData[0]);
+//     //if ( msg.updated ) {//update client paddle direction
+//       paddle2->paddleDirection[0] = msg.output[0];
+//       paddle2->paddleDirection[1] = msg.output[1]; 
+//     //}
+//   }
+//   //server sends correct server position and turn
+//   char buf[] = { (char)(room->paddle->paddleDirection[0]),
+//                  (char)(room->paddle->paddleDirection[1])};
+//   nm->messageClients(PROTOCOL_TCP,buf,2);
+
+// }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
