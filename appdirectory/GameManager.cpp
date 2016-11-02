@@ -112,12 +112,8 @@ void GameManager::createScene(void)
     physicsEngine = new Physics();   
     gui = new GUI();
     sound = new Sound();
-    // sound->loadSounds();
-    // nm = new NetManager();
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
-
-
     Room *room = new Room(mSceneMgr, physicsEngine);
     cubeRoomDimension = room->getDimension();
 }
@@ -179,85 +175,27 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
     gui->startingMultiPlayer=false;
   }
 
-
-  // Ogre::Vector3 b = sphereNode->getPosition();
-
-  // Ogre::Vector3 R;
-
- 
-  // bool xOutOfRangeNeg = (a.x <= (0-cubeRoomDimension/2 + sphereRadius));
-  // physicsEngine->getDynamicsWorld()->stepSimulation(1.0f/60.0f);
-  // bool xOutOfRangePos = (a.x >= (cubeRoomDimension/2 - sphereRadius));
-  // bool yOutOfRangeNeg = (a.y <= (0 + sphereRadius));
-  // bool yOutOfRangePos = (a.y >= (cubeRoomDimension - sphereRadius));
-  // bool zOutOfRangeNeg = (a.z <= (0-cubeRoomDimension/2 + sphereRadius));
-  // bool zOutOfRangePos = (a.z >= (cubeRoomDimension/2 - sphereRadius));
- 
- 
- 
-  // if (ret && (!xOutOfRangePos && !yOutOfRangePos && !zOutOfRangePos && !xOutOfRangeNeg && !yOutOfRangeNeg && !zOutOfRangeNeg))
-  // {
-  //   sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
-  // }else{
-  //   if(zOutOfRangeNeg){
-  //     R = dir - 2*(wallPlane4.normal * dir)*wallPlane4.normal;
-  //     R.normalise();
-  //     dir = R*speed;
-  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
-  //   } else if(zOutOfRangePos){
-  //     R = dir -2*(wallPlane3.normal * dir)*wallPlane3.normal;
-  //     R.normalise();
-  //     dir = R*speed;
-  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
-  //   } else if(yOutOfRangeNeg){
-  //     R = dir -2*(floorPlane.normal * dir)*floorPlane.normal;
-  //     R.normalise();
-  //     dir = R*speed;
-  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
-  //   } else if(yOutOfRangePos){
-  //     R = dir -2*(ceilingPlane.normal * dir)*ceilingPlane.normal;
-  //     R.normalise();
-  //     dir = R*speed;
-  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
-  //   } else if(xOutOfRangeNeg){
-  //     R = dir -2*(wallPlane2.normal * dir)*wallPlane2.normal;
-  //     R.normalise();
-  //     dir = R*speed;
-  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
-  //   } else if(xOutOfRangePos){
-  //     R = dir -2*(wallPlane.normal * dir)*wallPlane.normal;
-  //     R.normalise();
-  //     dir = R*speed;
-  //     sphereNode->translate(dir, Ogre::Node::TS_LOCAL);
-  //   }
-  // }
-  //printf("4\n");
   if(gui->playingSingle || gui->playingServer || gui->playingClient)
   {
     static Ogre::Real speed = 5000;
     Ogre::Vector3 n = mSceneMgr->getSceneNode("Paddle")->getPosition();
 
-    // Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
     if (mKeyboard->isKeyDown(OIS::KC_I)){
       if (!(n.z <= 0-cubeRoomDimension/2 + (700/2)))
         paddle->move[1] = -1;
 
-        // dirVec.z -= move;
     }
      if (mKeyboard->isKeyDown(OIS::KC_K)){
       if (!(n.z >= cubeRoomDimension/2 - (700/2)))
         paddle->move[1] = 1;
-        // dirVec.z += move;
     }
 
     if (mKeyboard->isKeyDown(OIS::KC_J)){
       if(!(n.x <= 0-cubeRoomDimension/2 + (700/2)))
         paddle->move[0] = -1;
-        // dirVec.x -= move;
     }
      if (mKeyboard->isKeyDown(OIS::KC_L)){
       if(!(n.x >= cubeRoomDimension/2 - (700/2)))
-        // dirVec.x += move;
         paddle->move[0] = 1;
     }
     if (server)
@@ -265,9 +203,7 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   
     if (client)
       sendToServer();
-
-    
-    
+   
     mSceneMgr->getSceneNode("Paddle")->translate(
         speed * Ogre::Vector3(paddle->move[0],0,paddle->move[1]) * fe.timeSinceLastFrame,
         Ogre::Node::TS_LOCAL);
@@ -294,7 +230,6 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
       gui->incrementScore();
     }
   }
-  //printf("7\n");
   return ret;
 }
  
@@ -336,9 +271,7 @@ void GameManager::searchGame() {
     if (gui->address.compare(nm->getIPstring()))
       gui->startClientGame();
   }
-
 }
-
 
 void GameManager::endNetwork() {
   if (nm) {
@@ -350,8 +283,6 @@ void GameManager::endNetwork() {
 
 void GameManager::startMulti() {
   if (startServer()){
-    // gui->getIP(nm->getIPstring().c_str());
-
     if (nm->pollForActivity(5000)) {
       if (nm->getClients()){
         gui->startingMultiPlayer = true;
@@ -381,22 +312,17 @@ void GameManager::sendToClient() {
     paddle2->move[0] = msg.output[0];
     paddle2->move[1] = msg.output[1]; 
   }
-
   char buf[] = { (char)(paddle->move[0]),
                  (char)(paddle->move[1])};
-
   nm->messageClients(PROTOCOL_TCP,buf, 2);
 }
 
 void GameManager::sendToServer() {
   char buf[] = { (char)(paddle->move[0]),
                  (char)(paddle->move[1])};
-
   nm->messageServer(PROTOCOL_TCP, buf, 2);
   if ( nm->pollForActivity(10) ) {
-
     ClientData& msg = nm->tcpServerData;
-
     paddle2->move[0] = msg.output[0];
     paddle2->move[1] = msg.output[1];
   }

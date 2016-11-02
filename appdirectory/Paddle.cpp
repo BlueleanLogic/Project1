@@ -49,7 +49,7 @@ Paddle::Paddle(Ogre::SceneManager *mSceneMgr, Physics *physicsEngine, bool clien
     // ***Create and track the paddle's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo rbPInfo(paddleMass, paddleMotionState, btPaddleCollider, localPaddleInertia);
     paddleBody = new btRigidBody(rbPInfo);
-    paddleBody->setRestitution(2);
+    paddleBody->setRestitution(1.0f);
     //paddleBody->setUserPointer(paddleNode);
     physicsEngine->getDynamicsWorld()->addRigidBody(paddleBody);
 }

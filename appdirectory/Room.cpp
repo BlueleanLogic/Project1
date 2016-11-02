@@ -86,7 +86,7 @@ void Room::makePlane(Ogre::Vector3 nodeLocation, const char *planeName, Ogre::Pl
     // ***Create and track the ground's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo groundRBInfo(groundMass, groundMotionState, groundShape, localGroundInertia);
     groundBody = new btRigidBody(groundRBInfo);
-    groundBody->setRestitution(1.0001f);
+    groundBody->setRestitution(1.0f);
     physicsEngine->getDynamicsWorld()->addRigidBody(groundBody);
 }
 

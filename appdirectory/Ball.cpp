@@ -44,7 +44,7 @@ Ball::Ball(Ogre::SceneManager *mSceneMgr, Physics *physicsEngine)
     // ***Create and track the sphere's rigidbody.***
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, btSphereCollider, localInertia);
     sphereBody = new btRigidBody(rbInfo);
-    sphereBody->setRestitution(1);
+    sphereBody->setRestitution(1.0f);
     sphereBody->setUserPointer(sphereNode);
     physicsEngine->getDynamicsWorld()->addRigidBody(sphereBody);
 
