@@ -367,7 +367,6 @@ void GameManager::singlePlayerGame() {
 }
 
 void GameManager::multiPlayerGame() {
-  printf("asdf\n");
   paddle = new Paddle(mSceneMgr, physicsEngine, false);
   paddle2 = new Paddle(mSceneMgr, physicsEngine, true);
   ball = new Ball(mSceneMgr, physicsEngine);
@@ -377,31 +376,50 @@ void GameManager::multiPlayerGame() {
 void GameManager::sendToClient() {
   if ( nm->pollForActivity(10) ) {
     ClientData& msg = *(nm->tcpClientData[0]);
-    for (int i = 0; i < 128; i++)
-      printf("%c", msg.output[i]);
+    // for (int i = 0; i < 128; i++)
+    //   printf("%c", msg.output[i]);
     // printf("server1 %d\n", msg.output[0]);
     // printf("server2 %d\n", msg.output[1]);
+    printf("%s\n", msg.output[0]);
     paddle2->move[0] = msg.output[0];
     paddle2->move[1] = msg.output[1]; 
   }
+
   char buf[] = { (char)(paddle->move[0]),
                  (char)(paddle->move[1])};
   nm->messageClients(PROTOCOL_TCP,buf,2);
 }
 
+// std::string GameManager::getCoord(){
+
+// }
+
 void GameManager::sendToServer() {
-  char buf[] = { (char)(paddle2->move[0]),
-                 (char)(paddle2->move[1])};
-  nm->messageServer(PROTOCOL_TCP,buf,2);
+  // std::String coords;
+  // int z = paddle->move[1];
+  // int x = paddle->move[0];
+  // if (x = -1)
+  //   x = 2;
+  // if (z = -1)
+  //   z = 2;
+
+  // coords = x.c_str() + z.c_str();
+  // char buf[] = { (char)(paddle->move[0]),
+  //                (char)(paddle->move[1])};
+
+  std::string str = "asdfghjhwejhfg";
+  nm->messageServer(PROTOCOL_TCP,str.c_str(),1);
   if ( nm->pollForActivity(10) ) {
 
     ClientData& msg = nm->tcpServerData;
-    for (int i = 0; i < 128; i++)
-      printf("%c", msg.output[i]);
+    // for (int i = 0; i < 128; i++)
+    //   printf("%c", msg.output[i]);
     // printf("client1 %d\n", msg.output[0]);
     // printf("client2 %d\n", msg.output[1]);
-    paddle->move[0] = msg.output[0];
-    paddle->move[1] = msg.output[1];
+
+
+    // paddle2->move[0] = msg.output[0];
+    // paddle2->move[1] = msg.output[1];
   }
 }
 
