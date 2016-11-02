@@ -18,7 +18,7 @@ Paddle::Paddle(Ogre::SceneManager *mSceneMgr, Physics *physicsEngine, bool clien
 
     if(client) {
         paddleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Paddle2", ogrePaddlePosition);
-        paddleEntity->setMaterialName("MyMaterials/HexagonalMesh");
+        paddleEntity->setMaterialName("MyMaterials/HexagonsAndStars");
     } else {
         paddleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Paddle", ogrePaddlePosition);
         paddleEntity->setMaterialName("Examples/Rockwall");

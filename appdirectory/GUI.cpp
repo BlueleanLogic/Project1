@@ -19,6 +19,7 @@ isServer(false),
 isClient(false),
 stategui(true),
 startingSinglePlayer(false),
+startingMultiPlayer(false),
 playingSingle(false),
 playingServer(false),
 playingClient(false)

@@ -25,6 +25,8 @@ Description: Makes a ball and a room, and alows the user to watch the ball bounc
 GameManager::GameManager(void)
     :physicsEngine(0),
     gui(0),
+    server(false),
+    client(false),
     nm(NULL)
     // mShutDown(false)
 {
@@ -155,12 +157,16 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
   if (gui->isServer) {
     startMulti();
     gui->isServer=false;
+    server = true;
   }
 
   if (gui->isClient) {
     searchGame();
     gui->isClient=false;
+    client = true;
   }
+
+
 
   //This starts singleplayer once prompted by the gui
   if (gui->startingSinglePlayer) {
@@ -168,6 +174,15 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
     gui->startingSinglePlayer=false;
   }
 
+  if (gui->startingMultiPlayer) {
+    multiPlayerGame();
+    gui->startingMultiPlayer=false;
+  }
+  if (server)
+    sendToClient();
+  
+  if (client)
+    sendToServer();
 
   // Ogre::Vector3 b = sphereNode->getPosition();
 
@@ -255,6 +270,14 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
     mSceneMgr->getSceneNode("Paddle")->translate(
         speed * Ogre::Vector3(paddle->move[0],0,paddle->move[1]) * fe.timeSinceLastFrame,
         Ogre::Node::TS_LOCAL);
+    if (server || client){
+      mSceneMgr->getSceneNode("Paddle2")->translate(
+          speed * Ogre::Vector3(paddle2->move[0],0,paddle2->move[1]) * fe.timeSinceLastFrame,
+          Ogre::Node::TS_LOCAL);    
+      paddle2->move[0]=0;
+      paddle2->move[1]=0;  
+    }
+
     paddle->move[0]=0;
     paddle->move[1]=0;
     
@@ -301,6 +324,7 @@ bool GameManager::startClient(const char* IP) {
   nm->initNetManager();
   nm->addNetworkInfo(PROTOCOL_ALL,IP);
   if ( nm->startClient() ) {
+    gui->startingMultiPlayer = true;
     return true;
   }
   return false;
@@ -311,6 +335,7 @@ void GameManager::searchGame() {
     if (gui->address.compare(nm->getIPstring()))
       gui->startClientGame();
   }
+
 }
 
 
@@ -328,6 +353,7 @@ void GameManager::startMulti() {
 
     if (nm->pollForActivity(5000)) {
       if (nm->getClients()){
+        gui->startingMultiPlayer = true;
         gui->startServerGame();
       }
     }
@@ -335,30 +361,50 @@ void GameManager::startMulti() {
 }
 
 void GameManager::singlePlayerGame() {
-    Paddle *paddle = new Paddle(mSceneMgr, physicsEngine, false);
+    paddle = new Paddle(mSceneMgr, physicsEngine, false);
     ball = new Ball(mSceneMgr, physicsEngine);
     gui->playingSingle=true;
 }
 
 void GameManager::multiPlayerGame() {
-  
+  printf("asdf\n");
+  paddle = new Paddle(mSceneMgr, physicsEngine, false);
+  paddle2 = new Paddle(mSceneMgr, physicsEngine, true);
+  ball = new Ball(mSceneMgr, physicsEngine);
+  gui->playingServer=true;
 }
 
-// void GameManager::sendToClient() {
-// //server checks client player position
-//   if ( nm->pollForActivity(10) ) {
-//     ClientData& msg = *(nm->tcpClientData[0]);
-//     //if ( msg.updated ) {//update client paddle direction
-//       paddle2->paddleDirection[0] = msg.output[0];
-//       paddle2->paddleDirection[1] = msg.output[1]; 
-//     //}
-//   }
-//   //server sends correct server position and turn
-//   char buf[] = { (char)(room->paddle->paddleDirection[0]),
-//                  (char)(room->paddle->paddleDirection[1])};
-//   nm->messageClients(PROTOCOL_TCP,buf,2);
+void GameManager::sendToClient() {
+  if ( nm->pollForActivity(10) ) {
+    ClientData& msg = *(nm->tcpClientData[0]);
+    for (int i = 0; i < 128; i++)
+      printf("%c", msg.output[i]);
+    // printf("server1 %d\n", msg.output[0]);
+    // printf("server2 %d\n", msg.output[1]);
+    paddle2->move[0] = msg.output[0];
+    paddle2->move[1] = msg.output[1]; 
+  }
+  char buf[] = { (char)(paddle->move[0]),
+                 (char)(paddle->move[1])};
+  nm->messageClients(PROTOCOL_TCP,buf,2);
+}
 
-// }
+void GameManager::sendToServer() {
+  char buf[] = { (char)(paddle2->move[0]),
+                 (char)(paddle2->move[1])};
+  nm->messageServer(PROTOCOL_TCP,buf,2);
+  if ( nm->pollForActivity(10) ) {
+
+    ClientData& msg = nm->tcpServerData;
+    for (int i = 0; i < 128; i++)
+      printf("%c", msg.output[i]);
+    // printf("client1 %d\n", msg.output[0]);
+    // printf("client2 %d\n", msg.output[1]);
+    paddle->move[0] = msg.output[0];
+    paddle->move[1] = msg.output[1];
+  }
+}
+
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN

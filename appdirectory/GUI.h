@@ -25,6 +25,7 @@ class GUI{
       void startClientGame();
 
       bool startingSinglePlayer;
+      bool startingMultiPlayer;
       bool playingSingle;
       bool playingServer;
       bool playingClient;

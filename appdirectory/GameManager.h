@@ -74,9 +74,15 @@ private:
     void startMulti();
     void searchGame();
     void multiPlayerGame();
+    bool server;
+    bool client;
 
     // void startMulti();
     void singlePlayerGame();
+    void sendToClient();
+    void sendToServer();
+
+
 };
 
 //---------------------------------------------------------------------------
