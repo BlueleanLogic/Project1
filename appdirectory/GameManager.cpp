@@ -221,15 +221,47 @@ bool GameManager::frameRenderingQueued(const Ogre::FrameEvent& fe)
     physicsEngine->stepSimulation();
 
     btTransform trans;
-    ball->GetBody()->getMotionState()->getWorldTransform(trans);
+    if (ball)
+      ball->GetBody()->getMotionState()->getWorldTransform(trans);
     //printf("\nposition of Y: ");
     //printf("%f", (float)(trans.getOrigin().getY()));
     // mSceneMgr->getSceneNode("sphereNode")->getPosition().y;
     // Ogre::Vector3 bPosition = sphereNode->getPosition();
-    if (mSceneMgr->getSceneNode("sphereNode")->getPosition().y <= 51){
+
+    // Ogre::Vector3 n = mSceneMgr->getSceneNode("Paddle")->getPosition();
+    Ogre::Vector3 sphere = mSceneMgr->getSceneNode("sphereNode")->getPosition();
+
+    if (sphere.y <= 75 && (n.x < sphere.x + 400 && n.x > sphere.x - 400 ) && (n.z < sphere.z + 400 && n.z > sphere.z - 400)) {
+      if (server || client) {
+        Ogre::Vector3 n2 = mSceneMgr->getSceneNode("Paddle2")->getPosition();
+        if (sphere.y <= 75 && (n2.x < sphere.x + 400 && n2.x > sphere.x - 400 ) && (n2.z < sphere.z + 400 && n2.z > sphere.z - 400)) {
+          gui->incrementScore();
+          return true;;
+        }
+      }
       gui->incrementScore();
     }
+
+    if (server || client) {
+      Ogre::Vector3 n2 = mSceneMgr->getSceneNode("Paddle2")->getPosition();
+      if ((sphere.y <= 75 && !(n2.x < sphere.x + 400 && n2.x > sphere.x - 400 ) && (n2.z < sphere.z + 400 && n2.z > sphere.z - 400)) &&
+         (sphere.y <= 75 && !(n.x < sphere.x + 400 && n.x > sphere.x - 400 ) && (n.z < sphere.z + 400 && n.z > sphere.z - 400)))
+        gui->resetScore();
+    }
+    
+
+    else if (sphere.y <= 75 && !(n.x < sphere.x + 400 && n.x > sphere.x - 400 ) && (n.z < sphere.z + 400 && n.z > sphere.z - 400)) {
+      // Ogre::Vector3 resetLocation = Ogre::Vector3(30,4500,30);
+      // delete ball;
+      // ball = new Ball(mSceneMgr, physicsEngine);
+      // ball->GetBody()->getMotionState()->getWorldTransform(trans);
+
+      // mSceneMgr->getSceneNode("sphereNode")->setPosition(resetLocation);
+      gui->resetScore();
+    }
+
   }
+  
   return ret;
 }
  

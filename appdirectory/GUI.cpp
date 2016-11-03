@@ -26,6 +26,7 @@ playingClient(false)
 {
 	score = 0;
 	score2 = 0;
+  highScore = 0;
   // stategui = true;
 	mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
 
@@ -72,8 +73,8 @@ playingClient(false)
 
   scoreBox = wmgr.createWindow("TaharezLook/StaticText", "Volleyball/Game");
   scoreBox->setText("Score: 0");
-  scoreBox->setSize(CEGUI::USize(CEGUI::UDim(0.1, 0), CEGUI::UDim(0.05, 0)));
-  scoreBox->setPosition(CEGUI::Vector2<CEGUI::UDim>(CEGUI::UDim(0.9,0), CEGUI::UDim(0,0)));
+  scoreBox->setSize(CEGUI::USize(CEGUI::UDim(0.2, 0), CEGUI::UDim(0.05, 0)));
+  scoreBox->setPosition(CEGUI::Vector2<CEGUI::UDim>(CEGUI::UDim(.35,0), CEGUI::UDim(0,0)));
 
   multiMenu = wmgr.createWindow("TaharezLook/FrameWindow", "Volleyball/Menu/MultiplayerMenu");
   multiMenu->setSize(CEGUI::USize(CEGUI::UDim(0.4, 0), CEGUI::UDim(0.5, 0)));
@@ -141,7 +142,14 @@ GUI::~GUI(void)
 void GUI::incrementScore()
 {
 	score++;
-	scoreBox->setText("Score: " + NumberToString(score));
+  if (score > highScore)
+    highScore = score;
+	scoreBox->setText("Score: " + NumberToString(score) + "  High Score: " + NumberToString(highScore));
+}
+
+void GUI::resetScore() {
+  score = 0;
+  scoreBox->setText("Score: " + NumberToString(score) + "  High Score: " + NumberToString(highScore));
 }
 
 void GUI::player1Win(bool win)

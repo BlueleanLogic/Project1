@@ -12,6 +12,11 @@ class GUI{
       GUI(void);
       ~GUI(void);
       void incrementScore(void);
+      void resetScore();
+      int score;
+      int score2;
+      int highScore;
+
       virtual bool quit(const CEGUI::EventArgs &e);
       bool mShutDown;
       // GameState gameMode;
@@ -32,8 +37,6 @@ class GUI{
 
       private:
       CEGUI::OgreRenderer* mRenderer;
-      int score;
-      int score2;
       CEGUI::Window *scoreBox;
       CEGUI::Window *sheet;
       CEGUI::Window *menu;
